@@ -1,0 +1,56 @@
+[project]
+name = "scikit-learn-models"
+version = "0.1"
+description = "Extra models for scikit-learn"
+readme = "README.md"
+authors = [{name="Facundo Manuel Quiroga",email="{first_name}{last_name_initial}@gmail.com"}]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.2.0",
+    "matplotlib>=3.10.0",
+    "graphviz>=0.20.3",
+    "pandas>=2.2.3",
+    "scikit-learn>=1.6.1",
+    "data-science-types>=0.2.23",
+    
+]
+
+[build-system]
+# # A list of packages that are needed to build your package:
+# requires = ["setuptools"] # REQUIRED if [build-system] table is used
+# # The name of the Python object that frontends will use to perform the build:
+# build-backend = "setuptools.build_meta" 
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project.urls]
+"Homepage" = "https://github.com/facundoq/scikit-learn-models"
+"Bug Reports" = "https://github.com/facundoq/scikit-learn-models/issues"
+"Source" = "https://github.com/facundoq/scikit-learn-models"
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple/"
+publish-url = "https://pypi.org/legacy/"
+
+[tool.uv.sources]
+microsoft-python-type-stubs = { git = "https://github.com/microsoft/python-type-stubs.git" }
+scikit-learn-models = { workspace = true }
+
+[tool.setuptools]
+py-modules = ['sklearnmodels']
+
+[tool.hatch.build.targets.wheel]
+packages = ["sklearnmodels"]
+
+
+[dependency-groups]
+dev = [
+    "pandas-stubs>=2.2.3.250308",
+    "scipy-stubs>=1.15.2.1",
+    "microsoft-python-type-stubs",
+    "jupyter>=1.1.1",
+    "scikit-learn-models",
+    "pytest>=8.3.5",
+]
