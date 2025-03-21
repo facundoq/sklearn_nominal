@@ -81,7 +81,8 @@ class OptimizingDiscretizationStrategy(DiscretizationStrategy):
         self.callbacks = callbacks
     def __call__(self, x:pd.Series,y:np.ndarray,column:str,metric:TargetError)->list[Condition]:
         
-        values = x.unique()
+        values = x.unique().to_numpy()
+        values = values[~np.isnan(values)]
         n = len(values)
         if self.max_evals is not None:
             if n>self.max_evals:

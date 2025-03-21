@@ -32,9 +32,18 @@ class ClassificationError(TargetError):
     def __init__(self,classes:int):
         self.classes=classes
     def prediction(self,y:np.ndarray):
+        
+        
+        
+            
         if len(y)==0:
             return np.ones(self.classes)/self.classes
         else:
+            if np.issubdtype(y.dtype,object):
+                #string classes
+                y_cat = pd.Series(data=y.squeeze()).astype("category")
+                y = y_cat.cat.codes.to_numpy().reshape(-1,1)
+            #numeric index classes classes
             counts = np.bincount(y[:,0],minlength=self.classes)
             return counts/counts.sum()
     def __repr__(self):
@@ -52,10 +61,10 @@ class EntropyMetric(ClassificationError):
     
 class RegressionMetric(TargetError):
     def prediction(self,y:np.ndarray):
-        return y.mean(axis=0)
+        return np.mean(y,axis=0)
 
 class DeviationMetric(RegressionMetric):
     def __call__(self, y:np.ndarray):
         if y.shape[0]==0:
             return np.inf
-        return y.std()
+        return np.sum(np.std(y,axis=0))

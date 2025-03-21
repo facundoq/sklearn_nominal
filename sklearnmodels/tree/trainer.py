@@ -90,12 +90,9 @@ class BaseTreeTrainer(TreeTrainer):
         
         column_errors = self.global_error.column_error(x,y)
         
-        
-        
         names,errors = zip(*[(k,s.error) for k,s in column_errors.items()])
         best_column_i = np.argmin(np.array(errors))
         best_column = column_errors[names[best_column_i]]
-
         
         
         #BASE CASE: best gain is not enough to split tree 
