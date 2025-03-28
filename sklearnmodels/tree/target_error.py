@@ -32,10 +32,6 @@ class ClassificationError(TargetError):
     def __init__(self,classes:int):
         self.classes=classes
     def prediction(self,y:np.ndarray):
-        
-        
-        
-            
         if len(y)==0:
             return np.ones(self.classes)/self.classes
         else:

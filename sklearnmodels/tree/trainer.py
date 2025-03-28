@@ -87,9 +87,15 @@ class BaseTreeTrainer(TreeTrainer):
             for callback in self.tree_creation_callbacks:
                 callback(tree,height,True,None,None)
             return tree
-        
         column_errors = self.global_error.column_error(x,y)
         
+        
+        #BASE CASE: no viable columns to split found
+        if len(column_errors)==0:
+            for callback in self.tree_creation_callbacks:
+                callback(tree,height,True,None,None)
+            return tree
+         
         names,errors = zip(*[(k,s.error) for k,s in column_errors.items()])
         best_column_i = np.argmin(np.array(errors))
         best_column = column_errors[names[best_column_i]]
