@@ -1,0 +1,42 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="churn", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=0 </b> <br/> error: 0.588, n=5000 <br/> p: (0.86, 0.14) <br/><b>total_day_minutes</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=0 </b> <br/> error: 0.500, n=4649 <br/> p: (0.89, 0.11) <br/><b>number_customer_service_calls</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="<= 261.3"] ;
+3 [label=<<b> Class=0 </b> <br/> error: 0.375, n=1654 <br/> p: (0.93, 0.07) <br/><b>international_plan</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 3:n [label="1"] ;
+4 [label=<<b> Class=0 </b> <br/> error: 0.276, n=1513 <br/> p: (0.95, 0.05) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+3:s -> 4:n [label="0"] ;
+5 [label=<<b> Class=0 </b> <br/> error: 0.925, n=141 <br/> p: (0.66, 0.34) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+3:s -> 5:n [label="1"] ;
+6 [label=<<b> Class=0 </b> <br/> error: 0.421, n=949 <br/> p: (0.91, 0.09) <br/><b>international_plan</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 6:n [label="0"] ;
+7 [label=<<b> Class=0 </b> <br/> error: 0.275, n=843 <br/> p: (0.95, 0.05) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+6:s -> 7:n [label="0"] ;
+8 [label=<<b> Class=0 </b> <br/> error: 0.414, n=623 <br/> p: (0.92, 0.08) <br/><b>international_plan</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 8:n [label="3"] ;
+9 [label=<<b> Class=0 </b> <br/> error: 0.299, n=565 <br/> p: (0.95, 0.05) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+8:s -> 9:n [label="0"] ;
+10 [label=<<b> Class=0 </b> <br/> error: 0.984, n=233 <br/> p: (0.58, 0.42) <br/><b>total_day_minutes</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 10:n [label="4"] ;
+11 [label=<<b> Class=0 </b> <br/> error: 0.760, n=159 <br/> p: (0.78, 0.22) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+10:s -> 11:n [label="> 156.5"] ;
+12 [label=<<b> Class=0 </b> <br/> error: 0.374, n=1053 <br/> p: (0.93, 0.07) <br/><b>international_plan</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 12:n [label="2"] ;
+13 [label=<<b> Class=0 </b> <br/> error: 0.258, n=964 <br/> p: (0.96, 0.04) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+12:s -> 13:n [label="0"] ;
+14 [label=<<b> Class=1 </b> <br/> error: 0.991, n=351 <br/> p: (0.44, 0.56) <br/><b>voice_mail_plan</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 14:n [label="> 261.3"] ;
+15 [label=<<b> Class=1 </b> <br/> error: 0.873, n=266 <br/> p: (0.29, 0.71) <br/><b>total_eve_minutes</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+14:s -> 15:n [label="0"] ;
+16 [label=<<b> Class=1 </b> <br/> error: 0.595, n=194 <br/> p: (0.14, 0.86) <br/><b>total_day_minutes</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+15:s -> 16:n [label="> 167.1"] ;
+17 [label=<<b> Class=1 </b> <br/> error: 0.731, n=137 <br/> p: (0.20, 0.80) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+16:s -> 17:n [label="<= 291.8"] ;
+
+}

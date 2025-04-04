@@ -1,0 +1,20 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="dresses-sales", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.981, n=500 <br/> p: (0.58, 0.42) <br/><b>V11</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=1 </b> <br/> error: 0.982, n=135 <br/> p: (0.58, 0.42) <br/><b>V12</b>>, fillcolor="0.300 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="chiffon"] ;
+3 [label=<<b> Class=1 </b> <br/> error: 0.991, n=18 <br/> p: (0.56, 0.44) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+2:s -> 3:n [label="sashes"] ;
+4 [label=<<b> Class=1 </b> <br/> error: 0.938, n=31 <br/> p: (0.65, 0.35) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 4:n [label="broadcloth"] ;
+5 [label=<<b> Class=2 </b> <br/> error: 0.980, n=12 <br/> p: (0.42, 0.58) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 5:n [label="jersey"] ;
+6 [label=<<b> Class=1 </b> <br/> error: 0.998, n=19 <br/> p: (0.53, 0.47) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 6:n [label="worsted"] ;
+
+}
