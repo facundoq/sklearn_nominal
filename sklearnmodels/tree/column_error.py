@@ -13,7 +13,7 @@ class ValueCondition(Condition):
     def __init__(self,column:str,value):
         self.column=column
         self.value=value
-    def __call__(self,x:pd.Series):
+    def __call__(self,x:pd.DataFrame):
         return x[self.column]==self.value
     def __repr__(self):
         return f"{self.column}={self.value}"
@@ -26,7 +26,7 @@ class RangeCondition(Condition):
         self.column=column
         self.value=value
         self.less=less
-    def __call__(self,x:pd.Series):
+    def __call__(self,x:pd.DataFrame):
         if self.less:
             return x[self.column]<=self.value
         else:
@@ -80,8 +80,7 @@ class OptimizingDiscretizationStrategy(DiscretizationStrategy):
         self.max_evals=max_evals
         self.callbacks = callbacks
     def __call__(self, x:pd.Series,y:np.ndarray,column:str,metric:TargetError)->list[Condition]:
-        
-        values = x.unique().to_numpy()
+        values = x.unique()
         values = values[~np.isnan(values)]
         n = len(values)
         if self.max_evals is not None:

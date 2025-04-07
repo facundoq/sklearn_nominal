@@ -1,0 +1,46 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="ilpd", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.864, n=583 <br/> p: (0.71, 0.29) <br/><b>V3</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=1 </b> <br/> error: 0.931, n=468 <br/> p: (0.65, 0.35) <br/><b>V5</b>>, fillcolor="0.120 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="<= 3.3"] ;
+3 [label=<<b> Class=1 </b> <br/> error: 0.976, n=328 <br/> p: (0.59, 0.41) >, fillcolor="0.240 0.7 0.800", shape="oval"];
+2:s -> 3:n [label="<= 248"] ;
+4 [label=<<b> Class=1 </b> <br/> error: 0.722, n=140 <br/> p: (0.80, 0.20) <br/><b>V7</b>>, fillcolor="0.240 0.7 0.800", shape="rect"];
+2:s -> 4:n [label="> 248"] ;
+5 [label=<<b> Class=1 </b> <br/> error: 0.880, n=77 <br/> p: (0.70, 0.30) <br/><b>V3</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+4:s -> 5:n [label="<= 58"] ;
+6 [label=<<b> Class=2 </b> <br/> error: 0.998, n=17 <br/> p: (0.47, 0.53) >, fillcolor="0.480 0.7 0.800", shape="oval"];
+5:s -> 6:n [label="<= 0.7"] ;
+7 [label=<<b> Class=1 </b> <br/> error: 0.784, n=60 <br/> p: (0.77, 0.23) <br/><b>V9</b>>, fillcolor="0.480 0.7 0.800", shape="rect"];
+5:s -> 7:n [label="> 0.7"] ;
+8 [label=<<b> Class=1 </b> <br/> error: 0.469, n=20 <br/> p: (0.90, 0.10) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+7:s -> 8:n [label="<= 2.7"] ;
+9 [label=<<b> Class=1 </b> <br/> error: 0.881, n=40 <br/> p: (0.70, 0.30) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+7:s -> 9:n [label="> 2.7"] ;
+10 [label=<<b> Class=1 </b> <br/> error: 0.400, n=63 <br/> p: (0.92, 0.08) <br/><b>V1</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+4:s -> 10:n [label="> 58"] ;
+11 [label=<<b> Class=1 </b> <br/> error: 0.345, n=62 <br/> p: (0.94, 0.06) <br/><b>V1</b>>, fillcolor="0.480 0.7 0.800", shape="rect"];
+10:s -> 11:n [label="> 4"] ;
+12 [label=<<b> Class=1 </b> <br/> error: 0.650, n=24 <br/> p: (0.83, 0.17) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+11:s -> 12:n [label="<= 38"] ;
+13 [label=<<b> Class=1 </b> <br/> error: 0.000, n=38 <br/> p: (1.00, 0.00) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+11:s -> 13:n [label="> 38"] ;
+14 [label=<<b> Class=1 </b> <br/> error: 0.258, n=115 <br/> p: (0.96, 0.04) <br/><b>V4</b>>, fillcolor="0.120 0.7 0.900", shape="rect"];
+1:s -> 14:n [label="> 3.3"] ;
+15 [label=<<b> Class=1 </b> <br/> error: 0.439, n=55 <br/> p: (0.91, 0.09) <br/><b>V8</b>>, fillcolor="0.240 0.7 0.800", shape="rect"];
+14:s -> 15:n [label="<= 3.9"] ;
+16 [label=<<b> Class=1 </b> <br/> error: 0.691, n=27 <br/> p: (0.81, 0.19) <br/><b>V9</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+15:s -> 16:n [label="<= 6.6"] ;
+17 [label=<<b> Class=1 </b> <br/> error: 0.940, n=14 <br/> p: (0.64, 0.36) >, fillcolor="0.480 0.7 0.800", shape="oval"];
+16:s -> 17:n [label="<= 2.6"] ;
+18 [label=<<b> Class=1 </b> <br/> error: 0.000, n=28 <br/> p: (1.00, 0.00) >, fillcolor="0.360 0.7 0.900", shape="oval"];
+15:s -> 18:n [label="> 6.6"] ;
+19 [label=<<b> Class=1 </b> <br/> error: 0.000, n=60 <br/> p: (1.00, 0.00) >, fillcolor="0.240 0.7 0.800", shape="oval"];
+14:s -> 19:n [label="> 3.9"] ;
+
+}

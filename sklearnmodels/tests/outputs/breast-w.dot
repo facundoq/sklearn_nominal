@@ -1,0 +1,38 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="breast-w", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=benign </b> <br/> error: 0.929, n=699 <br/> p: (0.66, 0.34) <br/><b>Cell_Size_Uniformity</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=benign </b> <br/> error: 0.084, n=384 <br/> p: (0.99, 0.01) <br/><b>Normal_Nucleoli</b>>, fillcolor="0.120 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="<= 1"] ;
+3 [label=<<b> Class=benign </b> <br/> error: 0.026, n=379 <br/> p: (1.00, 0.00) >, fillcolor="0.240 0.7 0.800", shape="oval"];
+2:s -> 3:n [label="<= 3"] ;
+4 [label=<<b> Class=malignant </b> <br/> error: 0.807, n=315 <br/> p: (0.25, 0.75) <br/><b>Bare_Nuclei</b>>, fillcolor="0.120 0.7 0.900", shape="rect"];
+1:s -> 4:n [label="> 1"] ;
+5 [label=<<b> Class=benign </b> <br/> error: 0.868, n=83 <br/> p: (0.71, 0.29) <br/><b>Single_Epi_Cell_Size</b>>, fillcolor="0.240 0.7 0.800", shape="rect"];
+4:s -> 5:n [label="<= 2"] ;
+6 [label=<<b> Class=benign </b> <br/> error: 0.219, n=57 <br/> p: (0.96, 0.04) <br/><b>Cell_Size_Uniformity</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+5:s -> 6:n [label="<= 3"] ;
+7 [label=<<b> Class=benign </b> <br/> error: 0.000, n=54 <br/> p: (1.00, 0.00) >, fillcolor="0.480 0.7 0.800", shape="oval"];
+6:s -> 7:n [label="<= 3"] ;
+8 [label=<<b> Class=malignant </b> <br/> error: 0.619, n=26 <br/> p: (0.15, 0.85) <br/><b>Cell_Size_Uniformity</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+5:s -> 8:n [label="> 3"] ;
+9 [label=<<b> Class=malignant </b> <br/> error: 0.000, n=17 <br/> p: (0.00, 1.00) >, fillcolor="0.480 0.7 0.800", shape="oval"];
+8:s -> 9:n [label="> 4"] ;
+10 [label=<<b> Class=malignant </b> <br/> error: 0.368, n=227 <br/> p: (0.07, 0.93) <br/><b>Cell_Shape_Uniformity</b>>, fillcolor="0.240 0.7 0.800", shape="rect"];
+4:s -> 10:n [label="> 2"] ;
+11 [label=<<b> Class=malignant </b> <br/> error: 0.270, n=217 <br/> p: (0.05, 0.95) <br/><b>Marginal_Adhesion</b>>, fillcolor="0.360 0.7 0.900", shape="rect"];
+10:s -> 11:n [label="> 2"] ;
+12 [label=<<b> Class=malignant </b> <br/> error: 0.421, n=117 <br/> p: (0.09, 0.91) <br/><b>Clump_Thickness</b>>, fillcolor="0.480 0.7 0.800", shape="rect"];
+11:s -> 12:n [label="<= 5"] ;
+13 [label=<<b> Class=malignant </b> <br/> error: 0.672, n=34 <br/> p: (0.18, 0.82) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+12:s -> 13:n [label="<= 5"] ;
+14 [label=<<b> Class=malignant </b> <br/> error: 0.279, n=83 <br/> p: (0.05, 0.95) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+12:s -> 14:n [label="> 5"] ;
+15 [label=<<b> Class=malignant </b> <br/> error: 0.000, n=100 <br/> p: (0.00, 1.00) >, fillcolor="0.480 0.7 0.800", shape="oval"];
+11:s -> 15:n [label="> 5"] ;
+
+}

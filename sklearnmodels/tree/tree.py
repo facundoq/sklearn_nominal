@@ -8,7 +8,7 @@ import pandas as pd
 class Condition(abc.ABC):
 
     @abc.abstractmethod
-    def __call__(self, x:pd.Series)->pd.Series:
+    def __call__(self, x:pd.DataFrame)->np.ndarray:
         pass
     
     @abc.abstractmethod
@@ -20,11 +20,9 @@ type Branches = dict[Condition,Tree]
 def split_by_conditions(x:pd.DataFrame,y:np.ndarray,conditions:list[Condition]):
      
      for condition in conditions:
-            idx = x.apply(condition,axis=1)
-            # if condition yields no samples, avoid
-            if (~idx).all():
-                continue
-            yield  x.loc[idx],y[idx],condition
+            idx = condition(x)
+            if idx.any():
+                yield  x.loc[idx],y[idx],condition
 
 class Tree:
     def __init__(self,prediction:np.ndarray,score:float,samples:int,branches:Branches=None):
