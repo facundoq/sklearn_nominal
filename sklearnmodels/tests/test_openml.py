@@ -39,7 +39,9 @@ def test_benchmark():
         y = le.fit_transform(y)
         y = y.reshape(-1,1)
         # print(y,le.classes_)
+        print(x)
         print(y.shape,x.shape,y.dtype)
+        
         clf = get_classification_model(len(le.classes_))
         clf.fit(x,y)
         y_pred = clf.predict(x)
