@@ -11,24 +11,6 @@ import pytest
 
 output_folderpath = Path("tests/outputs")
 
-def get_classification_trainer(classes:int):
-    
-    scorers = {
-        "number":tree.DiscretizingNumericColumnSplitter(tree.OptimizingDiscretizationStrategy()),
-        "object":tree.NominalColumnSplitter()
-                                }
-    scorer = tree.MixedGlobalError(scorers,tree.EntropyMetric(classes))
-    prune_criteria = tree.PruneCriteria(max_height=5,min_samples_leaf=3,min_error_improvement=0.01)
-    trainer = tree.BaseTreeTrainer(scorer,prune_criteria)
-    return trainer
-
-def read_classification_dataset(url:str):
-    df = pd.read_csv(url)
-    x = df.iloc[:,:-1]
-    le = LabelEncoder().fit(df.iloc[:,-1])
-    y = le.transform(df.iloc[:,-1])
-    y = y.reshape(len(y),1)
-    return x,y,le.classes_
 
 
 def get_regression_trainer():
@@ -36,7 +18,7 @@ def get_regression_trainer():
         "number":tree.DiscretizingNumericColumnSplitter(tree.OptimizingDiscretizationStrategy()),
         "object":tree.NominalColumnSplitter()
                                 }
-    prune_criteria = tree.PruneCriteria(max_height=5,min_samples_leaf=3,min_error_improvement=0.01)
+    prune_criteria = tree.PruneCriteria(max_height=5,min_samples_leaf=3,min_error_decrease=0.01)
     scorer = tree.MixedGlobalError(scorers,tree.DeviationMetric())
     trainer = tree.BaseTreeTrainer(scorer,prune_criteria)
     return trainer

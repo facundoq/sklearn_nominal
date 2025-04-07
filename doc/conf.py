@@ -106,9 +106,9 @@ intersphinx_mapping = {
 plot_gallery = True
 
 sphinx_gallery_conf = {
-    "doc_module": "skltemplate",
+    "doc_module": "sklearnmodels",
     "backreferences_dir": os.path.join("generated"),
     "examples_dirs": "../examples",
     "gallery_dirs": "auto_examples",
-    "reference_url": {"skltemplate": None},
+    "reference_url": {"sklearnmodels": None},
 }

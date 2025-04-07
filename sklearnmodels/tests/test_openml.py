@@ -6,9 +6,8 @@ from sklearn.discriminant_analysis import StandardScaler
 import sklearn.impute
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-import sklearn.tree
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearnmodels import tree
+from sklearnmodels import tree,SKLearnClassificationTree,SKLearnRegressionTree
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -17,19 +16,11 @@ import subprocess
 
 def get_nominal_tree_classifier(x:pd.DataFrame,classes:int):
     n,m=x.shape
-    scorers = {
-        "number":tree.DiscretizingNumericColumnSplitter(tree.OptimizingDiscretizationStrategy(max_evals=3)),
-        "object":tree.NominalColumnSplitter(),
-        "category":tree.NominalColumnSplitter()
-                                }
-    scorer = tree.MixedGlobalError(scorers,tree.EntropyMetric(classes))
     max_height = min(max(int(np.log(m)*3),5),30)
     min_samples_leaf = max(10,int(n*(0.05/classes)))
     min_samples_split = min_samples_leaf
     min_error_improvement = 0.05/classes    
-    prune_criteria = tree.PruneCriteria(max_height=max_height,min_samples_leaf=min_samples_leaf,min_error_improvement=min_error_improvement,min_samples_split=min_samples_split)
-    trainer = tree.BaseTreeTrainer(scorer,prune_criteria)
-    return tree.SKLearnClassificationTree(trainer)
+    return SKLearnClassificationTree(criterion="entropy",max_depth=max_height,min_samples_leaf=min_samples_leaf,min_samples_split=min_samples_split,min_error_decrease=min_error_improvement,splitter=4)
 
 def get_sklearn_pipeline(x:pd.DataFrame,model):
     numeric_features = x.select_dtypes(include=['int64','float64']).columns
@@ -46,6 +37,8 @@ def get_sklearn_pipeline(x:pd.DataFrame,model):
             ('cat', categorical_transformer, categorical_features)])
     return Pipeline(steps=[('preprocessor', preprocessor),
                       ('classifier', model)])
+    
+
 def get_sklearn_tree(x:pd.DataFrame,classes:int):
     model = sklearn.tree.DecisionTreeClassifier(max_depth=20,min_samples_leaf=20)
     return get_sklearn_pipeline(x,model)
@@ -86,7 +79,7 @@ def test_benchmark(model_generator:typing.Callable):
                         "score":acc,
                         })
         if isinstance(clf,tree.SKLearnClassificationTree):
-            tree_model :tree.Tree = clf.tree
+            tree_model :tree.Tree = clf.tree_
             filepath = f"tests/outputs/{dataset.name}.dot"
             image_filepath = f"tests/outputs/{dataset.name}.png"
             tree.export_dot_file(tree_model,filepath,dataset.name,list(le.classes_))

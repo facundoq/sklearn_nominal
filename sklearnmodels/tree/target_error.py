@@ -29,37 +29,44 @@ def log(x,base):
         return np.log(x) * lb
 
 class ClassificationError(TargetError):
-    def __init__(self,classes:int):
+    def __init__(self,classes:int,class_weight:np.ndarray=None):
         self.classes=classes
+        
+        if class_weight is None:
+            self.class_weight=np.ones(classes)
+        else:
+            self.class_weight=class_weight    
     def prediction(self,y:np.ndarray):
         if len(y)==0:
-            return np.ones(self.classes)/self.classes
+            result = np.ones(self.classes)/self.classes
         else:
             if np.issubdtype(y.dtype,object):
                 #string classes
                 y_cat = pd.Series(data=y.squeeze()).astype("category")
                 y = y_cat.cat.codes.to_numpy().reshape(-1,1)
             #numeric index classes classes
-            counts = np.bincount(y[:,0],minlength=self.classes)
-            return counts/counts.sum()
+            counts = np.bincount(y,minlength=self.classes)
+            result = counts/counts.sum()
+        result *= self.class_weight
+        result /= result.sum()
     def __repr__(self):
             return f"{super().__repr__()}(classes={self.classes})"
 
 
 class EntropyMetric(ClassificationError):
-    def __init__(self,classes:int,base=2):
-        super().__init__(classes)
+    def __init__(self,classes:int,class_weight:np.ndarray,base=2):
+        super().__init__(classes,class_weight)
         self.base=base
     def __call__(self, y:np.ndarray):
         p = self.prediction(y)
         # largest_value = log(np.array([self.classes]),self.base)[0]
         return -np.sum(p*log(p,self.classes))
     
-class RegressionMetric(TargetError):
+class RegressionError(TargetError):
     def prediction(self,y:np.ndarray):
         return np.mean(y,axis=0)
 
-class DeviationMetric(RegressionMetric):
+class DeviationMetric(RegressionError):
     def __call__(self, y:np.ndarray):
         if y.shape[0]==0:
             return np.inf

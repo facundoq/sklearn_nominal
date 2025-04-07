@@ -3,7 +3,9 @@
 
 from . import tree
 
-__version__ = "0.1.1"
+from .scikit import SKLearnRegressionTree,SKLearnClassificationTree
+from ._version import __version__
+
 
 __all__ = [
     "tree",
