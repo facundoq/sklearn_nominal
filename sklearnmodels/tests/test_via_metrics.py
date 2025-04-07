@@ -31,13 +31,7 @@ def read_regression_dataset(url:str):
 
 
 
-def test_classification(x:pd.DataFrame,y:np.ndarray,class_names:list[str],name:str,filepath:Path):
-    classes = y.max()+1
-    trainer = get_classification_trainer(classes)
-    model = tree.SKLearnClassificationTree(trainer)
-    model.fit(x,y)
-    y_pred = model.predict(x)
-    return accuracy_score(y,y_pred)
+
 
 def test_classification_urls():
     datasets = [
