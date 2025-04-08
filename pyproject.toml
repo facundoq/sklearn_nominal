@@ -159,3 +159,9 @@ ignore=[
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --color=yes"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
+
+[tool.mypy]
+implicit_optional = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+warn_return_any = true

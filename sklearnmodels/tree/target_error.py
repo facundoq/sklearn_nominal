@@ -17,6 +17,7 @@ class TargetError(abc.ABC):
     
 eps = 1e-32
 def log(x,base):
+    
     x[x<eps]=eps
     if base==2:
         return np.log2(x)
@@ -49,6 +50,7 @@ class ClassificationError(TargetError):
             result = counts/counts.sum()
         result *= self.class_weight
         result /= result.sum()
+        return result
     def __repr__(self):
             return f"{super().__repr__()}(classes={self.classes})"
 
@@ -60,6 +62,7 @@ class EntropyMetric(ClassificationError):
     def __call__(self, y:np.ndarray):
         p = self.prediction(y)
         # largest_value = log(np.array([self.classes]),self.base)[0]
+        
         return -np.sum(p*log(p,self.classes))
     
 class RegressionError(TargetError):

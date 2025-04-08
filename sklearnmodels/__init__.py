@@ -3,7 +3,7 @@
 
 from . import tree
 
-from .scikit import SKLearnRegressionTree,SKLearnClassificationTree
+from .scikit import SKLearnClassificationTree,SKLearnRegressionTree
 from ._version import __version__
 
 

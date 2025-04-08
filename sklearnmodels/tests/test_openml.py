@@ -7,7 +7,7 @@ import sklearn.impute
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearnmodels import tree,SKLearnClassificationTree,SKLearnRegressionTree
+from sklearnmodels import tree,SKLearnClassificationTree,SKLearnClassificationTree
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
