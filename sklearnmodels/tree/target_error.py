@@ -48,6 +48,7 @@ class ClassificationError(TargetError):
             #numeric index classes classes
             counts = np.bincount(y,minlength=self.classes)
             result = counts/counts.sum()
+            # print(result.dtype,self.class_weight.dtype)
         result *= self.class_weight
         result /= result.sum()
         return result
