@@ -1,0 +1,26 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="nomao", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=2 </b> <br/> error: 0.863, n=34465 <br/> p: (0.29, 0.71) <br/><b>V3</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=2 </b> <br/> error: 0.251, n=8730 <br/> p: (0.04, 0.96) <br/><b>V105</b>>, fillcolor="0.300 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="1.0"] ;
+3 [label=<<b> Class=2 </b> <br/> error: 0.041, n=4467 <br/> p: (0.00, 1.00) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+2:s -> 3:n [label="1.0"] ;
+4 [label=<<b> Class=2 </b> <br/> error: 0.088, n=1168 <br/> p: (0.01, 0.99) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 4:n [label="0.857143"] ;
+5 [label=<<b> Class=2 </b> <br/> error: 0.339, n=2746 <br/> p: (0.06, 0.94) <br/><b>V105</b>>, fillcolor="0.300 0.7 0.900", shape="rect"];
+1:s -> 5:n [label="0.666667"] ;
+6 [label=<<b> Class=2 </b> <br/> error: 0.172, n=1364 <br/> p: (0.03, 0.97) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+5:s -> 6:n [label="1.0"] ;
+7 [label=<<b> Class=2 </b> <br/> error: 0.134, n=1972 <br/> p: (0.02, 0.98) <br/><b>V101</b>>, fillcolor="0.300 0.7 0.900", shape="rect"];
+1:s -> 7:n [label="0.8"] ;
+8 [label=<<b> Class=2 </b> <br/> error: 0.011, n=1002 <br/> p: (0.00, 1.00) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+7:s -> 8:n [label="1.0"] ;
+9 [label=<<b> Class=2 </b> <br/> error: 0.707, n=1106 <br/> p: (0.19, 0.81) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 9:n [label="0.5"] ;
+
+}

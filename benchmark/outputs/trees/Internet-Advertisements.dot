@@ -1,0 +1,24 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="Internet-Advertisements", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=noad </b> <br/> error: 0.584, n=3279 <br/> p: (0.14, 0.86) <br/><b>aratio</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=noad </b> <br/> error: 0.489, n=301 <br/> p: (0.11, 0.89) >, fillcolor="0.200 0.7 0.900", shape="oval"];
+1:s -> 2:n [label="1.0"] ;
+3 [label=<<b> Class=ad </b> <br/> error: 0.120, n=184 <br/> p: (0.98, 0.02) <br/><b>origurl.4301.misfits2</b>>, fillcolor="0.200 0.7 0.900", shape="rect"];
+1:s -> 3:n [label="7.8"] ;
+4 [label=<<b> Class=ad </b> <br/> error: 0.087, n=183 <br/> p: (0.99, 0.01) <br/><b>origurl.hollywood.9662</b>>, fillcolor="0.400 0.7 0.800", shape="rect"];
+3:s -> 4:n [label="0"] ;
+5 [label=<<b> Class=ad </b> <br/> error: 0.049, n=182 <br/> p: (0.99, 0.01) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+4:s -> 5:n [label="0"] ;
+6 [label=<<b> Class=noad </b> <br/> error: 0.403, n=910 <br/> p: (0.08, 0.92) <br/><b>url.ads</b>>, fillcolor="0.200 0.7 0.900", shape="rect"];
+1:s -> 6:n [label="0.0"] ;
+7 [label=<<b> Class=noad </b> <br/> error: 0.263, n=876 <br/> p: (0.04, 0.96) <br/><b>ancurl.click</b>>, fillcolor="0.400 0.7 0.800", shape="rect"];
+6:s -> 7:n [label="0"] ;
+8 [label=<<b> Class=noad </b> <br/> error: 0.190, n=861 <br/> p: (0.03, 0.97) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+7:s -> 8:n [label="0"] ;
+
+}

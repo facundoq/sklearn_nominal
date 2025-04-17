@@ -40,4 +40,4 @@ def test_regression_tree(regression_data):
     assert hasattr(model, "is_fitted_")
     assert hasattr(model, "tree_")
     y_pred = model.predict(x)
-    assert y_pred.shape == (x.shape[0],1)  
+    assert y_pred.shape == (x.shape[0],)  

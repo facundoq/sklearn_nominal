@@ -1,0 +1,36 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="phoneme", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.873, n=5404 <br/> p: (0.71, 0.29) <br/><b>V4</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=1 </b> <br/> error: 0.554, n=3188 <br/> p: (0.87, 0.13) <br/><b>V4</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="<= 0.1029"] ;
+3 [label=<<b> Class=1 </b> <br/> error: 0.884, n=1061 <br/> p: (0.70, 0.30) <br/><b>V2</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 3:n [label="<= -0.8946"] ;
+4 [label=<<b> Class=1 </b> <br/> error: 0.999, n=363 <br/> p: (0.52, 0.48) <br/><b>V5</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+3:s -> 4:n [label="<= -0.3643"] ;
+5 [label=<<b> Class=1 </b> <br/> error: 0.978, n=235 <br/> p: (0.59, 0.41) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+4:s -> 5:n [label="<= 0.4832"] ;
+6 [label=<<b> Class=1 </b> <br/> error: 0.737, n=698 <br/> p: (0.79, 0.21) <br/><b>V1</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+3:s -> 6:n [label="> -0.3643"] ;
+7 [label=<<b> Class=1 </b> <br/> error: 0.145, n=193 <br/> p: (0.98, 0.02) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+6:s -> 7:n [label="<= -0.6571"] ;
+8 [label=<<b> Class=1 </b> <br/> error: 0.854, n=505 <br/> p: (0.72, 0.28) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+6:s -> 8:n [label="> -0.6571"] ;
+9 [label=<<b> Class=1 </b> <br/> error: 0.251, n=2127 <br/> p: (0.96, 0.04) >, fillcolor="0.300 0.7 0.800", shape="oval"];
+2:s -> 9:n [label="> -0.8946"] ;
+10 [label=<<b> Class=2 </b> <br/> error: 0.997, n=2216 <br/> p: (0.47, 0.53) <br/><b>V1</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 10:n [label="> 0.1029"] ;
+11 [label=<<b> Class=2 </b> <br/> error: 0.991, n=2109 <br/> p: (0.45, 0.55) <br/><b>V4</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+10:s -> 11:n [label="<= 0.8706"] ;
+12 [label=<<b> Class=1 </b> <br/> error: 0.871, n=271 <br/> p: (0.71, 0.29) <br/><b>V2</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+11:s -> 12:n [label="<= 0.3043"] ;
+13 [label=<<b> Class=1 </b> <br/> error: 0.705, n=193 <br/> p: (0.81, 0.19) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+12:s -> 13:n [label="> -0.1979"] ;
+14 [label=<<b> Class=2 </b> <br/> error: 0.975, n=1838 <br/> p: (0.41, 0.59) >, fillcolor="0.450 0.7 0.900", shape="oval"];
+11:s -> 14:n [label="> 0.3043"] ;
+
+}

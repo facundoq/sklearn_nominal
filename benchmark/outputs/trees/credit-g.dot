@@ -1,0 +1,10 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="credit-g", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=good </b> <br/> error: 0.881, n=1000 <br/> p: (0.30, 0.70) >, fillcolor="0.000 0.7 0.800", shape="oval"];
+
+}

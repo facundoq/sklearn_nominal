@@ -1,0 +1,12 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="bank-marketing", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.521, n=45211 <br/> p: (0.88, 0.12) <br/><b>V6</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=1 </b> <br/> error: 0.413, n=3514 <br/> p: (0.92, 0.08) >, fillcolor="0.600 0.7 0.900", shape="oval"];
+1:s -> 2:n [label="0.0"] ;
+
+}

@@ -34,11 +34,12 @@ dev = [
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
     "scikit-learn-models",
-    "pytest>=8.3.5",
-    "openml>=0.15.1",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
     "snakeviz>=2.2.2",
+    "pytest>=8.3.5",
+    "openml>=0.15.1",
+    "lets-plot>=4.6.2",
 ]
 
 

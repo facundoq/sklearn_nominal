@@ -1,0 +1,32 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="cmc", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.971, n=1473 <br/> p: (0.43, 0.23, 0.35) <br/><b>Number_of_children_ever_born</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=3 </b> <br/> error: 0.969, n=259 <br/> p: (0.27, 0.27, 0.46) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 2:n [label="3"] ;
+3 [label=<<b> Class=2 </b> <br/> error: 0.983, n=49 <br/> p: (0.37, 0.39, 0.24) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 3:n [label="7"] ;
+4 [label=<<b> Class=1 </b> <br/> error: 0.847, n=47 <br/> p: (0.62, 0.19, 0.19) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 4:n [label="8"] ;
+5 [label=<<b> Class=1 </b> <br/> error: 0.091, n=97 <br/> p: (0.98, 0.00, 0.02) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 5:n [label="0"] ;
+6 [label=<<b> Class=1 </b> <br/> error: 0.995, n=92 <br/> p: (0.38, 0.29, 0.33) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 6:n [label="6"] ;
+7 [label=<<b> Class=1 </b> <br/> error: 0.913, n=276 <br/> p: (0.52, 0.17, 0.32) <br/><b>Wifes_age</b>>, fillcolor="0.300 0.7 0.900", shape="rect"];
+1:s -> 7:n [label="1"] ;
+8 [label=<<b> Class=3 </b> <br/> error: 0.887, n=28 <br/> p: (0.25, 0.18, 0.57) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+7:s -> 8:n [label="21"] ;
+9 [label=<<b> Class=1 </b> <br/> error: 0.870, n=28 <br/> p: (0.57, 0.14, 0.29) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+7:s -> 9:n [label="25"] ;
+10 [label=<<b> Class=1 </b> <br/> error: 0.962, n=276 <br/> p: (0.41, 0.20, 0.38) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 10:n [label="2"] ;
+11 [label=<<b> Class=3 </b> <br/> error: 0.992, n=197 <br/> p: (0.29, 0.31, 0.40) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 11:n [label="4"] ;
+12 [label=<<b> Class=3 </b> <br/> error: 0.986, n=135 <br/> p: (0.33, 0.27, 0.41) >, fillcolor="0.300 0.7 0.900", shape="oval"];
+1:s -> 12:n [label="5"] ;
+
+}

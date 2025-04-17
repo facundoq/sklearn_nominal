@@ -1,0 +1,22 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="kc1", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=False </b> <br/> error: 0.621, n=2109 <br/> p: (0.85, 0.15) <br/><b>e</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=False </b> <br/> error: 0.247, n=1097 <br/> p: (0.96, 0.04) >, fillcolor="0.150 0.7 0.900", shape="oval"];
+1:s -> 2:n [label="<= 243.8"] ;
+3 [label=<<b> Class=False </b> <br/> error: 0.852, n=1012 <br/> p: (0.72, 0.28) <br/><b>total_Opnd</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 3:n [label="> 243.8"] ;
+4 [label=<<b> Class=False </b> <br/> error: 0.776, n=865 <br/> p: (0.77, 0.23) >, fillcolor="0.300 0.7 0.800", shape="oval"];
+3:s -> 4:n [label="<= 64"] ;
+5 [label=<<b> Class=True </b> <br/> error: 0.988, n=147 <br/> p: (0.44, 0.56) <br/><b>locCodeAndComment</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+3:s -> 5:n [label="> 64"] ;
+6 [label=<<b> Class=True </b> <br/> error: 0.943, n=111 <br/> p: (0.36, 0.64) <br/><b>lOComment</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+5:s -> 6:n [label="<= 0"] ;
+7 [label=<<b> Class=True </b> <br/> error: 0.966, n=102 <br/> p: (0.39, 0.61) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+6:s -> 7:n [label="<= 19"] ;
+
+}

@@ -1,0 +1,10 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="cylinder-bands", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=noband </b> <br/> error: 0.982, n=540 <br/> p: (0.42, 0.58) >, fillcolor="0.000 0.7 0.800", shape="oval"];
+
+}

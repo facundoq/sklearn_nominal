@@ -1,0 +1,28 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="blood-transfusion-service-center", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=1 </b> <br/> error: 0.792, n=748 <br/> p: (0.76, 0.24) <br/><b>V1</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=1 </b> <br/> error: 0.949, n=375 <br/> p: (0.63, 0.37) <br/><b>V2</b>>, fillcolor="0.150 0.7 0.900", shape="rect"];
+1:s -> 2:n [label="<= 7"] ;
+3 [label=<<b> Class=1 </b> <br/> error: 0.858, n=213 <br/> p: (0.72, 0.28) >, fillcolor="0.300 0.7 0.800", shape="oval"];
+2:s -> 3:n [label="<= 5"] ;
+4 [label=<<b> Class=1 </b> <br/> error: 0.999, n=162 <br/> p: (0.52, 0.48) <br/><b>V4</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+2:s -> 4:n [label="> 5"] ;
+5 [label=<<b> Class=2 </b> <br/> error: 0.939, n=73 <br/> p: (0.36, 0.64) <br/><b>V2</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+4:s -> 5:n [label="<= 41"] ;
+6 [label=<<b> Class=2 </b> <br/> error: 0.952, n=70 <br/> p: (0.37, 0.63) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+5:s -> 6:n [label="<= 14"] ;
+7 [label=<<b> Class=1 </b> <br/> error: 0.933, n=89 <br/> p: (0.65, 0.35) <br/><b>V2</b>>, fillcolor="0.450 0.7 0.900", shape="rect"];
+4:s -> 7:n [label="> 41"] ;
+8 [label=<<b> Class=1 </b> <br/> error: 0.792, n=63 <br/> p: (0.76, 0.24) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+7:s -> 8:n [label="<= 14"] ;
+9 [label=<<b> Class=2 </b> <br/> error: 0.961, n=26 <br/> p: (0.38, 0.62) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+7:s -> 9:n [label="> 14"] ;
+10 [label=<<b> Class=1 </b> <br/> error: 0.492, n=373 <br/> p: (0.89, 0.11) >, fillcolor="0.150 0.7 0.900", shape="oval"];
+1:s -> 10:n [label="> 7"] ;
+
+}

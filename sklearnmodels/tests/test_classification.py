@@ -95,8 +95,8 @@ def test_performance_similar_sklearn(at_least_percent=0.8,dataset_names=dataset_
     nominal_results_all = []
     numeric_results_all = []
     for dataset in tqdm(datasets,desc=f"Datasets"):
-        nominal_results = train_test_classification_model("NominalTree",get_nominal_tree_classifier,dataset)
-        numeric_results = train_test_classification_model("SklearnTree",get_sklearn_tree,dataset)
+        nominal_results = train_test_classification_model("sklearnmodels.tree",get_nominal_tree_classifier,dataset)
+        numeric_results = train_test_classification_model("sklearn.tree",get_sklearn_tree,dataset)
         for set in ["Train","Test"]:
             numeric=numeric_results[set]
             nominal=nominal_results[set]

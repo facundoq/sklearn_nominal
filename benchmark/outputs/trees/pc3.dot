@@ -1,0 +1,34 @@
+digraph Tree {
+splines=false;
+graph [pad=".25", ranksep="0.5", nodesep="1"];
+node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
+edge [fontname="helvetica"] ;
+0 [label="pc3", shape=plaintext];
+0:s -> 1:n [style=invis];   
+1 [label=<<b> Class=False </b> <br/> error: 0.476, n=1563 <br/> p: (0.90, 0.10) <br/><b>LOC_BLANK</b>>, fillcolor="0.000 0.7 0.800", shape="rect"];
+2 [label=<<b> Class=False </b> <br/> error: 0.137, n=727 <br/> p: (0.98, 0.02) >, fillcolor="0.075 0.7 0.900", shape="oval"];
+1:s -> 2:n [label="<= 2"] ;
+3 [label=<<b> Class=False </b> <br/> error: 0.668, n=836 <br/> p: (0.83, 0.17) <br/><b>LOC_BLANK</b>>, fillcolor="0.075 0.7 0.900", shape="rect"];
+1:s -> 3:n [label="> 2"] ;
+4 [label=<<b> Class=False </b> <br/> error: 0.545, n=661 <br/> p: (0.87, 0.13) >, fillcolor="0.150 0.7 0.800", shape="oval"];
+3:s -> 4:n [label="<= 16"] ;
+5 [label=<<b> Class=False </b> <br/> error: 0.943, n=175 <br/> p: (0.64, 0.36) <br/><b>NUM_OPERANDS</b>>, fillcolor="0.150 0.7 0.800", shape="rect"];
+3:s -> 5:n [label="> 16"] ;
+6 [label=<<b> Class=False </b> <br/> error: 0.789, n=72 <br/> p: (0.76, 0.24) <br/><b>LOC_EXECUTABLE</b>>, fillcolor="0.225 0.7 0.900", shape="rect"];
+5:s -> 6:n [label="<= 74"] ;
+7 [label=<<b> Class=False </b> <br/> error: 0.892, n=55 <br/> p: (0.69, 0.31) >, fillcolor="0.300 0.7 0.800", shape="oval"];
+6:s -> 7:n [label="<= 33"] ;
+8 [label=<<b> Class=False </b> <br/> error: 0.992, n=103 <br/> p: (0.55, 0.45) <br/><b>CYCLOMATIC_COMPLEXITY</b>>, fillcolor="0.225 0.7 0.900", shape="rect"];
+5:s -> 8:n [label="> 74"] ;
+9 [label=<<b> Class=False </b> <br/> error: 0.974, n=96 <br/> p: (0.59, 0.41) <br/><b>PARAMETER_COUNT</b>>, fillcolor="0.300 0.7 0.800", shape="rect"];
+8:s -> 9:n [label="> 4"] ;
+10 [label=<<b> Class=False </b> <br/> error: 0.987, n=90 <br/> p: (0.57, 0.43) <br/><b>HALSTEAD_EFFORT</b>>, fillcolor="0.375 0.7 0.900", shape="rect"];
+9:s -> 10:n [label="<= 3"] ;
+11 [label=<<b> Class=False </b> <br/> error: 0.938, n=62 <br/> p: (0.65, 0.35) <br/><b>NUMBER_OF_LINES</b>>, fillcolor="0.450 0.7 0.800", shape="rect"];
+10:s -> 11:n [label="> 3.1e+04"] ;
+12 [label=<<b> Class=False </b> <br/> error: 0.971, n=55 <br/> p: (0.60, 0.40) <br/><b>HALSTEAD_LEVEL</b>>, fillcolor="0.525 0.7 0.900", shape="rect"];
+11:s -> 12:n [label="> 83"] ;
+13 [label=<<b> Class=False </b> <br/> error: 0.992, n=49 <br/> p: (0.55, 0.45) >, fillcolor="0.600 0.7 0.800", shape="oval"];
+12:s -> 13:n [label="> 0.01"] ;
+
+}
