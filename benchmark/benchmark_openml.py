@@ -13,10 +13,9 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import subprocess
-#import seaborn as sns
-import seaborn.objects as so
 import matplotlib.pyplot as plt
-from lets_plot import *
+import lets_plot as lp
+import cpuinfo
 
 # studies = openml.study.list_suites(status = 'all',output_format="dataframe")
 import time
@@ -75,8 +74,10 @@ def benchmark(model_generator:typing.Callable)->pd.DataFrame:
         model,model_name = model_generator(x,classes)
         start = time.time_ns()
         model.fit(x,y)
+        train_elapsed = (time.time_ns()-start)/10e9
+        start = time.time_ns()
         y_pred = model.predict(x)
-        elapsed = (time.time_ns()-start)/10e9
+        test_elapsed = (time.time_ns()-start)/10e9
         
         # run = openml.runs.run_model_on_task(clf, task)  # run the classifier on the task
         acc = sklearn.metrics.accuracy_score(y,y_pred)
@@ -85,12 +86,13 @@ def benchmark(model_generator:typing.Callable)->pd.DataFrame:
         results.append({"model":model_name,
                         "dataset":dataset.name,
                         "train_accuracy":acc,
-                        "time": elapsed,
+                        "train_time": train_elapsed,
+                        "test_time": test_elapsed,
                         "samples":n,
                         "features":m,
                         })
-        if i >2:
-            break
+        # if i >2:
+        #     break
         if isinstance(model,SKLearnClassificationTree):
             tree_model :tree.Tree = model.tree_
             filepath = basepath/f"trees/{dataset.name}.dot"
@@ -102,7 +104,7 @@ def benchmark(model_generator:typing.Callable)->pd.DataFrame:
     return results_df
     
     
-def save_results(df):
+def save_results(df,platform):
     # (
     # so.Plot(df, x="dataset",color="model")
     # .pair(y=["train_accuracy","time"])
@@ -119,13 +121,19 @@ def save_results(df):
 
     # ).save(basepath/"openml_cc18_time.png")
     
-    for y in ["train_accuracy","time"]:
-        path = str((basepath/f"openml_cc18_{y}.svg").absolute())
-        ggsave(ggplot(df, aes(x='dataset', y=y, color='model')) + ggsize(700, 300)+geom_line()+geom_point(),filename=path)
-
+    for y in ["train_accuracy","train_time","test_time"]:
+        path = str((basepath/f"openml_cc18_{platform}_{y}.png").absolute())
+        plot = lp.ggplot(df, lp.aes(x='dataset', y=y, color='model')) + lp.ggsize(800, 400)+lp.geom_line()+lp.geom_point()
+        lp.ggsave(plot,filename=path, w=8, h=4, unit='in', dpi=300)
+    for y in ["train_time","test_time"]:
+        plot = lp.ggplot(df,lp.aes(x="samples",y="train_time"))+ lp.facet_grid(x="model") + lp.geom_line()+lp.geom_point() +lp.ggsize(800, 400)
+        path = str((basepath/f"openml_cc18_{platform}_samples_{y}.png").absolute())
+        lp.ggsave(plot,filename=path, w=8, h=4, unit='in', dpi=300)
     
 if __name__ == "__main__":
-    table_path = basepath /"openml_cc18.csv"    
+    info = cpuinfo.get_cpu_info()
+    platform = "".join(info["brand_raw"].split(" ")).replace("/","-").replace("_","-").replace("(R)","").replace("(TM)","")
+    table_path = basepath /f"openml_cc18_{platform}.csv"
     if not table_path.exists():
         nominal_df = benchmark(get_nominal_tree)
         numeric_df = benchmark(get_sklearn_tree)
@@ -134,5 +142,5 @@ if __name__ == "__main__":
     else:
         df = pd.read_csv(table_path)
     print(df)
-    save_results(df)
+    save_results(df,platform)
     
