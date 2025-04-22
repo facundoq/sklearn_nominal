@@ -56,7 +56,7 @@ class ClassificationError(TargetError):
             return f"{super().__repr__()}(classes={self.classes})"
 
 
-class EntropyMetric(ClassificationError):
+class EntropyError(ClassificationError):
     def __init__(self,classes:int,class_weight:np.ndarray,base=2):
         super().__init__(classes,class_weight)
         self.base=base
@@ -65,12 +65,21 @@ class EntropyMetric(ClassificationError):
         # largest_value = log(np.array([self.classes]),self.base)[0]
         
         return -np.sum(p*log(p,self.classes))
-    
+
+class GiniError(ClassificationError):
+    def __init__(self,classes:int,class_weight:np.ndarray,base=2):
+        super().__init__(classes,class_weight)
+        self.base=base
+    def __call__(self, y:np.ndarray):
+        p = self.prediction(y)
+        # largest_value = log(np.array([self.classes]),self.base)[0]
+        return 1-np.sum(p**2)
+        
 class RegressionError(TargetError):
     def prediction(self,y:np.ndarray):
         return np.mean(y,axis=0)
 
-class DeviationMetric(RegressionError):
+class DeviationError(RegressionError):
     def __call__(self, y:np.ndarray):
         if y.shape[0]==0:
             return np.inf

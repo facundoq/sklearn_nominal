@@ -2,6 +2,8 @@ import abc
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.tree.attribute_penalization import AttributePenalization, NoPenalization
+
 from .target_error import TargetError
 
 from .column_error import ColumnSplitter, ColumnSplitterResult
@@ -24,9 +26,10 @@ class GlobalError(abc.ABC):
 
 class MixedGlobalError(GlobalError):
 
-    def __init__(self,column_splitters:dict[str,ColumnSplitter],error_function:TargetError):
+    def __init__(self,column_splitters:dict[str,ColumnSplitter],error_function:TargetError,attribute_penalization:AttributePenalization):
         self.column_splitters = column_splitters
         self.target_error = error_function
+        self.attribute_penalization=attribute_penalization
     def __repr__(self):
         return f"Error({self.target_error})"
 
@@ -42,6 +45,7 @@ class MixedGlobalError(GlobalError):
             x_type = x.select_dtypes(include=tipe)
             for c in x_type.columns:
                 error = column_error.error(x_type,y,c,self.target_error)
-                errors[c]=error
+                penalization = self.attribute_penalization.penalize(x,error.column,error.conditions)
+                errors[c]=error / penalization
         return errors
         

@@ -2,6 +2,8 @@ from multiprocessing import Value
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.tree.attribute_penalization import NoPenalization
+
 from . import tree
 from sklearn.preprocessing import LabelEncoder
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin, _fit_context
@@ -32,13 +34,14 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
-        min_error_decrease=0.0,):
+        min_error_decrease=0.0,attribute_penalizer="none",):
         self.criterion = criterion
         self.splitter = splitter
         self.max_depth = max_depth
         self.min_samples_leaf = min_samples_leaf
         self.min_samples_split = min_samples_split
         self.min_error_decrease = min_error_decrease
+        self.attribute_penalizer = attribute_penalizer
         
     def check_is_fitted(self):
         validation.check_is_fitted(self,"tree_")
@@ -57,7 +60,13 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
         else:
             columns=self.feature_names_in_
         return pd.DataFrame(x,columns=columns)
-    
+    def build_attribute_penalizer(self):
+        if self.attribute_penalizer is None or self.attribute_penalizer=="none":
+            return tree.NoPenalization()
+        elif self.attribute_penalizer=="gain_ratio":
+            return tree.GainRatioPenalization()
+        else:
+            raise ValueError(f"Invalid value '{self.attribute_penalizer}' for field attribute_penalizer; expected 'none' or 'gain_ratio'")
     def build_splitter(self):
         if self.splitter =="best":
             max_evals = np.iinfo(np.int64).max 
@@ -108,21 +117,11 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         return tags
     
     def build_trainer(self, error: tree.TargetError):
-        if self.splitter =="best":
-            max_evals = np.iinfo(np.int64).max 
-        elif isinstance(self.splitter,int):
-            max_evals=self.splitter
-        else:
-            raise ValueError(f"Invalid value '{self.splitter}' for splitter; expected integer or 'best'")
-        scorers = {
-            "number": tree.DiscretizingNumericColumnSplitter(
-                tree.OptimizingDiscretizationStrategy(max_evals=max_evals)
-            ),
-            "object": tree.NominalColumnSplitter(),
-            "category": tree.NominalColumnSplitter(),
-        }
+        attribute_penalization = self.build_attribute_penalizer()
+      
+        scorers = self.build_splitter()
 
-        scorer = tree.MixedGlobalError(scorers, error)
+        scorer = tree.MixedGlobalError(scorers, error,attribute_penalization)
         prune_criteria = tree.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
@@ -170,7 +169,8 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
 
     def build_error(self, classes: int):
         errors = {
-            "entropy": tree.EntropyMetric(classes, self._ordered_class_weights),
+            "entropy": tree.EntropyError(classes, self._ordered_class_weights),
+            "gini":tree.GiniError(classes,self._ordered_class_weights)
         }
         if self.criterion not in errors.keys():
             raise ValueError(f"Unknown error function {self.criterion}")
@@ -197,6 +197,7 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         min_samples_split=2,
         min_samples_leaf=1,
         min_error_decrease=0.0,
+        
     ):
         super().__init__(criterion=criterion,splitter=splitter,max_depth=max_depth,min_samples_split=min_samples_split,min_samples_leaf=min_samples_leaf,min_error_decrease=min_error_decrease)
 
@@ -207,9 +208,9 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         return tags
     
     def build_trainer(self, error: tree.TargetError):
-        
         scorers = self.build_splitter()
-        scorer = tree.MixedGlobalError(scorers, error)
+        attribute_penalization = self.build_attribute_penalizer()
+        scorer = tree.MixedGlobalError(scorers, error,attribute_penalization)
         prune_criteria = tree.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
@@ -237,7 +238,7 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
 
     def build_error(self,):
         errors = {
-            "std": tree.DeviationMetric(),
+            "std": tree.DeviationError(),
         }
         if self.criterion not in errors.keys():
             raise ValueError(f"Unknown error function {self.criterion}")
