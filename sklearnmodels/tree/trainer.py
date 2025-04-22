@@ -68,6 +68,14 @@ class PruneCriteria:
         error_improvement=tree.error-best_column.error
         return error_improvement<self.min_error_decrease
         
+class TreeTask:
+    def __init__(self,parent:Tree,condition:Condition,x:pd.DataFrame,y:np.ndarray,height:int):
+        self.parent=parent
+        self.condition=condition
+        self.x=x
+        self.y=y
+        self.height=height
+        
 
 class BaseTreeTrainer(TreeTrainer):
 
@@ -82,14 +90,23 @@ class BaseTreeTrainer(TreeTrainer):
     
     def fit(self,x:pd.DataFrame,y:np.ndarray)->Tree:
         return self.build(x,y,1)
-
     def build(self,x:pd.DataFrame,y:np.ndarray,height:int)->Tree:
+        tree,subtrees = self.make_tree(x,y,height)
+        
+        while len(subtrees)>0:
+            task = subtrees.pop()
+            subtree,subtree_tasks = self.make_tree(task.x,task.y,task.height)
+            task.parent.branches[task.condition]= subtree
+            subtrees += subtree_tasks
+        return tree
+            
+    def make_tree(self,x:pd.DataFrame,y:np.ndarray,height:int)->tuple[Tree,list[TreeTask]]:
         global_score =self.global_error.global_error(x,y)
         tree = Tree(global_score.prediction,global_score.error,y.shape[0])
         if self.prune.pre_split_prune(x,y,height,tree):
             for callback in self.tree_creation_callbacks:
                 callback(tree,height,True,None,None)
-            return tree
+            return tree,[]
         column_errors = self.global_error.column_error(x,y)
         
         
@@ -97,7 +114,7 @@ class BaseTreeTrainer(TreeTrainer):
         if len(column_errors)==0:
             for callback in self.tree_creation_callbacks:
                 callback(tree,height,True,None,None)
-            return tree
+            return tree,[]
          
         names,errors = zip(*[(k,s.error) for k,s in column_errors.items()])
         best_column_i = np.argmin(np.array(errors))
@@ -108,7 +125,7 @@ class BaseTreeTrainer(TreeTrainer):
         if self.prune.post_split_prune(tree,best_column):
             for callback in self.tree_creation_callbacks:
                 callback(tree,height, True,column_errors,best_column)
-            return tree
+            return tree,[]
         
         for callback in self.tree_creation_callbacks:
             callback(tree,height, False,column_errors,best_column)
@@ -116,6 +133,7 @@ class BaseTreeTrainer(TreeTrainer):
         #RECURSIVE CASE: use best attribute
         tree.column=best_column.column
         best_conditions = best_column.conditions
+        subtrees = []
         for x_branch,y_branch,condition in split_by_conditions(x,y,best_conditions):
             # avoid branches with low samples
             if len(y_branch)<self.prune.min_samples_leaf:
@@ -125,7 +143,8 @@ class BaseTreeTrainer(TreeTrainer):
                 x_branch = x_branch.drop(columns =[tree.column])
             for callback in self.tree_split_callbacks:
                 callback(tree,best_column,condition,x_branch,y_branch,height)
-            tree.branches[condition]=self.build(x_branch,y_branch,height+1)
-        return tree
+            subtrees.append(TreeTask(tree,condition,x_branch,y_branch,height+1))
+            
+        return tree,subtrees
 
 

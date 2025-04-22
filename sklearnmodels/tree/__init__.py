@@ -7,4 +7,4 @@ from .global_error import MixedGlobalError
 
 from .column_error import NominalColumnSplitter,DiscretizingNumericColumnSplitter,OptimizingDiscretizationStrategy
 
-from .export import export_dot,export_dot_file
+from .export import export_dot,export_dot_file,export_image

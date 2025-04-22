@@ -132,13 +132,16 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer
     
+    def _decode_y(self,y:np.ndarray):
+        return self.le_.inverse_transform(y)
+
     def _encode_y(self,y:np.ndarray):
-        le = LabelEncoder()
-        encoded_y = le.fit_transform(y)
-        self.classes_ = le.classes_
+        self.le_ = LabelEncoder()
+        encoded_y = self.le_.fit_transform(y)
+        self.classes_ = self.le_.classes_
         if self.class_weight is not None:
             # get the classes in the same order as assigned by the transform
-            ordered_classes = le.transform(le.inverse_transform(le.classes_))
+            ordered_classes = self.le_le.transform(self.le_.inverse_transform(self.classes_))
             # print(self.class_weight)
             # print(le.classes_.dtype,ordered_classes.dtype,type(ordered_classes[0]))
             # use the ordered classes to obtain ordered class weights
@@ -179,7 +182,11 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         return self.predict_base(x)
 
     def predict(self, x: pd.DataFrame):
-        return self.predict_proba(x).argmax(axis=1)
+        return self._decode_y(self.predict_proba(x).argmax(axis=1))
+    def export_dot(self,filepath):
+        tree.export_dot_file(self.tree_,filepath,class_names=self.classes_)
+    def export_image(self,filepath):
+        tree.export_image(self.tree_,filepath,class_names=self.classes_)
 
 class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
     def __init__(
@@ -241,3 +248,7 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         if len(self._y_original_shape)==1:
             y = y.squeeze()
         return y
+    def export_dot(self,filepath):
+        tree.export_dot_file(self.tree_,filepath)
+    def export_image(self,filepath):
+        tree.export_image(self.tree_,filepath)

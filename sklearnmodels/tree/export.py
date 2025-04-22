@@ -1,7 +1,7 @@
 from pathlib import Path
 from .tree import Condition
 from . import Tree
-
+import pygraphviz
 def dot_template(body:str,title:str):
 
     title_dot = f"""0 [label="{title}", shape=plaintext];
@@ -54,6 +54,7 @@ def make_edge(info:TreeInfo):
     condition = info.condition.short_description()
     return f'{info.parent_id}:s -> {info.id}:n [label="{condition}"] ;\n'
 
+
 def export_dot(tree:Tree,title="",class_names:list[str]=None):
     nodes:list[TreeInfo] = []
     global id
@@ -82,3 +83,9 @@ def export_dot_file(tree:Tree,filepath:Path,title="",class_names:list[str]=[]):
     dot = export_dot(tree,title=title,class_names=class_names)
     with open(filepath,"w") as f:
         f.write(dot)
+
+def export_image(tree:Tree,filepath:Path,title="",class_names:list[str]=[],prog="dot"):
+    dot = export_dot(tree,title=title,class_names=class_names)
+    graph = pygraphviz.AGraph(string=dot)
+    graph.draw(path=str(filepath),prog=prog)
+    
