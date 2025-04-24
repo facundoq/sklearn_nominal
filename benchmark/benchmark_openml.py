@@ -86,9 +86,6 @@ def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
         task = openml.tasks.get_task(task_id)  # download the OpenML task
         dataset = task.get_dataset()
         pbar.update(1)
-
-        if i >3:
-            break
         
         x, y = task.get_X_and_y(dataset_format='dataframe')  # get the data
         x = pyarrow_backed_pandas(x)
