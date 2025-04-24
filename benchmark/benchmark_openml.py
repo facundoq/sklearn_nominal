@@ -42,7 +42,7 @@ def get_nominal_tree(x:pd.DataFrame,classes:int):
     n,m=x.shape
     max_height,min_samples_leaf,min_samples_split,min_error_improvement = get_tree_parameters(x,classes)
     
-    return SKLearnClassificationTree(criterion="entropy",max_depth=max_height,min_samples_leaf=min_samples_leaf,min_samples_split=min_samples_split,min_error_decrease=min_error_improvement,splitter=10),"sklearnmodels.tree"
+    return SKLearnClassificationTree(criterion="entropy",max_depth=max_height,min_samples_leaf=min_samples_leaf,min_samples_split=min_samples_split,min_error_decrease=min_error_improvement,splitter=10)
 
 def get_sklearn_pipeline(x:pd.DataFrame,model):
     numeric_features = x.select_dtypes(include=['int64','float64']).columns
