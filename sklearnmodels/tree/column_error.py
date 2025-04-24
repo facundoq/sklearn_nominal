@@ -2,85 +2,53 @@ import abc
 from typing import Callable
 
 from numpy import isnan
-from .tree import Condition, split_by_conditions
+
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPenalization
+from sklearnmodels.tree.conditions import RangeSplit, Split, ValueSplit
+
 from .target_error import TargetError
-
-
-class ValueCondition(Condition):
-    def __init__(self,column:str,value):
-        self.column=column
-        self.value=value
-    def __call__(self,x:pd.DataFrame):
-        return x[self.column]==self.value
-    def __repr__(self):
-        return f"{self.column}={self.value}"
-    def short_description(self):
-        return f"{self.value}"
-    
-
-class RangeCondition(Condition):
-    def __init__(self,column:str,value:float,less:bool):
-        self.column=column
-        self.value=value
-        self.less=less
-    def __call__(self,x:pd.DataFrame):
-        if self.less:
-            return x[self.column]<=self.value
-        else:
-            return x[self.column]>self.value
-    def __repr__(self):
-        op = "<=" if self.less else ">"
-        return f"{self.column} {op} {self.value:.4g}"
-    def short_description(self):
-        op = "<=" if self.less else ">"
-        return f"{op} {self.value:.4g}"
+from .tree import Condition
+from . import ValueCondition,RangeCondition
 
 
 
-class ColumnSplitterResult:
-    def __init__(self,error:float,conditions:list[Condition],column:str,remove:bool):
+class SplitterResult:
+    def __init__(self,error:float,split:Split,column:str,remove:bool):
         self.error=error
-        self.conditions=conditions
+        self.split=split
         self.column=column
         self.remove = remove
     def __repr__(self):
-        return f"Score({self.column},{self.error},{len(self.conditions)} branches)"
+        return f"Score({self.column},{self.error},{len(self.split.conditions)} branches)"
     
-class ColumnSplitter(abc.ABC):
+class Splitter(abc.ABC):
 
+    def __init__(self,penalization:ColumnPenalization=NoPenalization()):
+        self.penalization=penalization
+    
     @abc.abstractmethod
-    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError)->ColumnSplitterResult:
+    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError)->SplitterResult:
         pass
 
     def __repr__(self):
         return self.__class__.__name__
     
 
-class DiscretizationStrategy:
-
-    @abc.abstractmethod
-    def __call__(self,x:pd.Series,y:np.ndarray,column:str,metric:TargetError)->list[Condition]:
-        pass
-
-class MeanDiscretizationStrategy(DiscretizationStrategy):
-
-    def __call__(self, x:pd.Series,y:np.ndarray,column:str,metric:TargetError)->list[Condition]:
-        mu = x.mean()
-        return [RangeCondition(column,mu,True),RangeCondition(column,mu,False)]
-
 type ConditionEvaluationCallback = Callable[[str,np.ndarray,np.ndarray],None]
 
-class OptimizingDiscretizationStrategy(DiscretizationStrategy):
-
+class NumericSplitter(Splitter):
+    
     def __init__(self,max_evals:int=np.iinfo(np.int64).max,callbacks:list[ConditionEvaluationCallback]=[]):
+        super().__init__()
         assert max_evals>0
         self.max_evals=max_evals
         self.callbacks = callbacks
-    def __call__(self, x:pd.Series,y:np.ndarray,column:str,metric:TargetError)->list[Condition]:
-        values = x.unique()
+
+    def get_values(self,x:pd.DataFrame,column:str):
+        values = x[column].unique()
         values = values[~np.isnan(values)]
         n = len(values)
         if self.max_evals is not None:
@@ -94,42 +62,38 @@ class OptimizingDiscretizationStrategy(DiscretizationStrategy):
         if n>1:
             values = values[:-1]
             n-=1
+        return values
+    
+    def optimize(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError):
+        values = self.get_values(x,column)
+        n = len(values)
 
         # find best split value based on unique values of column
         errors = np.zeros(n)
+        candidate_conditions = []
         for i,v in enumerate(values):
-            low,high = y[x<=v],y[x>v]
-            n_low,n_high = low.shape[0],high.shape[0]
-            errors[i] = (metric(low)*n_low+metric(high)*n_high)/n
+            split = RangeSplit(column,v)
+            errors[i]= metric.average_split(x,y,split)
+            candidate_conditions.append(split)
+            penalization = self.penalization.penalize(x, split)
+            errors[i]/=penalization
+        
         for callback in self.callbacks:
             callback(column,values,errors)
+            
         best_i = np.argmin(errors)
-        best_v = values[best_i]
-        return [RangeCondition(column,best_v,True),RangeCondition(column,best_v,False)]
-
-class DiscretizingNumericColumnSplitter(ColumnSplitter):
-    def __init__(self,strategy:DiscretizationStrategy):
-        super().__init__()
-        self.strategy = strategy
-
-    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError,)->ColumnSplitterResult:
-
-        conditions = self.strategy(x[column],y,column,metric)
-        n = len(y)
-        error = 0.0
-        for x_branch,y_branch,condition in split_by_conditions(x,y,conditions):
-            p = len(y_branch) /n
-            error += p* metric(y_branch)
-        return ColumnSplitterResult(error,conditions,column,False)
+        return candidate_conditions[best_i],errors[best_i]
+    
+    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError,)->SplitterResult:
+        conditions,error = self.optimize(x,y,column,metric)
+        return SplitterResult(error,conditions,column,False)
     
 
-class NominalColumnSplitter(ColumnSplitter):
+class NominalSplitter(Splitter):
 
-    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError)->ColumnSplitterResult:
-        conditions = [ValueCondition(column,v) for v in x[column].unique()]
-        n = len(y)
-        error = 0.0
-        for x_branch,y_branch,condition in split_by_conditions(x,y,conditions):
-            p = len(y_branch) /n
-            error += p* metric(y_branch)
-        return ColumnSplitterResult(error,conditions,column,True)
+    def error(self,x:pd.DataFrame,y:np.ndarray,column:str,metric:TargetError)->SplitterResult:
+        split = ValueSplit(column,x[column].unique())
+        error = metric.average_split(x,y,split)
+        penalization = self.penalization.penalize(x,split)
+        error/=penalization
+        return SplitterResult(error,split,column,True)

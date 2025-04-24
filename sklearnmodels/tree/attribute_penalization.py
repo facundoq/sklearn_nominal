@@ -2,31 +2,32 @@ import abc
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.tree.conditions import Split
 from sklearnmodels.tree.target_error import log
-from sklearnmodels.tree.tree import Condition, split_by_conditions
+from sklearnmodels.tree.tree import Condition
 
-class AttributePenalization(abc.ABC):
+class ColumnPenalization(abc.ABC):
     
     
     def __init__(self):
         super().__init__()
     abc.abstractmethod
-    def penalize(self,x:pd.DataFrame,column:str,conditions:list[Condition]):
+    def penalize(self,x:pd.DataFrame,split:Split):
         pass
         
     
     
-class NoPenalization(AttributePenalization):
+class NoPenalization(ColumnPenalization):
     
-    def penalize(self, x:pd.DataFrame, column:str,conditions:list[Condition]):
+    def penalize(self, x:pd.DataFrame,split:Split):
         return 1
     
 
     
-class GainRatioPenalization(AttributePenalization):
+class GainRatioPenalization(ColumnPenalization):
     
-    def penalize(self, x:pd.DataFrame, column:str,conditions:list[Condition]):
-        counts = np.array([len(s) for s in split_by_conditions(x,conditions)])
+    def penalize(self, x:pd.DataFrame,y:np.ndarray,split:Split):
+        counts = np.array([len(x_i) for x_i,y_i in split.split(x,y)])
         counts /=counts.sum()
         return -np.sum(counts*log(counts,len(counts)))
             

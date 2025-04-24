@@ -2,34 +2,34 @@ import abc
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.tree.attribute_penalization import AttributePenalization, NoPenalization
-
+from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPenalization
 from .target_error import TargetError
+from .column_error import Splitter, SplitterResult
 
-from .column_error import ColumnSplitter, ColumnSplitterResult
-
+#TODO simplify this
 class GlobalErrorResult:
     def __init__(self,prediction:np.ndarray, error:float, ):
         self.prediction=prediction
         self.error=error
 
-type ColumnErrors =  dict[str,ColumnSplitterResult]
+type ColumnErrors =  dict[str,SplitterResult]
 
-class GlobalError(abc.ABC):
+class Splitter(abc.ABC):
+    
     @abc.abstractmethod
     def global_error(self, x:pd.DataFrame, y:np.ndarray)->GlobalErrorResult:
         pass
 
     @abc.abstractmethod
-    def column_error(self, x:pd.DataFrame, y:np.ndarray)->ColumnErrors:
+    def split_columns(self, x:pd.DataFrame, y:np.ndarray)->ColumnErrors:
         pass
 
-class MixedGlobalError(GlobalError):
+class MixedSplitter(Splitter):
 
-    def __init__(self,column_splitters:dict[str,ColumnSplitter],error_function:TargetError,attribute_penalization:AttributePenalization):
+    def __init__(self,column_splitters:dict[str,Splitter],error_function:TargetError,column_penalization:ColumnPenalization):
         self.column_splitters = column_splitters
         self.target_error = error_function
-        self.attribute_penalization=attribute_penalization
+        self.column_penalization=column_penalization
     def __repr__(self):
         return f"Error({self.target_error})"
 
@@ -38,14 +38,13 @@ class MixedGlobalError(GlobalError):
         global_prediction = self.target_error.prediction(y)
         return GlobalErrorResult(global_prediction,global_metric)
     
-    def column_error(self, x:pd.DataFrame, y:np.ndarray)->ColumnErrors:
+    def split_columns(self, x:pd.DataFrame, y:np.ndarray)->ColumnErrors:
         
         errors = {}
         for tipe, column_error in self.column_splitters.items():
             x_type = x.select_dtypes(include=tipe)
             for c in x_type.columns:
-                error = column_error.error(x_type,y,c,self.target_error)
-                penalization = self.attribute_penalization.penalize(x,error.column,error.conditions)
-                errors[c]=error / penalization
+                errors[c] = column_error.error(x_type,y,c,self.target_error)
+                
         return errors
         

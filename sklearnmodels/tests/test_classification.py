@@ -27,14 +27,16 @@ def read_classification_dataset(path:Path):
     #y = y.reshape(len(y),1)
     return x,y,le.classes_
 
-def get_nominal_tree_classifier(x:pd.DataFrame,classes:int):
-    n,m=x.shape
-    max_height = min(max(int(np.log(m)*3),5),30)
-    min_samples_leaf = max(10,int(n*(0.05/classes)))
-    min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05/classes
+def get_nominal_tree_classifier(criterion:str):
+    def build_nominal_tree_classifier(x:pd.DataFrame,classes:int):
+        n,m=x.shape
+        max_height = min(max(int(np.log(m)*3),5),30)
+        min_samples_leaf = max(10,int(n*(0.05/classes)))
+        min_samples_split = min_samples_leaf
+        min_error_improvement = 0.05/classes
 
-    return SKLearnClassificationTree(criterion="entropy",max_depth=max_height,min_samples_leaf=min_samples_leaf,min_samples_split=min_samples_split,min_error_decrease=min_error_improvement,splitter=4)
+        return SKLearnClassificationTree(criterion=criterion,max_depth=max_height,min_samples_leaf=min_samples_leaf,min_samples_split=min_samples_split,min_error_decrease=min_error_improvement,splitter=4)
+    return build_nominal_tree_classifier
 
 
 def train_test_classification_model(model_name:str,model_generator,dataset:Path):
@@ -48,7 +50,7 @@ def train_test_classification_model(model_name:str,model_generator,dataset:Path)
     score_train = accuracy_score(y_train,y_pred_train)
     y_pred_test = model.predict(x_test)
     score_test = accuracy_score(y_test,y_pred_test)
-    return { "Model":model_name, "Dataset":dataset_name, "Train":score_train, "Test":score_test}
+    return {  "Dataset":dataset_name, "Model":model_name, "Train":score_train, "Test":score_test}
         
         
 
@@ -89,23 +91,34 @@ dataset_names = [
     "sonar.csv",
     "titanic.csv",
 ]
-def test_performance_similar_sklearn(at_least_percent=0.8,dataset_names=dataset_names):
+
+def check_results(at_least_percent:float,results:dict[str,dict[str,float]],reference_model:str):  
+    results=results.copy()
+    reference = results.pop(reference_model)
     
-    datasets = [path/name for name in dataset_names]
-    nominal_results_all = []
-    numeric_results_all = []
-    for dataset in tqdm(datasets,desc=f"Datasets"):
-        nominal_results = train_test_classification_model("sklearnmodels.tree",get_nominal_tree_classifier,dataset)
-        numeric_results = train_test_classification_model("sklearn.tree",get_sklearn_tree,dataset)
+    for model_name,model_results in results.items():
+        
         for set in ["Train","Test"]:
-            numeric=numeric_results[set]
-            nominal=nominal_results[set]
-            percent = nominal/numeric
-            assert at_least_percent<=percent, f"{set} accuracy of nominal tree ({nominal:.2g}) should be at least {at_least_percent*100:.2g}% of sklearn.tree ({numeric:.2g}) on dataset {nominal_results["Dataset"]}, was only {percent*100:.2g}%."
-        nominal_results_all.append(nominal_results)
-        numeric_results_all.append(numeric_results)
-    print(pd.DataFrame.from_records(nominal_results_all))
-    print(pd.DataFrame.from_records(numeric_results_all))
+                reference_score=reference[set]
+                model_score=model_results[set]
+                percent = model_score/reference_score
+                assert at_least_percent<=percent, f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {at_least_percent*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."
+                
+def test_performance_similar_sklearn(at_least_percent=0.8,dataset_names=dataset_names):
+    models = {"sklearn.tree":get_sklearn_tree,
+              "sklearnmodels.tree[entropy]":get_nominal_tree_classifier("entropy"),
+              "sklearnmodels.tree[gini]":get_nominal_tree_classifier("gini"),
+              "sklearnmodels.tree[gain_ratio]":get_nominal_tree_classifier("gain_ratio")
+              }
+    datasets = [path/name for name in dataset_names]
+    results_all= []
+    for dataset in tqdm(datasets,desc=f"Datasets"):
+        results = {k:train_test_classification_model(k,m,dataset) for k,m in models.items()}
+        check_results(at_least_percent,results,"sklearn.tree")
+        results_all += list(results.values())
+            
+    print(pd.DataFrame.from_records(results_all))
+    
 
 
 if __name__ == "__main__":

@@ -3,26 +3,9 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-# A condition can filter rows of a dataframe (pd.Series), 
-# Returns a new boolean series
-class Condition(abc.ABC):
-
-    @abc.abstractmethod
-    def __call__(self, x:pd.DataFrame)->np.ndarray:
-        pass
-    
-    @abc.abstractmethod
-    def short_description(self)-> str:
-        pass
+from .conditions import Condition
 
 type Branches = dict[Condition,Tree]
-
-def split_by_conditions(x:pd.DataFrame,y:np.ndarray,conditions:list[Condition]):
-     
-     for condition in conditions:
-            idx = condition(x)
-            if idx.any():
-                yield  x.loc[idx],y[idx],condition
 
 class Tree:
     def __init__(self,prediction:np.ndarray,score:float,samples:int,branches:Branches=None):

@@ -2,11 +2,22 @@ import abc
 import numpy as np
 import pandas as pd
 
+from .conditions import Condition, Split
+
 class TargetError(abc.ABC):
 
     @abc.abstractmethod
     def __call__(self,y:np.ndarray)->float:
         pass
+    
+    
+    def average_split(self,x:pd.DataFrame,y:np.ndarray,split:Split):
+        error = 0.0
+        n = len(y)
+        for x_branch,y_branch in split.split(x,y):
+            branch_error = self(y_branch)
+            error += len(y_branch) * branch_error
+        return error/n
     
     @abc.abstractmethod
     def prediction(self,y:np.ndarray):
@@ -36,7 +47,8 @@ class ClassificationError(TargetError):
         if class_weight is None:
             self.class_weight=np.ones(classes)
         else:
-            self.class_weight=class_weight    
+            self.class_weight=class_weight 
+               
     def prediction(self,y:np.ndarray):
         if len(y)==0:
             result = np.ones(self.classes)/self.classes
@@ -65,6 +77,8 @@ class EntropyError(ClassificationError):
         # largest_value = log(np.array([self.classes]),self.base)[0]
         
         return -np.sum(p*log(p,self.classes))
+    
+
 
 class GiniError(ClassificationError):
     def __init__(self,classes:int,class_weight:np.ndarray,base=2):

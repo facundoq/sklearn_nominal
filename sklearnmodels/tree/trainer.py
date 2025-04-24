@@ -3,9 +3,9 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from .column_error import ColumnSplitterResult
-from .tree import Condition, Tree, split_by_conditions
-from .global_error import ColumnErrors, GlobalErrorResult, GlobalError
+from .column_error import SplitterResult
+from .tree import Condition, Tree
+from .global_error import ColumnErrors, GlobalErrorResult, Splitter
 
 
 
@@ -18,8 +18,8 @@ class TreeTrainer(abc.ABC):
         pass
 
 
-type TreeCreationCallback =Callable[[Tree,int,bool,ColumnErrors,ColumnSplitterResult],None]
-type TreeSplitCallback =Callable[[Tree,ColumnSplitterResult,Condition],None]
+type TreeCreationCallback =Callable[[Tree,int,bool,ColumnErrors,SplitterResult],None]
+type TreeSplitCallback =Callable[[Tree,SplitterResult,Condition],None]
 
 
 class PruneCriteria:
@@ -64,7 +64,7 @@ class PruneCriteria:
         
         return False
     
-    def post_split_prune(self,tree:Tree,best_column:ColumnSplitterResult):
+    def post_split_prune(self,tree:Tree,best_column:SplitterResult):
         error_improvement=tree.error-best_column.error
         return error_improvement<self.min_error_decrease
         
@@ -79,14 +79,14 @@ class TreeTask:
 
 class BaseTreeTrainer(TreeTrainer):
 
-    def __init__(self, error:GlobalError,prune:PruneCriteria,tree_creation_callbacks:list[TreeCreationCallback]=[],tree_split_callbacks:list[TreeSplitCallback]=[]):
+    def __init__(self, error:Splitter,prune:PruneCriteria,tree_creation_callbacks:list[TreeCreationCallback]=[],tree_split_callbacks:list[TreeSplitCallback]=[]):
         self.prune = prune
         self.tree_creation_callbacks=tree_creation_callbacks
         self.tree_split_callbacks=tree_split_callbacks
-        self.global_error=error
+        self.splitter=error
    
     def __repr__(self):
-        return f"TreeTrainer({self.global_error},{self.prune})"
+        return f"TreeTrainer({self.splitter},{self.prune})"
     
     def fit(self,x:pd.DataFrame,y:np.ndarray)->Tree:
         return self.build(x,y,1)
@@ -101,14 +101,17 @@ class BaseTreeTrainer(TreeTrainer):
         return tree
             
     def make_tree(self,x:pd.DataFrame,y:np.ndarray,height:int)->tuple[Tree,list[TreeTask]]:
-        global_score =self.global_error.global_error(x,y)
+        global_score =self.splitter.global_error(x,y)
         tree = Tree(global_score.prediction,global_score.error,y.shape[0])
+        
+        #BASE CASE: pre_split_prune
         if self.prune.pre_split_prune(x,y,height,tree):
             for callback in self.tree_creation_callbacks:
                 callback(tree,height,True,None,None)
             return tree,[]
-        column_errors = self.global_error.column_error(x,y)
         
+        #COMPUTE SPLITS
+        column_errors = self.splitter.split_columns(x,y)
         
         #BASE CASE: no viable columns to split found
         if len(column_errors)==0:
@@ -132,15 +135,16 @@ class BaseTreeTrainer(TreeTrainer):
             
         #RECURSIVE CASE: use best attribute
         tree.column=best_column.column
-        best_conditions = best_column.conditions
+        best_split = best_column.split
         subtrees = []
-        for x_branch,y_branch,condition in split_by_conditions(x,y,best_conditions):
+        for i,(x_branch,y_branch) in enumerate(best_split.split(x,y)):
             # avoid branches with low samples
             if len(y_branch)<self.prune.min_samples_leaf:
                 continue
             # remove column from consideration
             if best_column.remove:
                 x_branch = x_branch.drop(columns =[tree.column])
+            condition=best_split.conditions[i]
             for callback in self.tree_split_callbacks:
                 callback(tree,best_column,condition,x_branch,y_branch,height)
             subtrees.append(TreeTask(tree,condition,x_branch,y_branch,height+1))
