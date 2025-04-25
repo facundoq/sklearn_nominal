@@ -52,6 +52,8 @@ class NumericSplitter(Splitter):
         self.callbacks = callbacks
 
     def get_values(self,x:pd.DataFrame,column:str):
+        values = x[column]
+        values.sort()
         values = x[column].unique()
         values = values[~np.isnan(values)]
         n = len(values)
@@ -61,12 +63,9 @@ class NumericSplitter(Splitter):
                 step = n//self.max_evals
                 values=values[::step]
                 n = len(values)
-        values  = values.to_numpy().copy()
-        values.sort()
-        # values = values.values.to_array()
-        # sorted_indices = pc.array_sort_indices(values)
-        # values = values.take(sorted_indices)
-
+        # values  = values.to_numpy().copy()
+        # values.sort()
+        
         if n>1:
             values = values[:-1]
             n-=1
