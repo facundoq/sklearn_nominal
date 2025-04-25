@@ -39,6 +39,10 @@ class Splitter(abc.ABC):
 
 type ConditionEvaluationCallback = Callable[[str,np.ndarray,np.ndarray],None]
 
+import pyarrow.compute as pc
+
+
+
 class NumericSplitter(Splitter):
     
     def __init__(self,max_evals:int=np.iinfo(np.int64).max,callbacks:list[ConditionEvaluationCallback]=[]):
@@ -57,7 +61,11 @@ class NumericSplitter(Splitter):
                 step = n//self.max_evals
                 values=values[::step]
                 n = len(values)
+        values  = values.to_numpy().copy()
         values.sort()
+        # values = values.values.to_array()
+        # sorted_indices = pc.array_sort_indices(values)
+        # values = values.take(sorted_indices)
 
         if n>1:
             values = values[:-1]

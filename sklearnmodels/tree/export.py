@@ -55,7 +55,7 @@ def make_edge(info:TreeInfo):
     return f'{info.parent_id}:s -> {info.id}:n [label="{condition}"] ;\n'
 
 
-def export_dot(tree:Tree,title="",class_names:list[str]=None):
+def export_dot(tree:Tree,class_names:list[str],title=""):
     nodes:list[TreeInfo] = []
     global id
     id = 0
@@ -79,13 +79,15 @@ def export_dot(tree:Tree,title="",class_names:list[str]=None):
     return dot_template(body,title)
 
 
-def export_dot_file(tree:Tree,filepath:Path,title="",class_names:list[str]=[]):
-    dot = export_dot(tree,title=title,class_names=class_names)
+def export_dot_file(tree:Tree,filepath:Path,title="",class_names:list[str]=None):
+    dot = export_dot(tree,class_names,title=title)
     with open(filepath,"w") as f:
         f.write(dot)
 
-def export_image(tree:Tree,filepath:Path,title="",class_names:list[str]=[],prog="dot"):
-    dot = export_dot(tree,title=title,class_names=class_names)
+def export_image(tree:Tree,filepath:Path,title="",class_names:list[str]=None,prog="dot"):
+    if class_names is None:
+        class_names = [f"Class {i}" for  i in range(len(tree.prediction))]
+    dot = export_dot(tree,class_names,title=title)
     graph = pygraphviz.AGraph(string=dot)
     graph.draw(path=str(filepath),prog=prog)
     

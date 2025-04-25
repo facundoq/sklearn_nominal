@@ -70,11 +70,7 @@ def get_sklearn_tree(x:pd.DataFrame,classes:int):
     return pipeline
 
 
-def pyarrow_backed_pandas(x:pd.DataFrame)->pd.DataFrame:
-    import pyarrow as pa
-    pa_table = pa.Table.from_pydict(x)
-    df = pa_table.to_pandas(types_mapper=pd.ArrowDtype)
-    return df
+
     
 def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
     benchmark_suite = openml.study.get_suite('OpenML-CC18')  # obtain the benchmark suite
@@ -88,7 +84,6 @@ def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
         pbar.update(1)
         
         x, y = task.get_X_and_y(dataset_format='dataframe')  # get the data
-        x = pyarrow_backed_pandas(x)
         
         n,m=x.shape
         if m>1000:
@@ -99,16 +94,13 @@ def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
         
             
         # print(f"Running {task} for dataset {dataset.name}")
-        
+        le = LabelEncoder().fit(y)
+        y = le.transform(y)
         classes = len(np.unique(y))
         
         pbar.set_postfix_str(f"{dataset.name}: input={n}x{m} => {classes} classes")
-        
-        
         model = model_generator(x,classes)
-        
         start = time.time_ns()
-        
         model.fit(x,y)
         train_elapsed = (time.time_ns()-start)/10e9
         start = time.time_ns()
@@ -117,8 +109,8 @@ def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
         
         # run = openml.runs.run_model_on_task(clf, task)  # run the classifier on the task
         acc = sklearn.metrics.accuracy_score(y,y_pred)
-        # score = run.get_metric_fn(sklearn.metrics.accuracy_score)  # print accuracy score
         
+        # score = run.get_metric_fn(sklearn.metrics.accuracy_score)  # print accuracy score
         results.append({"model":model_name,
                         "dataset":dataset.name,
                         "train_accuracy":acc,
@@ -130,7 +122,7 @@ def benchmark(model_generator:typing.Callable,model_name:str)->pd.DataFrame:
         
         if isinstance(model,SKLearnClassificationTree):
             image_filepath = basepath/f"trees/{dataset.name}.svg"
-            model.export_image(image_filepath)
+            model.export_image(image_filepath,le.classes_)
 
     results_df = pd.DataFrame.from_records(results)
     return results_df
@@ -179,7 +171,6 @@ def compute_results(platform:str,models:dict[str,typing.Callable],force=False):
         model_table_path = basepath /f"openml_cc18_{platform}_{model_name}.csv"
         if not model_table_path.exists() or force:
             print(f"Running benchmarks for {model_name}")
-            
             model_df = benchmark(model,model_name)
             model_df.to_csv(model_table_path)
         else:
@@ -209,7 +200,7 @@ if __name__ == "__main__":
     info = cpuinfo.get_cpu_info()
     platform = "".join(info["brand_raw"].split(" ")).replace("/","-").replace("_","-").replace("(R)","").replace("(TM)","")
     print(f"Running on {platform}")
-    df = compute_results(platform,models,force=True)
+    df = compute_results(platform,models,force=False)
     print(df)
     
     plot_results(df,platform)

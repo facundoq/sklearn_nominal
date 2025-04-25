@@ -25,6 +25,12 @@ def atleast_2d(x):
         result = x
     return result
 
+def pyarrow_backed_pandas(x:pd.DataFrame)->pd.DataFrame:
+    import pyarrow as pa
+    pa_table = pa.Table.from_pydict(x)
+    df = pa_table.to_pandas(types_mapper=pd.ArrowDtype)
+    return df
+
 class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
     check_parameters={"dtype":None}
 
@@ -58,7 +64,8 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
             columns = list([f"feature{i}" for i in range(self.n_features_in_)])
         else:
             columns=self.feature_names_in_
-        return pd.DataFrame(x,columns=columns)
+        df=pd.DataFrame(x,columns=columns)
+        return pyarrow_backed_pandas(df)
     def build_attribute_penalizer(self):
         if self.criterion =="gain_ratio":
             return tree.GainRatioPenalization()
@@ -129,21 +136,21 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer
     
-    def _decode_y(self,y:np.ndarray):
-        return self.le_.inverse_transform(y)
+    # def _decode_y(self,y:np.ndarray):
+    #     return self.le_.inverse_transform(y)
 
-    def _encode_y(self,y:np.ndarray):
-        self.le_ = LabelEncoder()
-        encoded_y = self.le_.fit_transform(y)
-        self.classes_ = self.le_.classes_
-        if self.class_weight is not None:
-            # get the classes in the same order as assigned by the transform
-            ordered_classes = self.le_le.transform(self.le_.inverse_transform(self.classes_))
-            # use the ordered classes to obtain ordered class weights
-            self._ordered_class_weights = np.array([self.class_weight[c] for c in ordered_classes])
-        else:
-            self._ordered_class_weights = None
-        return encoded_y
+    # def _encode_y(self,y:np.ndarray):
+    #     self.le_ = LabelEncoder()
+    #     encoded_y = self.le_.fit_transform(y)
+    #     self.classes_ = self.le_.classes_
+    #     if self.class_weight is not None:
+    #         # get the classes in the same order as assigned by the transform
+    #         ordered_classes = self.le_le.transform(self.le_.inverse_transform(self.classes_))
+    #         # use the ordered classes to obtain ordered class weights
+    #         self._ordered_class_weights = np.array([self.class_weight[c] for c in ordered_classes])
+    #     else:
+    #         self._ordered_class_weights = None
+    #     return encoded_y
     
     def fit(self, x: pd.DataFrame, y: np.ndarray):
         check_classification_targets(y)
@@ -153,7 +160,8 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         # check_X_y(x,y,accept_sparse=False,dtype=None,ensure_all_finite=False)
         x, y = validate_data(self, x, y, reset=True,multi_output=True,y_numeric=False, ensure_all_finite=False,dtype=None)
         y = _check_y(y,multi_output=True, y_numeric=False,estimator=self)
-        y = self._encode_y(y)
+        self.classes_=np.unique(y)
+        # y = self._encode_y(y)
         x_df =self.get_dataframe_from_x(x)
         if len(self.classes_)<2:
             raise ValueError("Can't train classifier with one class.")
@@ -165,9 +173,9 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
 
     def build_error(self, classes: int):
         errors = {
-            "entropy": tree.EntropyError(classes, self._ordered_class_weights),
-            "gini":tree.GiniError(classes,self._ordered_class_weights),
-            "gain_ratio": tree.EntropyError(classes, self._ordered_class_weights),
+            "entropy": tree.EntropyError(classes, self.class_weight),
+            "gini":tree.GiniError(classes,self.class_weight),
+            "gain_ratio": tree.EntropyError(classes, self.class_weight),
         }
         if self.criterion not in errors.keys():
             raise ValueError(f"Unknown error function {self.criterion}")
@@ -179,11 +187,14 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         return self.predict_base(x)
 
     def predict(self, x: pd.DataFrame):
-        return self._decode_y(self.predict_proba(x).argmax(axis=1))
-    def export_dot(self,filepath):
-        tree.export_dot_file(self.tree_,filepath,class_names=self.classes_)
-    def export_image(self,filepath):
-        tree.export_image(self.tree_,filepath,class_names=self.classes_)
+        p = self.predict_proba(x)
+        c = p.argmax(axis=1)
+        return c
+    
+    def export_dot(self,filepath,class_names=None):
+        tree.export_dot_file(self.tree_,filepath,class_names=class_names)
+    def export_image(self,filepath,class_names=None):
+        tree.export_image(self.tree_,filepath,class_names=class_names)
 
 class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
     def __init__(

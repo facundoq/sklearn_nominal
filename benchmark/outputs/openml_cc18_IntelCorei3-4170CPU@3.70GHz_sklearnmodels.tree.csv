@@ -1,5 +1,0 @@
-,model,dataset,train_accuracy,train_time,test_time,samples,features
-0,sklearnmodels.tree,kr-vs-kp,0.9424280350438048,0.0562759746,0.0169340796,3196,36
-1,sklearnmodels.tree,letter,0.65695,0.9072795042,0.0925712586,20000,16
-2,sklearnmodels.tree,balance-scale,0.7536,0.0109973963,0.0023856066,625,4
-3,sklearnmodels.tree,mfeat-factors,0.909,11.9750701639,0.0107860569,2000,216
