@@ -132,7 +132,7 @@ def check_results(
             percent = model_score / reference_score
             assert (
                 at_least_percent <= percent
-            ), f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {at_least_percent*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."
+            ), f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {at_least_percent*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
 
 
 def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset_names):

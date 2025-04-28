@@ -16,7 +16,7 @@ splines=false;
 graph [pad=".25", ranksep="0.5", nodesep="1"];
 node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
 edge [fontname="helvetica"] ;
-"""
+"""  # noqa: E501
         + title_dot
         + body
         + "\n}"
@@ -46,7 +46,6 @@ def make_color(height, max_height):
 def make_label(info: TreeInfo, class_names: list[str]):
     prediction = ", ".join([f"{p:.2f}" for p in info.tree.prediction])
     prediction = f"p: ({prediction})"
-    params = f"n={info.tree.samples}"
     class_info = ""
     if class_names is not None:
         class_name = class_names[info.tree.prediction.argmax()]

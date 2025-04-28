@@ -153,28 +153,8 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer
 
-    # def _decode_y(self,y:np.ndarray):
-    #     return self.le_.inverse_transform(y)
-
-    # def _encode_y(self,y:np.ndarray):
-    #     self.le_ = LabelEncoder()
-    #     encoded_y = self.le_.fit_transform(y)
-    #     self.classes_ = self.le_.classes_
-    #     if self.class_weight is not None:
-    #         # get the classes in the same order as assigned by the transform
-    #         ordered_classes = self.le_le.transform(self.le_.inverse_transform(self.classes_))
-    #         # use the ordered classes to obtain ordered class weights
-    #         self._ordered_class_weights = np.array([self.class_weight[c] for c in ordered_classes])
-    #     else:
-    #         self._ordered_class_weights = None
-    #     return encoded_y
-
     def fit(self, x: pd.DataFrame, y: np.ndarray):
         check_classification_targets(y)
-        # check_X_params = dict(dtype=None, accept_sparse=False, ensure_all_finite=False,ensure_2d=True)
-        # check_y_params = dict(ensure_2d=False,accept_sparse=False)
-        # x, y = validate_data(self, x, y, reset=True,multi_output=False,y_numeric=True, validate_separately=(check_X_params, check_y_params))
-        # check_X_y(x,y,accept_sparse=False,dtype=None,ensure_all_finite=False)
         x, y = validate_data(
             self,
             x,
@@ -260,10 +240,6 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         return trainer
 
     def fit(self, x: pd.DataFrame, y: np.ndarray):
-        # check_X_params = dict(dtype=None, accept_sparse=False, ensure_all_finite=False,ensure_2d=True)
-        # check_y_params = dict(ensure_2d=False,ensure_all_finite=True)
-        # x, y = validate_data(self, x, y, reset=True,multi_output=True,y_numeric=True, validate_separately=(check_X_params, check_y_params))
-        # check_X_y(x,y,accept_sparse=False,dtype=None,ensure_all_finite=False)
         x, y = validate_data(
             self,
             x,

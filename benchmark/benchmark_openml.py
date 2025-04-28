@@ -1,4 +1,3 @@
-# studies = openml.study.list_suites(status = 'all',output_format="dataframe")
 import time
 import typing
 from pathlib import Path
@@ -10,19 +9,16 @@ import openml
 import pandas as pd
 import sklearn
 import sklearn.impute
-from tqdm import tqdm
-
-from sklearnmodels import SKLearnClassificationTree
-
-basepath = Path("benchmark/outputs/")
-
-
-import sklearn
 from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from tqdm import tqdm
+
+from sklearnmodels import SKLearnClassificationTree
+
+basepath = Path("benchmark/outputs/")
 
 
 def get_tree_parameters(x: pd.DataFrame, classes: int):
@@ -129,11 +125,7 @@ def benchmark(model_generator: typing.Callable, model_name: str) -> pd.DataFrame
         start = time.time_ns()
         y_pred = model.predict(x)
         test_elapsed = (time.time_ns() - start) / 10e9
-
-        # run = openml.runs.run_model_on_task(clf, task)  # run the classifier on the task
         acc = sklearn.metrics.accuracy_score(y, y_pred)
-
-        # score = run.get_metric_fn(sklearn.metrics.accuracy_score)  # print accuracy score
         results.append(
             {
                 "model": model_name,
@@ -201,8 +193,6 @@ def plot_results(df: pd.DataFrame, platform: str):
                 + aes_speedup
             )
             save_plot(plot, f"openml_cc18_{platform}_{x}_{speedup_y}.png")
-        # plot = lp.ggplot(df,lp.aes(x="samples",y="features",size="train_time",color="model"))+ lp.geom_point(alpha=0.3)+ lp.ggsize(800, 400)+axis_font
-    # save_plot(plot,f"openml_cc18_{platform}_samples_features_{y}.png")
 
 
 def compute_results(platform: str, models: dict[str, typing.Callable], force=False):

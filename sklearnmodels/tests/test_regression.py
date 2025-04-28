@@ -123,9 +123,8 @@ def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_
             numeric = numeric_results[set]
             nominal = nominal_results[set]
             percent = nominal / numeric
-            assert (
-                percent <= at_most_percent
-            ), f"{set} score of nominal tree ({nominal:.2f}) should be at most {at_most_percent*100:.2f}% of sklearn.tree ({numeric:.2f}) on dataset {nominal_results["Dataset"]}, was {percent*100:.2f}% instead."
+            message = f"{set} score of nominal tree ({nominal:.2f}) should be at most {at_most_percent*100:.2f}% of sklearn.tree ({numeric:.2f}) on dataset {nominal_results["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
+            assert percent <= at_most_percent, message
         nominal_results_all.append(nominal_results)
         numeric_results_all.append(numeric_results)
     print(pd.DataFrame.from_records(nominal_results_all))
