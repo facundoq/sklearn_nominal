@@ -2,9 +2,8 @@
 # License: BSD 3 clause
 
 from . import tree
-
-from .scikit import SKLearnClassificationTree, SKLearnRegressionTree
 from ._version import __version__
+from .scikit import SKLearnClassificationTree, SKLearnRegressionTree
 
 __all__ = [
     "tree",

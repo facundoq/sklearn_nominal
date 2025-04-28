@@ -1,8 +1,6 @@
 import abc
 from typing import Callable
 
-from numpy import isnan
-
 import numpy as np
 import pandas as pd
 
@@ -10,8 +8,6 @@ from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPena
 from sklearnmodels.tree.conditions import RangeSplit, Split, ValueSplit
 
 from .target_error import TargetError
-from .tree import Condition
-from . import ValueCondition, RangeCondition
 
 
 class SplitterResult:
@@ -43,8 +39,6 @@ class Splitter(abc.ABC):
 
 
 type ConditionEvaluationCallback = Callable[[str, np.ndarray, np.ndarray], None]
-
-import pyarrow.compute as pc
 
 
 class NumericSplitter(Splitter):

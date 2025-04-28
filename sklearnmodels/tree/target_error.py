@@ -1,8 +1,9 @@
 import abc
+
 import numpy as np
 import pandas as pd
 
-from .conditions import Condition, Partition, Split
+from .conditions import Partition
 
 
 class TargetError(abc.ABC):

@@ -1,7 +1,9 @@
 from pathlib import Path
-from .tree import Condition
-from . import Tree
+
 import pygraphviz
+
+from . import Tree
+from .tree import Condition
 
 
 def dot_template(body: str, title: str):

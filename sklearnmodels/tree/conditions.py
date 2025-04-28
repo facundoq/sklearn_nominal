@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import abc
-from fcntl import F_SEAL_SEAL
 from typing import Iterable
+
 import numpy as np
-from numpy import number
 import pandas as pd
+from numpy import number
 
 type Partition = Iterable[tuple[pd.DataFrame, np.ndarray]]
 

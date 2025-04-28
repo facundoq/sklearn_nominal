@@ -1,31 +1,25 @@
-from pathlib import Path
-import typing
-
-import openml
-import sklearn
-from sklearnmodels import SKLearnClassificationTree
-import sklearn.impute
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-import lets_plot as lp
-import cpuinfo
-
 # studies = openml.study.list_suites(status = 'all',output_format="dataframe")
 import time
+import typing
+from pathlib import Path
+
+import cpuinfo
+import lets_plot as lp
+import numpy as np
+import openml
+import pandas as pd
+import sklearn
+import sklearn.impute
+from tqdm import tqdm
+
+from sklearnmodels import SKLearnClassificationTree
 
 basepath = Path("benchmark/outputs/")
 
 
-import numpy as np
-import pandas as pd
-from sklearnmodels import SKLearnClassificationTree
-
 import sklearn
 from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
-
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder

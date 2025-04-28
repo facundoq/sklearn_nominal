@@ -1,10 +1,12 @@
 import abc
+
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPenalization
+from sklearnmodels.tree.attribute_penalization import ColumnPenalization
+
+from .column_error import SplitterResult
 from .target_error import TargetError
-from .column_error import Splitter, SplitterResult
 
 
 # TODO simplify this
@@ -21,7 +23,7 @@ class GlobalErrorResult:
 type ColumnErrors = dict[str, SplitterResult]
 
 
-class Splitter(abc.ABC):
+class GlobalSplitter(abc.ABC):
 
     @abc.abstractmethod
     def global_error(self, x: pd.DataFrame, y: np.ndarray) -> GlobalErrorResult:
@@ -32,11 +34,11 @@ class Splitter(abc.ABC):
         pass
 
 
-class MixedSplitter(Splitter):
+class MixedSplitter(GlobalSplitter):
 
     def __init__(
         self,
-        column_splitters: dict[str, Splitter],
+        column_splitters: dict[str, GlobalSplitter],
         error_function: TargetError,
         column_penalization: ColumnPenalization,
     ):

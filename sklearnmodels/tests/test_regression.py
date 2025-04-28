@@ -1,20 +1,17 @@
-import subprocess
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
-from sklearn.compose import ColumnTransformer
 import sklearn.datasets
+import sklearn.tree
+from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.metrics import mean_absolute_error
-from tqdm import tqdm
-from sklearnmodels import tree
-import sklearn.tree
 from sklearn.model_selection import train_test_split
-import pytest
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from tqdm import tqdm
 
 from sklearnmodels import SKLearnRegressionTree
 
@@ -115,7 +112,7 @@ def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_
     datasets = [path / name for name in dataset_names]
     nominal_results_all = []
     numeric_results_all = []
-    for dataset in tqdm(datasets, desc=f"Datasets"):
+    for dataset in tqdm(datasets, desc="Datasets"):
         nominal_results = train_test_classification_model(
             "NominalTree", get_nominal_tree_regressor, dataset
         )

@@ -1,5 +1,3 @@
-import abc
-from typing import Callable
 import numpy as np
 import pandas as pd
 
@@ -64,7 +62,7 @@ class Tree:
     def pretty_print(self, height=0, max_height=np.inf):
         result = ""
         if height == 0:
-            result = f"root"
+            result = "root"
         if self.leaf:
             result = f"{self}"
 

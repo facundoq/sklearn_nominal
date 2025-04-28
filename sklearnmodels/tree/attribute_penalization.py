@@ -1,10 +1,10 @@
 import abc
+
 import numpy as np
 import pandas as pd
 
 from sklearnmodels.tree.conditions import Split
 from sklearnmodels.tree.target_error import log
-from sklearnmodels.tree.tree import Condition
 
 
 class ColumnPenalization(abc.ABC):

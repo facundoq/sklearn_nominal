@@ -122,7 +122,7 @@ dev = ["doc", "lint", "test"]
 
 [tool.black]
 line-length = 88
-target_version = ['py311']
+target_version = ['py312']
 preview = true
 exclude = '''
 /(
@@ -136,7 +136,7 @@ force-exclude = "sklearnmodels/_version.py"
 [tool.ruff]
 # max line length for black
 line-length = 88
-target-version = "py311"
+target-version = "py312"
 exclude=[
     ".git",
     "__pycache__",
@@ -153,6 +153,10 @@ select = ["E", "F", "W", "I"]
 ignore=[
     # space before : (needed for how black formats slicing)
     "E203",
+    # explicit reexport
+    "F401",
+    # fstrings with no variables
+    "F541",
     # do not assign a lambda expression, use a def
     "E731",
     # do not use variables named 'l', 'O', or 'I'

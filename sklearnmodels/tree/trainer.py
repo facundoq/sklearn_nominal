@@ -1,11 +1,12 @@
 import abc
 from typing import Callable
+
 import numpy as np
 import pandas as pd
 
 from .column_error import SplitterResult
+from .global_error import ColumnErrors, GlobalSplitter
 from .tree import Condition, Tree
-from .global_error import ColumnErrors, GlobalErrorResult, Splitter
 
 
 class TreeTrainer(abc.ABC):
@@ -97,7 +98,7 @@ class BaseTreeTrainer(TreeTrainer):
 
     def __init__(
         self,
-        error: Splitter,
+        error: GlobalSplitter,
         prune: PruneCriteria,
         tree_creation_callbacks: list[TreeCreationCallback] = [],
         tree_split_callbacks: list[TreeSplitCallback] = [],
