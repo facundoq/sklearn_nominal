@@ -1,0 +1,3 @@
+,model,dataset,train_accuracy,train_time,test_time,samples,features
+0,sklearnmodels.tree,kr-vs-kp,0.522215269086358,0.0032053772,0.0282954282,3196,36
+1,sklearnmodels.tree,letter,0.6053,4.0391697995,0.6157336842,20000,16

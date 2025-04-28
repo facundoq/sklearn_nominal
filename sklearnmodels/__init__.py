@@ -3,9 +3,8 @@
 
 from . import tree
 
-from .scikit import SKLearnClassificationTree,SKLearnRegressionTree
+from .scikit import SKLearnClassificationTree, SKLearnRegressionTree
 from ._version import __version__
-
 
 __all__ = [
     "tree",

@@ -10,5 +10,5 @@
 | sklearnmodels.tree | balance-scale |         0.7536   |   0.0109974  | 0.00238561  |       625 |          4 |
 | sklearnmodels.tree | mfeat-factors |         0.909    |  11.9751     | 0.0107861   |      2000 |        216 |
 ## Graphs
- All times are specified in seconds 
+ All times are specified in seconds
 ![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_train_accuracy.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_train_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_test_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_samples_train_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_samples_test_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_samples_speedup_train_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_samples_speedup_test_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_features_train_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_features_test_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_features_speedup_train_time.png)![alt](openml_cc18_IntelCorei3-4170CPU@3.70GHz_features_speedup_test_time.png)

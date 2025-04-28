@@ -13,7 +13,7 @@ from importlib.metadata import version as get_version
 project = "sklearnmodels"
 copyright = "2025, Facundo Manuel Quiroga"
 author = "Facundo Manuel Quiroga"
-release = get_version('sklearnmodels')
+release = get_version("sklearnmodels")
 version = ".".join(release.split(".")[:3])
 
 # -- General configuration ---------------------------------------------------

@@ -221,7 +221,7 @@
 <text text-anchor="start" x="1589.2" y="-661.71" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
 <text text-anchor="start" x="1481.2" y="-647.71" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.137, n=164 </text>
 <text text-anchor="start" x="1338.2" y="-633.71" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.03, 0.00, 0.00, 0.00, 0.00, 0.01, 0.00, 0.02, 0.00, 0.93) </text>
-<text text-anchor="start" x="1533.7" y="-619.71" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att88</text>
+<text text-anchor="start" x="1528.7" y="-619.71" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att208</text>
 </g>
 <!-- 4&#45;&gt;12 -->
 <g id="edge9" class="edge">
@@ -302,8 +302,8 @@
 <polygon fill="#45e544" stroke="black" points="1800.2,-554.2 1350.2,-554.2 1350.2,-490.2 1800.2,-490.2 1800.2,-554.2"/>
 <text text-anchor="start" x="1536.2" y="-540" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=9 </text>
 <text text-anchor="start" x="1609.2" y="-540" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="1501.2" y="-526" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.068, n=157 </text>
-<text text-anchor="start" x="1358.2" y="-512" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.03, 0.00, 0.00, 0.00, 0.00, 0.01, 0.00, 0.00, 0.00, 0.97) </text>
+<text text-anchor="start" x="1501.2" y="-526" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.052, n=155 </text>
+<text text-anchor="start" x="1358.2" y="-512" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.03, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.97) </text>
 <text text-anchor="start" x="1553.7" y="-498" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att68</text>
 </g>
 <!-- 12&#45;&gt;13 -->
@@ -311,7 +311,7 @@
 <title>12:s&#45;&gt;13:n</title>
 <path fill="none" stroke="black" d="M1555.2,-610.91C1555.2,-610.91 1566.1,-580.54 1571.81,-564.65"/>
 <polygon fill="black" stroke="black" points="1575.11,-565.79 1575.2,-555.2 1568.52,-563.43 1575.11,-565.79"/>
-<text text-anchor="middle" x="1596.2" y="-579.35" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 619</text>
+<text text-anchor="middle" x="1596.2" y="-579.35" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 660</text>
 </g>
 <!-- 8 -->
 <g id="node13" class="node">
@@ -385,16 +385,16 @@
 <polygon fill="#3dcc76" stroke="black" points="1919.2,-432.49 1469.2,-432.49 1469.2,-368.49 1919.2,-368.49 1919.2,-432.49"/>
 <text text-anchor="start" x="1655.2" y="-418.29" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=9 </text>
 <text text-anchor="start" x="1728.2" y="-418.29" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="1620.2" y="-404.29" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.017, n=149 </text>
-<text text-anchor="start" x="1477.2" y="-390.29" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.01, 0.00, 0.00, 0.00, 0.99) </text>
-<text text-anchor="start" x="1677.2" y="-376.29" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att6</text>
+<text text-anchor="start" x="1620.2" y="-404.29" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.017, n=150 </text>
+<text text-anchor="start" x="1477.2" y="-390.29" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.99) </text>
+<text text-anchor="start" x="1672.7" y="-376.29" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att13</text>
 </g>
 <!-- 13&#45;&gt;14 -->
 <g id="edge17" class="edge">
 <title>13:s&#45;&gt;14:n</title>
 <path fill="none" stroke="black" d="M1575.2,-489.2C1575.2,-489.2 1656.81,-450.99 1684.86,-437.86"/>
 <polygon fill="black" stroke="black" points="1686.63,-440.9 1694.2,-433.49 1683.66,-434.56 1686.63,-440.9"/>
-<text text-anchor="middle" x="1672.7" y="-457.64" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 24</text>
+<text text-anchor="middle" x="1672.7" y="-457.64" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 25</text>
 </g>
 <!-- 15 -->
 <g id="node19" class="node">
@@ -402,7 +402,7 @@
 <ellipse fill="#44e5c5" stroke="black" cx="1734.2" cy="-278.78" rx="318.4" ry="35.21"/>
 <text text-anchor="start" x="1695.2" y="-289.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=9 </text>
 <text text-anchor="start" x="1768.2" y="-289.58" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="1660.2" y="-275.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=148 </text>
+<text text-anchor="start" x="1660.2" y="-275.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=149 </text>
 <text text-anchor="start" x="1517.2" y="-261.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00) </text>
 </g>
 <!-- 14&#45;&gt;15 -->
@@ -410,7 +410,7 @@
 <title>14:s&#45;&gt;15:n</title>
 <path fill="none" stroke="black" d="M1694.2,-367.49C1694.2,-367.49 1716.7,-337.47 1727.95,-322.47"/>
 <polygon fill="black" stroke="black" points="1731,-324.23 1734.2,-314.13 1725.4,-320.03 1731,-324.23"/>
-<text text-anchor="middle" x="1742.2" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 581</text>
+<text text-anchor="middle" x="1742.2" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 145</text>
 </g>
 <!-- 19 -->
 <g id="node22" class="node">
@@ -553,7 +553,7 @@
 <text text-anchor="start" x="3189.2" y="-418.29" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
 <text text-anchor="start" x="3085.7" y="-404.29" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.547, n=29 </text>
 <text text-anchor="start" x="2938.2" y="-390.29" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.03, 0.00, 0.03, 0.07, 0.03, 0.38, 0.00, 0.45, 0.00) </text>
-<text text-anchor="start" x="3133.7" y="-376.29" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att46</text>
+<text text-anchor="start" x="3128.7" y="-376.29" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att163</text>
 </g>
 <!-- 26&#45;&gt;27 -->
 <g id="edge30" class="edge">
@@ -617,35 +617,35 @@
 <g id="node33" class="node">
 <title>28</title>
 <polygon fill="#44e5c5" stroke="black" points="2736.2,-310.78 2286.2,-310.78 2286.2,-246.78 2736.2,-246.78 2736.2,-310.78"/>
-<text text-anchor="start" x="2472.2" y="-296.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=6 </text>
+<text text-anchor="start" x="2472.2" y="-296.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=8 </text>
 <text text-anchor="start" x="2545.2" y="-296.58" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="2441.7" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.285, n=14 </text>
-<text text-anchor="start" x="2294.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.14, 0.07, 0.79, 0.00, 0.00, 0.00) </text>
-<text text-anchor="start" x="2494.2" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att3</text>
+<text text-anchor="start" x="2441.7" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.211, n=15 </text>
+<text text-anchor="start" x="2294.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.07, 0.00, 0.07, 0.00, 0.00, 0.00, 0.00, 0.87, 0.00) </text>
+<text text-anchor="start" x="2494.2" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att6</text>
 </g>
 <!-- 27&#45;&gt;28 -->
 <g id="edge32" class="edge">
 <title>27:s&#45;&gt;28:n</title>
 <path fill="none" stroke="black" d="M3155.2,-367.49C3155.2,-367.49 2603.24,-319.74 2521.31,-312.65"/>
 <polygon fill="black" stroke="black" points="2521.46,-309.15 2511.2,-311.78 2520.86,-316.13 2521.46,-309.15"/>
-<text text-anchor="middle" x="2927.7" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 11</text>
+<text text-anchor="middle" x="2927.7" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 20</text>
 </g>
 <!-- 30 -->
 <g id="node34" class="node">
 <title>30</title>
 <polygon fill="#44e5c5" stroke="black" points="3339.2,-310.78 2889.2,-310.78 2889.2,-246.78 3339.2,-246.78 3339.2,-310.78"/>
-<text text-anchor="start" x="3075.2" y="-296.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=8 </text>
+<text text-anchor="start" x="3075.2" y="-296.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=6 </text>
 <text text-anchor="start" x="3148.2" y="-296.58" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="3044.7" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.211, n=15 </text>
-<text text-anchor="start" x="2897.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.07, 0.00, 0.07, 0.00, 0.00, 0.00, 0.00, 0.87, 0.00) </text>
-<text text-anchor="start" x="3097.2" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att6</text>
+<text text-anchor="start" x="3044.7" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.285, n=14 </text>
+<text text-anchor="start" x="2897.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.14, 0.07, 0.79, 0.00, 0.00, 0.00) </text>
+<text text-anchor="start" x="3097.2" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att3</text>
 </g>
 <!-- 27&#45;&gt;30 -->
 <g id="edge33" class="edge">
 <title>27:s&#45;&gt;30:n</title>
 <path fill="none" stroke="black" d="M3155.2,-367.49C3155.2,-367.49 3131.65,-335.49 3120.25,-320"/>
 <polygon fill="black" stroke="black" points="3122.94,-317.76 3114.2,-311.78 3117.31,-321.91 3122.94,-317.76"/>
-<text text-anchor="middle" x="3163.7" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 11</text>
+<text text-anchor="middle" x="3163.7" y="-335.93" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 20</text>
 </g>
 <!-- 33 -->
 <g id="node37" class="node">
@@ -683,33 +683,33 @@
 <g id="node35" class="node">
 <title>29</title>
 <ellipse fill="#3dafcc" stroke="black" cx="2459.2" cy="-157.07" rx="318.4" ry="35.21"/>
-<text text-anchor="start" x="2420.2" y="-167.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=6 </text>
+<text text-anchor="start" x="2420.2" y="-167.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=8 </text>
 <text text-anchor="start" x="2493.2" y="-167.87" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="2389.7" y="-153.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=11 </text>
-<text text-anchor="start" x="2242.2" y="-139.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00) </text>
+<text text-anchor="start" x="2389.7" y="-153.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=13 </text>
+<text text-anchor="start" x="2242.2" y="-139.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 0.00) </text>
 </g>
 <!-- 28&#45;&gt;29 -->
 <g id="edge34" class="edge">
 <title>28:s&#45;&gt;29:n</title>
 <path fill="none" stroke="black" d="M2511.2,-245.78C2511.2,-245.78 2480.72,-214.5 2466.43,-199.84"/>
 <polygon fill="black" stroke="black" points="2468.68,-197.14 2459.2,-192.42 2463.67,-202.03 2468.68,-197.14"/>
-<text text-anchor="middle" x="2518.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 742</text>
+<text text-anchor="middle" x="2512.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 637</text>
 </g>
 <!-- 31 -->
 <g id="node36" class="node">
 <title>31</title>
 <ellipse fill="#3dafcc" stroke="black" cx="3167.2" cy="-157.07" rx="318.4" ry="35.21"/>
-<text text-anchor="start" x="3128.2" y="-167.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=8 </text>
+<text text-anchor="start" x="3128.2" y="-167.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=6 </text>
 <text text-anchor="start" x="3201.2" y="-167.87" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="3097.7" y="-153.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=13 </text>
-<text text-anchor="start" x="2950.2" y="-139.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 0.00) </text>
+<text text-anchor="start" x="3097.7" y="-153.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=11 </text>
+<text text-anchor="start" x="2950.2" y="-139.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00) </text>
 </g>
 <!-- 30&#45;&gt;31 -->
 <g id="edge35" class="edge">
 <title>30:s&#45;&gt;31:n</title>
 <path fill="none" stroke="black" d="M3114.2,-245.78C3114.2,-245.78 3145.27,-214.5 3159.83,-199.84"/>
 <polygon fill="black" stroke="black" points="3162.63,-201.98 3167.2,-192.42 3157.67,-197.05 3162.63,-201.98"/>
-<text text-anchor="middle" x="3171.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 637</text>
+<text text-anchor="middle" x="3177.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 742</text>
 </g>
 <!-- 37 -->
 <g id="node41" class="node">
@@ -753,7 +753,7 @@
 <text text-anchor="start" x="6130.2" y="-296.58" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
 <text text-anchor="start" x="6026.7" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.264, n=28 </text>
 <text text-anchor="start" x="5879.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.04, 0.00, 0.00, 0.86, 0.04, 0.00, 0.04, 0.00, 0.04, 0.00) </text>
-<text text-anchor="start" x="6069.7" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att104</text>
+<text text-anchor="start" x="6069.7" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att121</text>
 </g>
 <!-- 42&#45;&gt;43 -->
 <g id="edge45" class="edge">
@@ -834,15 +834,15 @@
 <text text-anchor="start" x="6150.2" y="-174.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=3 </text>
 <text text-anchor="start" x="6223.2" y="-174.87" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
 <text text-anchor="start" x="6119.7" y="-160.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.073, n=25 </text>
-<text text-anchor="start" x="5972.2" y="-146.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.96, 0.00, 0.00, 0.00, 0.00, 0.04, 0.00) </text>
-<text text-anchor="start" x="6172.2" y="-132.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att4</text>
+<text text-anchor="start" x="5972.2" y="-146.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.96, 0.04, 0.00, 0.00, 0.00, 0.00, 0.00) </text>
+<text text-anchor="start" x="6162.7" y="-132.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att119</text>
 </g>
 <!-- 43&#45;&gt;44 -->
 <g id="edge47" class="edge">
 <title>43:s&#45;&gt;44:n</title>
 <path fill="none" stroke="black" d="M6096.2,-245.78C6096.2,-245.78 6157.59,-209 6180.62,-195.21"/>
 <polygon fill="black" stroke="black" points="6182.42,-198.21 6189.2,-190.07 6178.82,-192.2 6182.42,-198.21"/>
-<text text-anchor="middle" x="6171.7" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 14</text>
+<text text-anchor="middle" x="6176.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 239</text>
 </g>
 <!-- 45 -->
 <g id="node49" class="node">
@@ -858,7 +858,7 @@
 <title>44:s&#45;&gt;45:n</title>
 <path fill="none" stroke="black" d="M6189.2,-124.07C6189.2,-124.07 6189.2,-96.5 6189.2,-81"/>
 <polygon fill="black" stroke="black" points="6192.7,-80.71 6189.2,-70.71 6185.7,-80.71 6192.7,-80.71"/>
-<text text-anchor="middle" x="6217.2" y="-92.51" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 940</text>
+<text text-anchor="middle" x="6212.7" y="-92.51" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 11</text>
 </g>
 <!-- 51 -->
 <g id="node53" class="node">
@@ -1419,7 +1419,7 @@
 <text text-anchor="start" x="10234.2" y="-296.58" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
 <text text-anchor="start" x="10126.2" y="-282.58" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.029, n=161 </text>
 <text text-anchor="start" x="9983.2" y="-268.58" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.99, 0.00, 0.01, 0.00, 0.00, 0.00) </text>
-<text text-anchor="start" x="10173.7" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att158</text>
+<text text-anchor="start" x="10173.7" y="-254.58" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att173</text>
 </g>
 <!-- 79&#45;&gt;80 -->
 <g id="edge82" class="edge">
@@ -1434,16 +1434,16 @@
 <polygon fill="#3dafcc" stroke="black" points="10425.2,-189.07 9975.2,-189.07 9975.2,-125.07 10425.2,-125.07 10425.2,-189.07"/>
 <text text-anchor="start" x="10161.2" y="-174.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=4 </text>
 <text text-anchor="start" x="10234.2" y="-174.87" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="10126.2" y="-160.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.017, n=159 </text>
+<text text-anchor="start" x="10126.2" y="-160.87" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.016, n=160 </text>
 <text text-anchor="start" x="9983.2" y="-146.87" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 0.99, 0.00, 0.01, 0.00, 0.00, 0.00) </text>
-<text text-anchor="start" x="10178.7" y="-132.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att37</text>
+<text text-anchor="start" x="10173.7" y="-132.87" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">att158</text>
 </g>
 <!-- 80&#45;&gt;81 -->
 <g id="edge83" class="edge">
 <title>80:s&#45;&gt;81:n</title>
 <path fill="none" stroke="black" d="M10200.2,-245.78C10200.2,-245.78 10200.2,-216.37 10200.2,-200.28"/>
 <polygon fill="black" stroke="black" points="10203.7,-200.07 10200.2,-190.07 10196.7,-200.07 10203.7,-200.07"/>
-<text text-anchor="middle" x="10228.2" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 449</text>
+<text text-anchor="middle" x="10232.7" y="-214.22" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 1178</text>
 </g>
 <!-- 82 -->
 <g id="node85" class="node">
@@ -1451,7 +1451,7 @@
 <ellipse fill="#4485e5" stroke="black" cx="10200.2" cy="-35.36" rx="318.4" ry="35.21"/>
 <text text-anchor="start" x="10161.2" y="-46.16" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=4 </text>
 <text text-anchor="start" x="10234.2" y="-46.16" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="10126.2" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=154 </text>
+<text text-anchor="start" x="10126.2" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.000, n=158 </text>
 <text text-anchor="start" x="9983.2" y="-18.16" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.00, 0.00, 0.00, 0.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00) </text>
 </g>
 <!-- 81&#45;&gt;82 -->
@@ -1459,7 +1459,7 @@
 <title>81:s&#45;&gt;82:n</title>
 <path fill="none" stroke="black" d="M10200.2,-124.07C10200.2,-124.07 10200.2,-96.5 10200.2,-81"/>
 <polygon fill="black" stroke="black" points="10203.7,-80.71 10200.2,-70.71 10196.7,-80.71 10203.7,-80.71"/>
-<text text-anchor="middle" x="10222.2" y="-92.51" font-family="Helvetica,sans-Serif" font-size="14.00">&gt; 190</text>
+<text text-anchor="middle" x="10228.2" y="-92.51" font-family="Helvetica,sans-Serif" font-size="14.00">&lt;= 449</text>
 </g>
 <!-- 87 -->
 <g id="node89" class="node">
