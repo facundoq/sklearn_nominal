@@ -1853,74 +1853,6 @@ wheels = [
 ]
 
 [[package]]
-name = "scikit-learn-models"
-source = { editable = "." }
-dependencies = [
-    { name = "data-science-types" },
-    { name = "graphviz" },
-    { name = "matplotlib" },
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "pygraphviz" },
-    { name = "pytest" },
-    { name = "scikit-learn" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "black" },
-    { name = "cairosvg" },
-    { name = "jupyter" },
-    { name = "lets-plot" },
-    { name = "microsoft-python-type-stubs" },
-    { name = "openml" },
-    { name = "pandas", extra = ["pyarrow"] },
-    { name = "pandas-stubs" },
-    { name = "py-cpuinfo" },
-    { name = "pyarrow" },
-    { name = "pygraphviz" },
-    { name = "scikit-learn-models" },
-    { name = "scipy-stubs" },
-    { name = "snakeviz" },
-    { name = "tabulate" },
-    { name = "tqdm" },
-    { name = "types-tqdm" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "data-science-types", specifier = ">=0.2.23" },
-    { name = "graphviz", specifier = ">=0.20.3" },
-    { name = "matplotlib", specifier = ">=3.10.0" },
-    { name = "numpy", specifier = ">=2.2.0" },
-    { name = "pandas", specifier = ">=2.2.3" },
-    { name = "pygraphviz", specifier = ">=1.14" },
-    { name = "pytest", specifier = ">=8.3.5" },
-    { name = "scikit-learn", specifier = ">=1.6.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "black", specifier = ">=25.1.0" },
-    { name = "cairosvg", specifier = ">=2.7.1" },
-    { name = "jupyter", specifier = ">=1.1.1" },
-    { name = "lets-plot", specifier = ">=4.6.2" },
-    { name = "microsoft-python-type-stubs", git = "https://github.com/microsoft/python-type-stubs.git" },
-    { name = "openml", specifier = ">=0.15.1" },
-    { name = "pandas", extras = ["pyarrow"], specifier = ">=2.2.3" },
-    { name = "pandas-stubs", specifier = ">=2.2.3.250308" },
-    { name = "py-cpuinfo", specifier = ">=9.0.0" },
-    { name = "pyarrow", specifier = ">=19.0.1" },
-    { name = "pygraphviz", specifier = ">=1.14" },
-    { name = "scikit-learn-models", editable = "." },
-    { name = "scipy-stubs", specifier = ">=1.15.2.1" },
-    { name = "snakeviz", specifier = ">=2.2.2" },
-    { name = "tabulate", specifier = ">=0.9.0" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "types-tqdm", specifier = ">=4.67.0.20250401" },
-]
-
-[[package]]
 name = "scipy"
 version = "1.15.2"
 source = { registry = "https://pypi.org/simple/" }
@@ -1995,6 +1927,74 @@ source = { registry = "https://pypi.org/simple/" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050 },
+]
+
+[[package]]
+name = "sklearnmodels"
+source = { editable = "." }
+dependencies = [
+    { name = "data-science-types" },
+    { name = "graphviz" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pygraphviz" },
+    { name = "pytest" },
+    { name = "scikit-learn" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "black" },
+    { name = "cairosvg" },
+    { name = "jupyter" },
+    { name = "lets-plot" },
+    { name = "microsoft-python-type-stubs" },
+    { name = "openml" },
+    { name = "pandas", extra = ["pyarrow"] },
+    { name = "pandas-stubs" },
+    { name = "py-cpuinfo" },
+    { name = "pyarrow" },
+    { name = "pygraphviz" },
+    { name = "scipy-stubs" },
+    { name = "sklearnmodels" },
+    { name = "snakeviz" },
+    { name = "tabulate" },
+    { name = "tqdm" },
+    { name = "types-tqdm" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "data-science-types", specifier = ">=0.2.23" },
+    { name = "graphviz", specifier = ">=0.20.3" },
+    { name = "matplotlib", specifier = ">=3.10.0" },
+    { name = "numpy", specifier = ">=2.2.0" },
+    { name = "pandas", specifier = ">=2.2.3" },
+    { name = "pygraphviz", specifier = ">=1.14" },
+    { name = "pytest", specifier = ">=8.3.5" },
+    { name = "scikit-learn", specifier = ">=1.6.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = ">=25.1.0" },
+    { name = "cairosvg", specifier = ">=2.7.1" },
+    { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "lets-plot", specifier = ">=4.6.2" },
+    { name = "microsoft-python-type-stubs", git = "https://github.com/microsoft/python-type-stubs.git" },
+    { name = "openml", specifier = ">=0.15.1" },
+    { name = "pandas", extras = ["pyarrow"], specifier = ">=2.2.3" },
+    { name = "pandas-stubs", specifier = ">=2.2.3.250308" },
+    { name = "py-cpuinfo", specifier = ">=9.0.0" },
+    { name = "pyarrow", specifier = ">=19.0.1" },
+    { name = "pygraphviz", specifier = ">=1.14" },
+    { name = "scipy-stubs", specifier = ">=1.15.2.1" },
+    { name = "sklearnmodels", editable = "." },
+    { name = "snakeviz", specifier = ">=2.2.2" },
+    { name = "tabulate", specifier = ">=0.9.0" },
+    { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "types-tqdm", specifier = ">=4.67.0.20250401" },
 ]
 
 [[package]]

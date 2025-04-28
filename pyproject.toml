@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "scikit-learn-models"
+name = "sklearnmodels"
 dynamic = ["version"]
 description = "Extra models for scikit-learn"
 readme = "README.md"
@@ -35,7 +35,7 @@ dev = [
     "scipy-stubs>=1.15.2.1",
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
-    "scikit-learn-models",
+    "sklearnmodels",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
     "snakeviz>=2.2.2",
@@ -52,9 +52,9 @@ dev = [
 
 
 [project.urls]
-"Homepage" = "https://github.com/facundoq/scikit-learn-models"
-"Bug Reports" = "https://github.com/facundoq/scikit-learn-models/issues"
-"Source" = "https://github.com/facundoq/scikit-learn-models"
+"Homepage" = "https://github.com/facundoq/sklearnmodels"
+"Bug Reports" = "https://github.com/facundoq/sklearnmodels/issues"
+"Source" = "https://github.com/facundoq/sklearnmodels"
 
 [tool.setuptools_scm]
 version_file = "sklearnmodels/_version.py"
@@ -71,7 +71,7 @@ publish-url = "https://pypi.org/legacy/"
 
 [tool.uv.sources]
 microsoft-python-type-stubs = { git = "https://github.com/microsoft/python-type-stubs.git" }
-scikit-learn-models = { workspace = true }
+sklearnmodels = { workspace = true }
 
 
 [tool.pixi.feature.lint.dependencies]
