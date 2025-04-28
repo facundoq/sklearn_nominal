@@ -1,2 +1,2 @@
-# scikit-learn-models
+# sklearnmodels
 Extra models for scikit-learn, including Decision/Regression Trees with support for nominal values
