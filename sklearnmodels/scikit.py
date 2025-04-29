@@ -105,10 +105,7 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
         x_df = self.get_dataframe_from_x(x)
         n = len(x_df)
         assert n > 0
-        predictions = np.zeros((n, len(self.tree_.prediction)))
-        for i, row in x_df.iterrows():
-            predictions[i, :] = self.tree_.predict(row)
-        return predictions
+        return self.tree_.predict(x_df)
 
 
 class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):

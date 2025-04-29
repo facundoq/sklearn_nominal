@@ -15,7 +15,7 @@ type Partition = Iterable[tuple[pd.DataFrame, np.ndarray]]
 class Condition(abc.ABC):
 
     @abc.abstractmethod
-    def __call__(self, x: pd.DataFrame) -> np.ndarray:
+    def __call__(self, x: pd.Series) -> np.ndarray:
         pass
 
     @abc.abstractmethod
@@ -23,7 +23,7 @@ class Condition(abc.ABC):
         pass
 
     def na_to_false(self, s: bool | any):
-        if not isinstance(s, bool):
+        if not isinstance(s, (bool, np.bool_)):
             return False
         else:
             return s
@@ -34,7 +34,7 @@ class ValueCondition(Condition):
         self.column = column
         self.value = value
 
-    def __call__(self, x: pd.DataFrame):
+    def __call__(self, x: pd.Series):
         return self.na_to_false(x[self.column] == self.value)
 
     def __repr__(self):
@@ -50,7 +50,7 @@ class RangeCondition(Condition):
         self.value = value
         self.less = less
 
-    def __call__(self, x: pd.DataFrame):
+    def __call__(self, x: pd.Series):
 
         if self.less:
             return self.na_to_false(x[self.column] <= self.value)
@@ -77,12 +77,9 @@ class Split(abc.ABC):
     def partition(self) -> Partition:
         pass
 
+    @abc.abstractmethod
     def split(self, x: pd.DataFrame, y: np.ndarray):
-        for condition in self.conditions():
-            idx = condition(x)
-
-            if idx.any():
-                yield x.loc[idx], y[idx]
+        pass
 
 
 class ColumnSplit(Split):
@@ -106,12 +103,10 @@ class RangeSplit(ColumnSplit):
         return [RangeCondition(self.column, self.value, t) for t in [True, False]]
 
     def split(self, x: pd.DataFrame, y: np.ndarray):
-        idx = x[self.column].values <= self.value
+        idx = x[self.column] <= self.value
         not_idx = (~idx).fillna(False)
         idx = idx.fillna(False)
-        # print(idx.shape,idx.dtype,y.shape,y.dtype)
-        # np_idx = idx.to_numpy()
-        # print(np_idx)
+
         yield x.loc[idx], y[idx]
         yield x.loc[not_idx], y[not_idx]
 
@@ -121,8 +116,6 @@ class ValueSplit(ColumnSplit):
         super().__init__(column)
         self.values = values
         self._partition = list(self.split(x, y))
-        # self.x = x
-        # self.y = y
 
     @property
     def partition(self):

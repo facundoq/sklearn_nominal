@@ -2,8 +2,7 @@ from pathlib import Path
 
 import pygraphviz
 
-from . import Tree
-from .tree import Condition
+from . import Tree, Condition
 
 
 def dot_template(body: str, title: str):
@@ -74,12 +73,12 @@ def export_dot(tree: Tree, class_names: list[str], title=""):
     global id
     id = 0
 
-    def collect(tree: Tree, parent: int, height: int, condition=None):
+    def collect(root: Tree, parent: int, height: int, condition=None):
         global id
         id += 1
-        info = TreeInfo(id, parent, tree, condition, height)
+        info = TreeInfo(id, parent, root, condition, height)
         nodes.append(info)
-        for c, t in tree.branches.items():
+        for c, t in root.branches.items():
             collect(t, info.id, height + 1, c)
 
     collect(tree, 0, 0, 1)

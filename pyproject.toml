@@ -16,10 +16,14 @@ dependencies = [
     "data-science-types>=0.2.23",
     "pytest>=8.3.5",
 ]
-
-[project.optional-dependencies]
-export = [
-    "pygraphviz>=1.14",
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
 ]
 
 
@@ -30,15 +34,6 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
 
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: POSIX",
-    "Operating System :: Unix",
-    "Operating System :: MacOS",
-    "Operating System :: Microsoft :: Windows",
-]
 
 [dependency-groups]
 dev = [
@@ -66,6 +61,11 @@ dev = [
 "Homepage" = "https://github.com/facundoq/sklearnmodels"
 "Bug Reports" = "https://github.com/facundoq/sklearnmodels/issues"
 "Source" = "https://github.com/facundoq/sklearnmodels"
+
+[project.optional-dependencies]
+export = [
+    "pygraphviz>=1.14",
+]
 
 
 [tool.setuptools_scm]
@@ -178,6 +178,7 @@ ignore=[
 [tool.ruff.lint.per-file-ignores]
 # It's fine not to put the import at the top of the file in the examples
 # folder.
+"*/__init__.py"=["I001","E402"]
 "examples/*"=["E402"]
 "doc/conf.py"=["E402"]
 "doc/_templates/numpydoc_docstring.py"=["F821", "W292"]

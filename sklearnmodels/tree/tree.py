@@ -30,11 +30,18 @@ class Tree:
         self.column: str = None
         self.error = error
 
-    def predict(self, x: pd.Series):
+    def predict(self, x: pd.DataFrame):
+        n = x.shape[0]
+        predictions = np.zeros((n, len(self.prediction)))
+        for i, (idx, row) in enumerate(x.iterrows()):
+            predictions[i, :] = self.predict_sample(row)
+        return predictions
+
+    def predict_sample(self, x: pd.Series):
         for condition, child in self.branches.items():
             result = condition(x)
             if result:
-                return child.predict(x)
+                return child.predict_sample(x)
         return self.prediction
 
     def children(self):

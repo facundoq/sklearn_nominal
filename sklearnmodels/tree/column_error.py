@@ -38,7 +38,8 @@ class Splitter(abc.ABC):
         return self.__class__.__name__
 
 
-type ConditionEvaluationCallback = Callable[[str, np.ndarray, np.ndarray], None]
+type ConditionEvaluationCallbackResult = tuple[str, np.ndarray, np.ndarray]
+type ConditionEvaluationCallback = Callable[[ConditionEvaluationCallbackResult], None]
 
 
 class NumericSplitter(Splitter):
@@ -86,7 +87,7 @@ class NumericSplitter(Splitter):
             errors[i] /= penalization
 
         for callback in self.callbacks:
-            callback(column, values, errors)
+            callback((column, values, errors))
 
         best_i = np.argmin(errors)
         return candidate_splits[best_i], errors[best_i]

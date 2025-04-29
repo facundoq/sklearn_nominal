@@ -26,9 +26,9 @@ def read_regression_dataset(path: Path):
 def get_nominal_tree_regressor(x: pd.DataFrame, y: np.ndarray):
     n, m = x.shape
     max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(n * (0.05 / y.std())))
+    min_samples_leaf = max(10, int(np.log(n) * (0.05 / y.std())))
     min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05 * y.std()
+    min_error_improvement = 0.01 * y.std()
 
     return SKLearnRegressionTree(
         criterion="std",
@@ -36,7 +36,7 @@ def get_nominal_tree_regressor(x: pd.DataFrame, y: np.ndarray):
         min_samples_leaf=min_samples_leaf,
         min_samples_split=min_samples_split,
         min_error_decrease=min_error_improvement,
-        splitter=4,
+        splitter="best",
     )
 
 
@@ -58,7 +58,7 @@ def train_test_classification_model(model_name: str, model_generator, dataset: P
         "Dataset": dataset_name,
         "Train": score_train,
         "Test": score_test,
-    }
+    }, model
 
 
 def get_sklearn_pipeline(x: pd.DataFrame, model):
@@ -113,10 +113,11 @@ def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_
     nominal_results_all = []
     numeric_results_all = []
     for dataset in tqdm(datasets, desc="Datasets"):
-        nominal_results = train_test_classification_model(
+        nominal_results, nominal_model = train_test_classification_model(
             "NominalTree", get_nominal_tree_regressor, dataset
         )
-        numeric_results = train_test_classification_model(
+        nominal_model: SKLearnRegressionTree = nominal_model
+        numeric_results, model = train_test_classification_model(
             "SklearnTree", get_sklearn_tree, dataset
         )
         for set in ["Train", "Test"]:
@@ -124,6 +125,8 @@ def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_
             nominal = nominal_results[set]
             percent = nominal / numeric
             message = f"{set} score of nominal tree ({nominal:.2f}) should be at most {at_most_percent*100:.2f}% of sklearn.tree ({numeric:.2f}) on dataset {nominal_results["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
+            message += f"{nominal_model.get_params()}"
+            message += f"\n Tree:\n {nominal_model.tree_.pretty_print()}"
             assert percent <= at_most_percent, message
         nominal_results_all.append(nominal_results)
         numeric_results_all.append(numeric_results)

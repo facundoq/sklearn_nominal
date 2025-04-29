@@ -58,8 +58,7 @@ class MixedSplitter(GlobalSplitter):
 
         errors = {}
         for tipe, column_error in self.column_splitters.items():
-            x_type = x.select_dtypes(include=tipe)
-            for c in x_type.columns:
-                errors[c] = column_error.error(x_type, y, c, self.target_error)
+            for c in x.select_dtypes(include=tipe).columns:
+                errors[c] = column_error.error(x, y, c, self.target_error)
 
         return errors

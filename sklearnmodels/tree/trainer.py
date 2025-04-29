@@ -16,10 +16,13 @@ class TreeTrainer(abc.ABC):
         pass
 
 
-type TreeCreationCallback = Callable[
-    [Tree, int, bool, ColumnErrors, SplitterResult], None
+type TreeCreationCallbackResult = tuple[
+    Tree, TreeTask, bool, ColumnErrors, SplitterResult
 ]
-type TreeSplitCallback = Callable[[Tree, SplitterResult, Condition], None]
+type TreeCreationCallback = Callable[[TreeCreationCallbackResult], None]
+
+type TreeSplitCallbackResult = tuple[TreeTask, SplitterResult]
+type TreeSplitCallback = Callable[[TreeSplitCallbackResult], None]
 
 
 class PruneCriteria:
@@ -115,63 +118,81 @@ class BaseTreeTrainer(TreeTrainer):
         return self.build(x, y, 1)
 
     def build(self, x: pd.DataFrame, y: np.ndarray, height: int) -> Tree:
-        tree, subtrees = self.make_tree(x, y, height)
+        # ROOT
+        global_score = self.splitter.global_error(x, y)
+        root = Tree(global_score.prediction, global_score.error, y.shape[0])
+        root_task = TreeTask(None, None, x, y, height)
+        subtrees = self.make_tree(root, root_task)
 
+        # OTHER NODES
         while len(subtrees) > 0:
             task = subtrees.pop()
-            subtree, subtree_tasks = self.make_tree(task.x, task.y, task.height)
-            task.parent.branches[task.condition] = subtree
-            subtrees += subtree_tasks
-        return tree
+            global_score = self.splitter.global_error(task.x, task.y)
+            new_tree = Tree(global_score.prediction, global_score.error, y.shape[0])
+            task.parent.branches[task.condition] = new_tree
+            subtree_tasks = self.make_tree(new_tree, task)
+            # bfs
+            subtree_tasks.reverse()
+            subtrees = subtrees + subtree_tasks
+        return root
 
-    def make_tree(
-        self, x: pd.DataFrame, y: np.ndarray, height: int
-    ) -> tuple[Tree, list[TreeTask]]:
-        global_score = self.splitter.global_error(x, y)
-        tree = Tree(global_score.prediction, global_score.error, y.shape[0])
+    def run_creation_callbacks(self, result: TreeCreationCallbackResult):
 
+        for callback in self.tree_creation_callbacks:
+            callback(result)
+
+    def make_tree(self, tree: Tree, task: TreeTask) -> list[TreeTask]:
         # BASE CASE: pre_split_prune
-        if self.prune.pre_split_prune(x, y, height, tree):
-            for callback in self.tree_creation_callbacks:
-                callback(tree, height, True, None, None)
-            return tree, []
+        if self.prune.pre_split_prune(task.x, task.y, task.height, tree):
+            self.run_creation_callbacks(
+                (
+                    tree,
+                    task,
+                    True,
+                    None,
+                    None,
+                )
+            )
+            return []
 
         # COMPUTE SPLITS
-        column_errors = self.splitter.split_columns(x, y)
+        column_errors = self.splitter.split_columns(task.x, task.y)
 
         # BASE CASE: no viable columns to split found
         if len(column_errors) == 0:
-            for callback in self.tree_creation_callbacks:
-                callback(tree, height, True, None, None)
-            return tree, []
+            self.run_creation_callbacks((tree, task, True, None, None))
+            return []
 
         names, errors = zip(*[(k, s.error) for k, s in column_errors.items()])
+
         best_column_i = np.argmin(np.array(errors))
         best_column = column_errors[names[best_column_i]]
 
         # BASE CASE: best gain is not enough to split tree
         if self.prune.post_split_prune(tree, best_column):
-            for callback in self.tree_creation_callbacks:
-                callback(tree, height, True, column_errors, best_column)
-            return tree, []
+            self.run_creation_callbacks((tree, task, True, column_errors, best_column))
+            return []
 
-        for callback in self.tree_creation_callbacks:
-            callback(tree, height, False, column_errors, best_column)
+        self.run_creation_callbacks((tree, task, False, column_errors, best_column))
 
         # RECURSIVE CASE: use best attribute
         tree.column = best_column.column
         best_split = best_column.split
         subtrees = []
+
         for i, (x_branch, y_branch) in enumerate(best_split.partition):
             # avoid branches with low samples
             if len(y_branch) < self.prune.min_samples_leaf:
                 continue
+            condition = best_split.conditions[i]
+
             # remove column from consideration
             if best_column.remove:
-                x_branch = x_branch.drop(columns=[tree.column])
-            condition = best_split.conditions[i]
-            for callback in self.tree_split_callbacks:
-                callback(tree, best_column, condition, x_branch, y_branch, height)
-            subtrees.append(TreeTask(tree, condition, x_branch, y_branch, height + 1))
+                x_branch = x_branch.drop(columns=[best_column.column])
+            subtask = TreeTask(tree, condition, x_branch, y_branch, task.height + 1)
 
-        return tree, subtrees
+            for callback in self.tree_split_callbacks:
+                callback((subtask, best_column))
+            subtrees.append(subtask)
+
+        return subtrees

@@ -47,12 +47,11 @@ def log(x, base):
 
 class ClassificationError(TargetError):
     def __init__(self, classes: int, class_weight: np.ndarray = None):
-        self.classes = classes
-
         if class_weight is None:
-            self.class_weight = np.ones(classes)
-        else:
-            self.class_weight = class_weight
+            class_weight = np.ones(classes)
+
+        self.classes = classes
+        self.class_weight = class_weight
 
     def prediction(self, y: np.ndarray):
         if len(y) == 0:
@@ -75,7 +74,7 @@ class ClassificationError(TargetError):
 
 
 class EntropyError(ClassificationError):
-    def __init__(self, classes: int, class_weight: np.ndarray, base=2):
+    def __init__(self, classes: int, class_weight: np.ndarray = None, base=2):
         super().__init__(classes, class_weight)
         self.base = base
 
