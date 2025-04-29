@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pygraphviz
 
-from . import Tree, Condition
+from . import Condition, Tree
 
 
 def dot_template(body: str, title: str):
