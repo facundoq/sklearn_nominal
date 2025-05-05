@@ -1,11 +1,8 @@
-from .conditions import (
-    ColumnSplit,
+from ..backend.split import ColumnSplit, RangeSplit, Split, ValueSplit
+from ..backend.conditions import (
     Condition,
     RangeCondition,
-    RangeSplit,
-    Split,
     ValueCondition,
-    ValueSplit,
 )
 
 from .attribute_penalization import (
@@ -13,10 +10,10 @@ from .attribute_penalization import (
     GainRatioPenalization,
     NoPenalization,
 )
-from .column_error import NominalSplitter, NumericSplitter
+from .column_error import NominalColumnError, NumericColumnError
 
 
-from .global_error import MixedSplitter
+from .global_error import DefaultSplitter
 from .target_error import (
     ClassificationError,
     DeviationError,

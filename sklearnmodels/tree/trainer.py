@@ -4,7 +4,9 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from .column_error import SplitterResult
+from sklearnmodels.backend.core import Dataset
+
+from .column_error import ColumnErrorResult
 from .global_error import ColumnErrors, GlobalSplitter
 from .tree import Condition, Tree
 
@@ -17,11 +19,11 @@ class TreeTrainer(abc.ABC):
 
 
 type TreeCreationCallbackResult = tuple[
-    Tree, TreeTask, bool, ColumnErrors, SplitterResult
+    Tree, TreeTask, bool, ColumnErrors, ColumnErrorResult
 ]
 type TreeCreationCallback = Callable[[TreeCreationCallbackResult], None]
 
-type TreeSplitCallbackResult = tuple[TreeTask, SplitterResult]
+type TreeSplitCallbackResult = tuple[TreeTask, ColumnErrorResult]
 type TreeSplitCallback = Callable[[TreeSplitCallbackResult], None]
 
 
@@ -76,7 +78,7 @@ class PruneCriteria:
 
         return False
 
-    def post_split_prune(self, tree: Tree, best_column: SplitterResult):
+    def post_split_prune(self, tree: Tree, best_column: ColumnErrorResult):
         error_improvement = tree.error - best_column.error
         return error_improvement < self.min_error_decrease
 
@@ -86,14 +88,12 @@ class TreeTask:
         self,
         parent: Tree,
         condition: Condition,
-        x: pd.DataFrame,
-        y: np.ndarray,
+        d: Dataset,
         height: int,
     ):
         self.parent = parent
         self.condition = condition
-        self.x = x
-        self.y = y
+        self.d = d
         self.height = height
 
 
@@ -112,23 +112,23 @@ class BaseTreeTrainer(TreeTrainer):
         self.splitter = error
 
     def __repr__(self):
-        return f"TreeTrainer({self.splitter},{self.prune})"
+        return f"{self.__class__.__name__}({self.splitter},{self.prune})"
 
-    def fit(self, x: pd.DataFrame, y: np.ndarray) -> Tree:
-        return self.build(x, y, 1)
+    def fit(self, d: Dataset) -> Tree:
+        return self.build(d, 1)
 
-    def build(self, x: pd.DataFrame, y: np.ndarray, height: int) -> Tree:
+    def build(self, d: Dataset, height: int) -> Tree:
         # ROOT
-        global_score = self.splitter.global_error(x, y)
-        root = Tree(global_score.prediction, global_score.error, y.shape[0])
-        root_task = TreeTask(None, None, x, y, height)
+        global_score = self.splitter.global_error(d.x, d.y)
+        root = Tree(global_score.prediction, global_score.error, d.n)
+        root_task = TreeTask(None, None, d, height)
         subtrees = self.make_tree(root, root_task)
 
         # OTHER NODES
         while len(subtrees) > 0:
             task = subtrees.pop()
             global_score = self.splitter.global_error(task.x, task.y)
-            new_tree = Tree(global_score.prediction, global_score.error, y.shape[0])
+            new_tree = Tree(global_score.prediction, global_score.error, d.n)
             task.parent.branches[task.condition] = new_tree
             subtree_tasks = self.make_tree(new_tree, task)
             # bfs
@@ -180,16 +180,16 @@ class BaseTreeTrainer(TreeTrainer):
         best_split = best_column.split
         subtrees = []
 
-        for i, (x_branch, y_branch) in enumerate(best_split.partition):
+        for i, d_branch in enumerate(best_split.partition):
             # avoid branches with low samples
-            if len(y_branch) < self.prune.min_samples_leaf:
+            if d_branch.n < self.prune.min_samples_leaf:
                 continue
             condition = best_split.conditions[i]
 
             # remove column from consideration
             if best_column.remove:
-                x_branch = x_branch.drop(columns=[best_column.column])
-            subtask = TreeTask(tree, condition, x_branch, y_branch, task.height + 1)
+                d_branch = d_branch.drop(columns=[best_column.column])
+            subtask = TreeTask(tree, condition, d_branch, task.height + 1)
 
             for callback in self.tree_split_callbacks:
                 callback((subtask, best_column))

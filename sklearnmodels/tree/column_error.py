@@ -1,19 +1,31 @@
 import abc
 from typing import Callable
 
+from h11 import Data
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend.conditions import Condition, RangeCondition, ValueCondition
+from sklearnmodels.backend.core import Dataset, Partition
+from sklearnmodels.backend.split import RangeSplit, Split
 from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPenalization
-from sklearnmodels.tree.conditions import RangeSplit, Split, ValueSplit
+from sklearnmodels.backend.split import ValueSplit
 
 from .target_error import TargetError
 
 
-class SplitterResult:
-    def __init__(self, error: float, split: Split, column: str, remove: bool):
+class ColumnErrorResult:
+    def __init__(
+        self,
+        column: str,
+        error: float,
+        conditions: list[Condition],
+        partition: Partition,
+        remove: bool = False,
+    ):
         self.error = error
-        self.split = split
+        self.conditions = conditions
+        self.partition = partition
         self.column = column
         self.remove = remove
 
@@ -23,26 +35,37 @@ class SplitterResult:
         )
 
 
-class Splitter(abc.ABC):
+class ColumnError(abc.ABC):
 
     def __init__(self, penalization: ColumnPenalization = NoPenalization()):
         self.penalization = penalization
 
     @abc.abstractmethod
-    def error(
-        self, x: pd.DataFrame, y: np.ndarray, column: str, metric: TargetError
-    ) -> SplitterResult:
+    def error(self, d: Dataset, column: str, metric: TargetError) -> ColumnErrorResult:
         pass
 
     def __repr__(self):
         return self.__class__.__name__
+
+    def evaluate(
+        self,
+        d: Dataset,
+        conditions: list[Condition],
+        column: str,
+        metric: TargetError,
+        remove=False,
+    ):
+        partition = d.split(conditions)
+        error = metric.average_split(partition)
+        error /= self.penalization.penalize(partition)
+        return ColumnErrorResult(column, error, conditions, partition, remove)
 
 
 type ConditionEvaluationCallbackResult = tuple[str, np.ndarray, np.ndarray]
 type ConditionEvaluationCallback = Callable[[ConditionEvaluationCallbackResult], None]
 
 
-class NumericSplitter(Splitter):
+class NumericColumnError(ColumnError):
 
     def __init__(
         self,
@@ -54,10 +77,8 @@ class NumericSplitter(Splitter):
         self.max_evals = max_evals
         self.callbacks = callbacks
 
-    def get_values(self, x: pd.DataFrame, column: str):
-        values = x[column].sort_values()
-        values = x[column].unique()
-        values = values[~np.isnan(values)]
+    def get_values(self, d: Dataset, column: str):
+        values = d.unique_values(column, sorted=True)
         n = len(values)
         if self.max_evals is not None:
             if n > self.max_evals:
@@ -70,46 +91,29 @@ class NumericSplitter(Splitter):
             n -= 1
         return values
 
-    def optimize(
-        self, x: pd.DataFrame, y: np.ndarray, column: str, metric: TargetError
-    ):
-        values = self.get_values(x, column)
-        n = len(values)
-
+    def optimize(self, d: Dataset, column: str, metric: TargetError):
+        values = self.get_values(d, column)
         # find best split value based on unique values of column
-        errors = np.zeros(n)
-        candidate_splits = []
+        best = None
         for i, v in enumerate(values):
-            split = RangeSplit(column, v, x, y)
-            errors[i] = metric.average_split(split.partition)
-            candidate_splits.append(split)
-            penalization = self.penalization.penalize(x, split)
-            errors[i] /= penalization
-
-        for callback in self.callbacks:
-            callback((column, values, errors))
-
-        best_i = np.argmin(errors)
-        return candidate_splits[best_i], errors[best_i]
+            conditions = RangeCondition.make(self.column, self.value)
+            result = self.evaluate(d, conditions, column, metric, True)
+            if best is None or result.error <= best.error:
+                best = result
+        return best
 
     def error(
         self,
-        x: pd.DataFrame,
-        y: np.ndarray,
+        d: Dataset,
         column: str,
         metric: TargetError,
-    ) -> SplitterResult:
-        conditions, error = self.optimize(x, y, column, metric)
-        return SplitterResult(error, conditions, column, False)
+    ) -> ColumnErrorResult:
+        conditions, error = self.optimize(d, column, metric)
+        return ColumnErrorResult(error, conditions, column, False)
 
 
-class NominalSplitter(Splitter):
+class NominalColumnError(ColumnError):
 
-    def error(
-        self, x: pd.DataFrame, y: np.ndarray, column: str, metric: TargetError
-    ) -> SplitterResult:
-        split = ValueSplit(column, x[column].unique(), x, y)
-        error = metric.average_split(split.partition)
-        penalization = self.penalization.penalize(x, split)
-        error /= penalization
-        return SplitterResult(error, split, column, True)
+    def error(self, d: Dataset, column: str, metric: TargetError) -> ColumnErrorResult:
+        conditions = [ValueCondition(column, v) for v in d.unique_values(column)]
+        return self.evaluate(d, conditions, column, metric)

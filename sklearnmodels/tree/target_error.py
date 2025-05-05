@@ -3,7 +3,7 @@ import abc
 import numpy as np
 import pandas as pd
 
-from .conditions import Partition
+from ..backend.conditions import Partition
 
 
 class TargetError(abc.ABC):
@@ -14,9 +14,9 @@ class TargetError(abc.ABC):
     def average_split(self, partition: Partition):
         error = 0.0
         n = 0
-        for x_branch, y_branch in partition:
-            branch_error = self(y_branch)
-            n_branch = len(y_branch)
+        for d_branch in partition:
+            branch_error = self(d_branch.y)
+            n_branch = d_branch.n
             error += n_branch * branch_error
             n += n_branch
         return error / n

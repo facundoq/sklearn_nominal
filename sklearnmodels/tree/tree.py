@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .conditions import Condition
+from ..backend.conditions import Condition
 
 type Branches = dict[Condition, Tree]
 

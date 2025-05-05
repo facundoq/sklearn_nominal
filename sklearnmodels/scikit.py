@@ -7,6 +7,8 @@ from sklearn.utils import validation
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_y, validate_data
 
+from sklearnmodels.backend.pandas import PandasDataset
+
 from . import tree
 
 
@@ -86,9 +88,9 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
                 " 'best'"
             )
         scorers = {
-            "number": tree.NumericSplitter(max_evals=max_evals),
-            "object": tree.NominalSplitter(),
-            "category": tree.NominalSplitter(),
+            "number": tree.NumericColumnError(max_evals=max_evals),
+            "object": tree.NominalColumnError(),
+            "category": tree.NominalColumnError(),
         }
         return scorers
 
@@ -140,7 +142,7 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
 
         scorers = self.build_splitter()
 
-        scorer = tree.MixedSplitter(scorers, error, attribute_penalization)
+        scorer = tree.DefaultSplitter(scorers, error, attribute_penalization)
         prune_criteria = tree.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
@@ -170,7 +172,8 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
             raise ValueError("Can't train classifier with one class.")
         error = self.build_error(len(self.classes_))
         trainer = self.build_trainer(error)
-        self.tree_ = trainer.fit(x_df, y)
+        d = PandasDataset(x_df, y)
+        self.tree_ = trainer.fit(d)
         self.is_fitted_ = True
         return self
 
@@ -226,7 +229,7 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
     def build_trainer(self, error: tree.TargetError):
         scorers = self.build_splitter()
         attribute_penalization = self.build_attribute_penalizer()
-        scorer = tree.MixedSplitter(scorers, error, attribute_penalization)
+        scorer = tree.DefaultSplitter(scorers, error, attribute_penalization)
         prune_criteria = tree.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,

@@ -3,7 +3,8 @@ import abc
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.tree.conditions import Split
+from sklearnmodels.backend.core import Partition
+from sklearnmodels.backend.split import Split
 from sklearnmodels.tree.target_error import log
 
 
@@ -13,17 +14,17 @@ class ColumnPenalization(abc.ABC):
 
     abc.abstractmethod
 
-    def penalize(self, x: pd.DataFrame, split: Split):
+    def penalize(self, partition: Partition):
         pass
 
 
 class NoPenalization(ColumnPenalization):
-    def penalize(self, x: pd.DataFrame, split: Split):
+    def penalize(self, partition: Partition):
         return 1
 
 
 class GainRatioPenalization(ColumnPenalization):
-    def penalize(self, x: pd.DataFrame, y: np.ndarray, split: Split):
-        counts = np.array([len(x_i) for x_i, y_i in split.partition])
+    def penalize(self, partition: Partition):
+        counts = np.array([len(x_i) for x_i, y_i in partition])
         counts /= counts.sum()
         return -np.sum(counts * log(counts, len(counts)))
