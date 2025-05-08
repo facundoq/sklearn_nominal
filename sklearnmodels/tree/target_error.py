@@ -3,7 +3,7 @@ import abc
 import numpy as np
 import pandas as pd
 
-from ..backend.conditions import Partition
+from sklearnmodels.backend.core import Partition
 
 
 class TargetError(abc.ABC):
@@ -19,7 +19,10 @@ class TargetError(abc.ABC):
             n_branch = d_branch.n
             error += n_branch * branch_error
             n += n_branch
-        return error / n
+        if n == 0:
+            return np.inf
+        else:
+            return error / n
 
     @abc.abstractmethod
     def prediction(self, y: np.ndarray):

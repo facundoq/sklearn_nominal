@@ -13,6 +13,8 @@ from sklearnmodels.backend.split import ValueSplit
 
 from .target_error import TargetError
 
+type ColumnCallback = Callable[[ColumnErrorResult], None]
+
 
 class ColumnErrorResult:
     def __init__(
@@ -30,55 +32,60 @@ class ColumnErrorResult:
         self.remove = remove
 
     def __repr__(self):
-        return (
-            f"Score({self.column},{self.error},{len(self.split.conditions)} branches)"
-        )
+        return f"Score({self.column},{self.error},{len(self.conditions)} branches)"
 
 
 class ColumnError(abc.ABC):
 
-    def __init__(self, penalization: ColumnPenalization = NoPenalization()):
+    def __init__(
+        self,
+        metric: TargetError,
+        penalization: ColumnPenalization = NoPenalization(),
+        callback=None,
+    ):
         self.penalization = penalization
+        self.metric = metric
+        self.callback = callback
+
+    def do_callback(self, result: ColumnErrorResult):
+        if self.callback is not None:
+            self.callback(result)
 
     @abc.abstractmethod
-    def error(self, d: Dataset, column: str, metric: TargetError) -> ColumnErrorResult:
+    def error(self, d: Dataset, column: str) -> ColumnErrorResult | None:
         pass
 
     def __repr__(self):
         return self.__class__.__name__
 
-    def evaluate(
+    def evaluate_conditions(
         self,
         d: Dataset,
         conditions: list[Condition],
         column: str,
-        metric: TargetError,
         remove=False,
-    ):
+    ) -> ColumnErrorResult:
         partition = d.split(conditions)
-        error = metric.average_split(partition)
+        error = self.metric.average_split(partition)
         error /= self.penalization.penalize(partition)
         return ColumnErrorResult(column, error, conditions, partition, remove)
-
-
-type ConditionEvaluationCallbackResult = tuple[str, np.ndarray, np.ndarray]
-type ConditionEvaluationCallback = Callable[[ConditionEvaluationCallbackResult], None]
 
 
 class NumericColumnError(ColumnError):
 
     def __init__(
         self,
+        metric: TargetError,
+        penalization: ColumnPenalization = NoPenalization(),
+        callback=None,
         max_evals: int = np.iinfo(np.int64).max,
-        callbacks: list[ConditionEvaluationCallback] = [],
     ):
-        super().__init__()
+        super().__init__(metric, penalization, callback=callback)
         assert max_evals > 0
         self.max_evals = max_evals
-        self.callbacks = callbacks
 
     def get_values(self, d: Dataset, column: str):
-        values = d.unique_values(column, sorted=True)
+        values = d.unique_values(column, True)
         n = len(values)
         if self.max_evals is not None:
             if n > self.max_evals:
@@ -91,29 +98,29 @@ class NumericColumnError(ColumnError):
             n -= 1
         return values
 
-    def optimize(self, d: Dataset, column: str, metric: TargetError):
-        values = self.get_values(d, column)
-        # find best split value based on unique values of column
-        best = None
-        for i, v in enumerate(values):
-            conditions = RangeCondition.make(self.column, self.value)
-            result = self.evaluate(d, conditions, column, metric, True)
-            if best is None or result.error <= best.error:
-                best = result
-        return best
-
     def error(
         self,
         d: Dataset,
         column: str,
-        metric: TargetError,
-    ) -> ColumnErrorResult:
-        conditions, error = self.optimize(d, column, metric)
-        return ColumnErrorResult(error, conditions, column, False)
+    ) -> ColumnErrorResult | None:
+        values = self.get_values(d, column)
+        # find best split value based on unique values of column
+        best = None
+        for i, v in enumerate(values):
+            conditions = RangeCondition.make(column, v)
+            result = self.evaluate_conditions(d, conditions, column)
+            self.do_callback(result)
+            if best is None or result.error <= best.error:
+                best = result
+        return best
 
 
 class NominalColumnError(ColumnError):
 
-    def error(self, d: Dataset, column: str, metric: TargetError) -> ColumnErrorResult:
-        conditions = [ValueCondition(column, v) for v in d.unique_values(column)]
-        return self.evaluate(d, conditions, column, metric)
+    def error(self, d: Dataset, column: str) -> ColumnErrorResult | None:
+        conditions: list[Condition] = [
+            ValueCondition(column, v) for v in d.unique_values(column, False)
+        ]
+        result = self.evaluate_conditions(d, conditions, column, remove=True)
+        self.do_callback(result)
+        return result

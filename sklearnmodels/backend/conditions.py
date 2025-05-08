@@ -10,6 +10,10 @@ import pandas as pd
 # Returns a new boolean series
 class Condition(abc.ABC):
 
+    def __init__(self, column: str):
+        super().__init__()
+        self.column = column
+
     @abc.abstractmethod
     def __call__(self, x: pd.Series) -> np.ndarray:
         pass
@@ -27,7 +31,7 @@ class Condition(abc.ABC):
 
 class ValueCondition(Condition):
     def __init__(self, column: str, value):
-        self.column = column
+        super().__init__(column)
         self.value = value
 
     def __call__(self, x: pd.Series):
@@ -42,7 +46,7 @@ class ValueCondition(Condition):
 
 class RangeCondition(Condition):
     def __init__(self, column: str, value: float, less: bool):
-        self.column = column
+        super().__init__(column)
         self.value = value
         self.less = less
 

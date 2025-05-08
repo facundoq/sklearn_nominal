@@ -1,4 +1,6 @@
 import abc
+from os import error
+from typing import Callable
 
 import numpy as np
 import pandas as pd
@@ -6,7 +8,13 @@ import pandas as pd
 from sklearnmodels.backend.core import ColumnType, Dataset
 from sklearnmodels.tree.attribute_penalization import ColumnPenalization
 
-from .column_error import ColumnErrorResult
+from .column_error import (
+    ColumnCallback,
+    ColumnError,
+    ColumnErrorResult,
+    NominalColumnError,
+    NumericColumnError,
+)
 from .target_error import TargetError
 
 
@@ -21,31 +29,31 @@ class GlobalErrorResult:
         self.error = error
 
 
-type ColumnErrors = dict[str, ColumnErrorResult]
-
-
-class GlobalSplitter(abc.ABC):
+class Splitter(abc.ABC):
 
     @abc.abstractmethod
-    def global_error(self, x: pd.DataFrame, y: np.ndarray) -> GlobalErrorResult:
+    def global_error(self, d: Dataset) -> GlobalErrorResult:
         pass
 
     @abc.abstractmethod
-    def split_columns(self, x: pd.DataFrame, y: np.ndarray) -> ColumnErrors:
+    def split_columns(self, d: Dataset) -> ColumnErrorResult | None:
         pass
 
 
-class DefaultSplitter(GlobalSplitter):
+class DefaultSplitter(Splitter):
 
     def __init__(
         self,
-        column_splitters: dict[ColumnType, GlobalSplitter],
         error_function: TargetError,
-        column_penalization: ColumnPenalization,
+        column_splitters: dict[ColumnType, ColumnError] = None,
     ):
+        if column_splitters is None:
+            column_splitters = {
+                ColumnType.Nominal: NominalColumnError(error_function),
+                ColumnType.Numeric: NumericColumnError(error_function),
+            }
         self.column_splitters = column_splitters
         self.target_error = error_function
-        self.column_penalization = column_penalization
 
     def __repr__(self):
         return f"Error({self.target_error})"
@@ -55,11 +63,11 @@ class DefaultSplitter(GlobalSplitter):
         global_prediction = self.target_error.prediction(d.y)
         return GlobalErrorResult(global_prediction, global_metric)
 
-    def split_columns(self, d: Dataset) -> ColumnErrors:
-
-        errors = {}
+    def split_columns(self, d: Dataset) -> ColumnErrorResult | None:
+        best = None
         for c, c_type in zip(d.columns, d.types):
-            column_error = self.column_splitters[c_type]
-            errors[c] = column_error.error(d, c, self.target_error)
-
-        return errors
+            result = self.column_splitters[c_type].error(d, c)
+            update = best is None or (result is not None and result.error < best.error)
+            if update:
+                best = result
+        return best

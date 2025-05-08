@@ -49,7 +49,10 @@ def make_label(info: TreeInfo, class_names: list[str]):
     if class_names is not None:
         class_name = class_names[info.tree.prediction.argmax()]
         class_info = f"<b> Class={class_name} </b> <br/>"
-    column = "" if info.tree.leaf else f"<br/><b>{info.tree.column}</b>"
+
+    column = ""
+    if not info.tree.leaf:
+        column = f"<br/>{'-'*len(info.tree.column)}<br/><b>{info.tree.column}</b>"
     error = f"error: {info.tree.error:.3f}, n={info.tree.samples}"
     label = f"<{class_info} {error} <br/> {prediction} {column}>"
     return label
@@ -65,10 +68,11 @@ def make_node(info: TreeInfo, max_height: int, class_names: list[str]):
 
 def make_edge(info: TreeInfo):
     condition = info.condition.short_description()
-    return f'{info.parent_id}:s -> {info.id}:n [label="{condition}"] ;\n'
+    return f'{info.parent_id}:s -> {info.id}:n [label="{html_escape(condition)}"] ;\n'
 
 
 def export_dot(tree: Tree, class_names: list[str], title=""):
+    class_names = list(map(html_escape, class_names))
     nodes: list[TreeInfo] = []
     global id
     id = 0
@@ -101,11 +105,16 @@ def export_dot_file(
         f.write(dot)
 
 
+def html_escape(s: str) -> str:
+    return s.replace("<", "&lt;").replace(">", "&gt;")
+
+
 def export_image(
     tree: Tree, filepath: Path, title="", class_names: list[str] = None, prog="dot"
 ):
     if class_names is None:
-        class_names = [f"Class {i}" for i in range(len(tree.prediction))]
+        class_names = [f"Class '{i}'" for i in range(len(tree.prediction))]
+
     dot = export_dot(tree, class_names, title=title)
     graph = pygraphviz.AGraph(string=dot)
     graph.draw(path=str(filepath), prog=prog)

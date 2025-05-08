@@ -7,7 +7,11 @@ from sklearn.utils import validation
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_y, validate_data
 
+from sklearnmodels.backend.core import ColumnType
 from sklearnmodels.backend.pandas import PandasDataset
+from sklearnmodels.tree.attribute_penalization import ColumnPenalization
+import sklearnmodels.tree.pruning
+from sklearnmodels.tree.target_error import TargetError
 
 from . import tree
 
@@ -69,7 +73,8 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
         else:
             columns = self.feature_names_in_
         df = pd.DataFrame(x, columns=columns)
-        return pyarrow_backed_pandas(df)
+        # return pyarrow_backed_pandas(df)
+        return df
 
     def build_attribute_penalizer(self):
         if self.criterion == "gain_ratio":
@@ -77,7 +82,7 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
         else:
             return tree.NoPenalization()
 
-    def build_splitter(self):
+    def build_splitter(self, e: TargetError, p: ColumnPenalization):
         if self.splitter == "best":
             max_evals = np.iinfo(np.int64).max
         elif isinstance(self.splitter, int):
@@ -88,9 +93,8 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
                 " 'best'"
             )
         scorers = {
-            "number": tree.NumericColumnError(max_evals=max_evals),
-            "object": tree.NominalColumnError(),
-            "category": tree.NominalColumnError(),
+            ColumnType.Numeric: tree.NumericColumnError(e, p, max_evals=max_evals),
+            ColumnType.Nominal: tree.NominalColumnError(e, p),
         }
         return scorers
 
@@ -138,12 +142,12 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         return tags
 
     def build_trainer(self, error: tree.TargetError):
-        attribute_penalization = self.build_attribute_penalizer()
+        column_penalization = self.build_attribute_penalizer()
 
-        scorers = self.build_splitter()
+        scorers = self.build_splitter(error, column_penalization)
 
-        scorer = tree.DefaultSplitter(scorers, error, attribute_penalization)
-        prune_criteria = tree.PruneCriteria(
+        scorer = tree.DefaultSplitter(error, scorers)
+        prune_criteria = sklearnmodels.tree.pruning.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
             min_error_decrease=self.min_error_decrease,
@@ -227,10 +231,10 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         return tags
 
     def build_trainer(self, error: tree.TargetError):
-        scorers = self.build_splitter()
-        attribute_penalization = self.build_attribute_penalizer()
-        scorer = tree.DefaultSplitter(scorers, error, attribute_penalization)
-        prune_criteria = tree.PruneCriteria(
+        column_penalization = self.build_attribute_penalizer()
+        scorers = self.build_splitter(error, column_penalization)
+        scorer = tree.DefaultSplitter(error, scorers)
+        prune_criteria = sklearnmodels.tree.pruning.PruneCriteria(
             max_height=self.max_depth,
             min_samples_leaf=self.min_samples_leaf,
             min_error_decrease=self.min_error_decrease,
@@ -256,7 +260,8 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         x_df = self.get_dataframe_from_x(x)
         error = self.build_error()
         trainer = self.build_trainer(error)
-        self.tree_ = trainer.fit(x_df, y)
+        d = PandasDataset(x_df, y)
+        self.tree_ = trainer.fit(d)
         self.is_fitted_ = True
         return self
 

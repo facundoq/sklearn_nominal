@@ -5,6 +5,7 @@ import enum
 from typing import Generator, Iterable
 
 import numpy as np
+import pandas as pd
 
 from .conditions import Condition
 
@@ -25,27 +26,37 @@ class Dataset(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def x():
+    def x(
+        self,
+    ) -> pd.DataFrame:
         pass
 
     @property
     @abc.abstractmethod
-    def y():
+    def y(
+        self,
+    ) -> np.ndarray:
         pass
 
     @property
     @abc.abstractmethod
-    def n() -> int:
+    def n(
+        self,
+    ) -> int:
         pass
 
     @property
     @abc.abstractmethod
-    def types() -> list[ColumnType]:
+    def types(
+        self,
+    ) -> list[ColumnType]:
         pass
 
     @property
     @abc.abstractmethod
-    def columns() -> list[str]:
+    def columns(
+        self,
+    ) -> list[str]:
         pass
 
     @abc.abstractmethod
@@ -57,5 +68,5 @@ class Dataset(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def unique_values(self, column: str) -> np.ndarray:
+    def unique_values(self, column: str, sorted: bool) -> np.ndarray:
         pass

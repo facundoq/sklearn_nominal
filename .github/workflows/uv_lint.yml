@@ -1,4 +1,4 @@
-name: Linter
+name: Linter And Tests
 
 on:
   push:
@@ -30,4 +30,4 @@ jobs:
         run: uvx ruff check
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run pytest sklearnmodels/tests

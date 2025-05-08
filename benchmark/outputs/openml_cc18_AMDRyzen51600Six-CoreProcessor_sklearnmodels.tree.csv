@@ -1,0 +1,11 @@
+,model,dataset,train_accuracy,train_time,test_time,samples,features
+0,sklearnmodels.tree,kr-vs-kp,0.9424280350438048,0.0509157414,0.0214750592,3196,36
+1,sklearnmodels.tree,letter,0.6089,0.3996123565,0.1273683454,20000,16
+2,sklearnmodels.tree,balance-scale,0.7536,0.009832604,0.0032652103,625,4
+3,sklearnmodels.tree,mfeat-factors,0.837,1.0092492405,0.0134478862,2000,32
+4,sklearnmodels.tree,mfeat-fourier,0.816,1.104178341,0.0128702664,2000,32
+5,sklearnmodels.tree,breast-w,0.9585121602288984,0.0281740601,0.0031453356,699,9
+6,sklearnmodels.tree,mfeat-karhunen,0.8525,0.9623313504,0.0119592159,2000,32
+7,sklearnmodels.tree,mfeat-morphological,0.676,0.0134897687,0.0101490686,2000,6
+8,sklearnmodels.tree,mfeat-zernike,0.74,1.1216824705,0.0134561762,2000,32
+9,sklearnmodels.tree,cmc,0.48879837067209775,0.0167400579,0.0086155444,1473,9

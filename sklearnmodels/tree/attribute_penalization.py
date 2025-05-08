@@ -25,6 +25,6 @@ class NoPenalization(ColumnPenalization):
 
 class GainRatioPenalization(ColumnPenalization):
     def penalize(self, partition: Partition):
-        counts = np.array([len(x_i) for x_i, y_i in partition])
+        counts = np.array([d_i.n for d_i in partition], dtype="float64")
         counts /= counts.sum()
         return -np.sum(counts * log(counts, len(counts)))
