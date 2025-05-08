@@ -19,18 +19,46 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
-
+from sklearn.tree import DecisionTreeClassifier
 from sklearnmodels import SKLearnClassificationTree
 
 basepath = Path("benchmark/openml_cc18/")
 
 
+class BenchmarkResult:
+
+    def __init__(self, filepath: Path, save_on_change=True):
+        self.filepath = filepath
+        self.save_on_change = save_on_change
+
+        if filepath.exists():
+            self.model_df = pd.read_csv(filepath)
+        else:
+            self.reset()
+
+    def reset(self):
+        self.model_df = pd.DataFrame()
+
+    def append(self, id: str, x: dict[str, typing.Any]):
+        x["id"] = id
+        result = pd.DataFrame.from_records([x])
+        self.model_df = pd.concat([self.model_df, result], axis=0)
+        if self.save_on_change:
+            self.save()
+
+    def has_id(self, id: str):
+        return (not self.model_df.empty) and id in self.model_df["id"].values
+
+    def save(self):
+        self.model_df.to_csv(self.filepath, index=False)
+
+
 def get_tree_parameters(x: pd.DataFrame, classes: int):
     n, m = x.shape
     max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(n * (0.05 / classes)))
+    min_samples_leaf = max(10, int(n * (0.05 / np.sqrt(classes))))
     min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05 / classes
+    min_error_improvement = 0.05 / np.sqrt(classes)
     return max_height, min_samples_leaf, min_samples_split, min_error_improvement
 
 
@@ -77,7 +105,7 @@ def get_sklearn_tree(x: pd.DataFrame, classes: int):
     max_height, min_samples_leaf, min_samples_split, min_error_improvement = (
         get_tree_parameters(x, classes)
     )
-    model = sklearn.tree.DecisionTreeClassifier(
+    model = DecisionTreeClassifier(
         max_depth=max_height,
         min_samples_leaf=min_samples_leaf,
         min_samples_split=min_samples_split,
@@ -101,16 +129,24 @@ def reduce_numeric_features(x: pd.DataFrame, max_numeric_features):
                 f"v_{i}={v:.2f}" for i, v in enumerate(pca.explained_variance_ratio_)
             ],
         )
+
         x = pd.concat([x_numeric_reduced, x_non_numeric], axis=1)
     return x
 
 
+def get_complexity(model):
+
+    if isinstance(model, SKLearnClassificationTree):
+        return model.tree_.n_nodes()
+    elif isinstance(model, Pipeline):
+        return model["classifier"].tree_.node_count
+    else:
+        raise ValueError(f"Cannot determine complexity for model {model}")
+
+
 def benchmark(
-    model_generator: typing.Callable,
-    model_name: str,
-    model_df: pd.DataFrame,
-    model_table_path: Path,
-) -> pd.DataFrame:
+    model_generator: typing.Callable, model_name: str, benchmark_result: BenchmarkResult
+):
     benchmark_suite = openml.study.get_suite(
         "OpenML-CC18"
     )  # obtain the benchmark suite
@@ -121,15 +157,13 @@ def benchmark(
     for i, task_id in enumerate(benchmark_suite.tasks):  # iterate over all tasks
         task = openml.tasks.get_task(task_id)  # download the OpenML task
         dataset = task.get_dataset()
+
         pbar.update(1)
+        id = f"{model_name}_{dataset.name}"
+
         # dont run again if a result already exists
-        if not model_df.empty:
-            previous_runs = model_df[
-                (model_df["model"] == model_name)
-                & (model_df["dataset"] == dataset.name)
-            ]
-            if len(previous_runs) > 0:
-                continue
+        if benchmark_result.has_id(id):
+            continue
 
         x, y = task.get_X_and_y(dataset_format="dataframe")  # get the data
         x = reduce_numeric_features(x, 32)
@@ -149,29 +183,27 @@ def benchmark(
         y_pred = model.predict(x)
         test_elapsed = (time.time_ns() - start) / 10e9
         acc = sklearn.metrics.accuracy_score(y, y_pred)
-        result = pd.DataFrame.from_records(
-            [
-                {
-                    "model": model_name,
-                    "dataset": dataset.name,
-                    "train_accuracy": acc,
-                    "train_time": train_elapsed,
-                    "test_time": test_elapsed,
-                    "samples": n,
-                    "features": m,
-                    "classes": classes,
-                }
-            ]
+        complexity = get_complexity(model)
+        benchmark_result.append(
+            id,
+            {
+                "model": model_name,
+                "dataset": dataset.name,
+                "train_accuracy": acc,
+                "train_time": train_elapsed,
+                "test_time": test_elapsed,
+                "samples": n,
+                "features": m,
+                "classes": classes,
+                "complexity": complexity,
+            },
         )
-        model_df = pd.concat([model_df, result], axis=0)
-        model_df.to_csv(model_table_path, index=False)
 
         if isinstance(model, SKLearnClassificationTree):
             image_folderpath = basepath / "trees"
             image_folderpath.mkdir(exist_ok=True)
             image_filepath = image_folderpath / f"{dataset.name}.svg"
             model.export_image(image_filepath, le.classes_)
-    return model_df
 
 
 paths = []
@@ -179,7 +211,7 @@ paths = []
 
 def save_plot(plot, filename: str):
     path = str((basepath / filename).absolute())
-    lp.ggsave(plot, filename=path, w=8, h=4, unit="in", dpi=300)
+    lp.ggsave(plot, filename=path, w=12, h=4, unit="in", dpi=300)
     paths.append(filename)
     return filename
 
@@ -197,12 +229,13 @@ def plot_results(df: pd.DataFrame):
         df_reference, on="dataset", how="left", suffixes=(None, "_ref")
     )
 
-    for y in ["train_accuracy", "train_time", "test_time"]:
+    for y in ["train_accuracy", "train_time", "test_time", "complexity", "classes"]:
         plot = (
             lp.ggplot(df, lp.aes(x="dataset", y=y, color="model"))
             + common_options
             + x_scale
             + axis_font
+            + lp.theme(legend_position="top")
         )
         save_plot(plot, f"{y}.png")
     for x in ["samples", "features"]:
@@ -223,24 +256,20 @@ def plot_results(df: pd.DataFrame):
             save_plot(plot, f"{x}_{speedup_y}.png")
 
 
-def compute_results(platform: str, models: dict[str, tuple[typing.Callable, bool]]):
+def compute_results(models: dict[str, tuple[typing.Callable, bool]]):
     model_dfs = []
     for model_name, (model, force) in models.items():
         model_table_path = basepath / f"{model_name}.csv"
-
+        benchmark_result = BenchmarkResult(model_table_path)
         if force:
-            model_df = pd.DataFrame()
-        elif model_table_path.exists():
-            model_df = pd.read_csv(model_table_path)
-        else:
-            model_df = pd.DataFrame()
+            benchmark_result.reset()
 
         print(f"{model_name}: Running benchmarks ")
-        benchmark(model, model_name, model_df, model_table_path)
+        benchmark(model, model_name, benchmark_result)
 
         print(f"{model_name}: Done")
 
-        model_dfs.append(model_df)
+        model_dfs.append(benchmark_result.model_df)
     df = pd.concat(model_dfs, ignore_index=True)
     return df
 
@@ -279,8 +308,8 @@ if __name__ == "__main__":
     basepath = basepath / platform
     basepath.mkdir(exist_ok=True, parents=True)
     print(f"Running on {platform}")
-    df = compute_results(platform, models)
+    df = compute_results(models)
     print(df)
 
     plot_results(df)
-    export_md(df, pdf=True)
+    export_md(df, pdf=False)

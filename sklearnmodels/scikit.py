@@ -100,7 +100,7 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
 
     def predict_base(self, x: pd.DataFrame):
         self.check_is_fitted()
-        x = validate_data(
+        _ = validate_data(
             self,
             x,
             accept_sparse=True,
@@ -108,7 +108,7 @@ class SKLearnTree(BaseEstimator, metaclass=abc.ABCMeta):
             dtype=None,
             ensure_all_finite=False,
         )
-        x_df = self.get_dataframe_from_x(x)
+        x_df = x  # self.get_dataframe_from_x(x)
         n = len(x_df)
         assert n > 0
         return self.tree_.predict(x_df)
@@ -158,7 +158,9 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
 
     def fit(self, x: pd.DataFrame, y: np.ndarray):
         check_classification_targets(y)
-        x, y = validate_data(
+
+        # print("fit", x.dtypes)
+        x_, y = validate_data(
             self,
             x,
             y,
@@ -171,7 +173,8 @@ class SKLearnClassificationTree(ClassifierMixin, SKLearnTree):
         y = _check_y(y, multi_output=True, y_numeric=False, estimator=self)
         self.classes_ = np.unique(y)
         # y = self._encode_y(y)
-        x_df = self.get_dataframe_from_x(x)
+        # x_df = self.get_dataframe_from_x(x)
+        x_df = x
         if len(self.classes_) < 2:
             raise ValueError("Can't train classifier with one class.")
         error = self.build_error(len(self.classes_))
@@ -244,11 +247,12 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         return trainer
 
     def fit(self, x: pd.DataFrame, y: np.ndarray):
-        x, y = validate_data(
+        _, y = validate_data(
             self,
             x,
             y,
             reset=True,
+            X_numeric=None,
             multi_output=True,
             y_numeric=True,
             ensure_all_finite=False,
@@ -257,7 +261,7 @@ class SKLearnRegressionTree(RegressorMixin, SKLearnTree):
         y = _check_y(y, multi_output=True, y_numeric=True, estimator=self)
         self._y_original_shape = y.shape
         y = atleast_2d(y)
-        x_df = self.get_dataframe_from_x(x)
+        x_df = x  # self.get_dataframe_from_x(x)
         error = self.build_error()
         trainer = self.build_trainer(error)
         d = PandasDataset(x_df, y)

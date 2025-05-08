@@ -7,6 +7,10 @@
 
 ![alt](test_time.png)
 
+![alt](complexity.png)
+
+![alt](classes.png)
+
 ![alt](samples_train_time.png)
 
 ![alt](samples_test_time.png)
@@ -25,149 +29,150 @@
 
 
 # Benchmark table
-| model                      | dataset                                |   train_accuracy |    train_time |   test_time |   samples |   features |
-|:---------------------------|:---------------------------------------|-----------------:|--------------:|------------:|----------:|-----------:|
-| sklearn.tree               | kr-vs-kp                               |        0.940864  |   0.00493156  | 0.00300394  |      3196 |         36 |
-| sklearn.tree               | letter                                 |        0.60975   |   0.0094374   | 0.00189309  |     20000 |         16 |
-| sklearn.tree               | balance-scale                          |        0.7984    |   0.000575043 | 0.000299199 |       625 |          4 |
-| sklearn.tree               | mfeat-factors                          |        0.8185    |   0.00768132  | 0.000363372 |      2000 |         32 |
-| sklearn.tree               | mfeat-fourier                          |        0.785     |   0.00733189  | 0.000427128 |      2000 |         32 |
-| sklearn.tree               | breast-w                               |        0.942775  |   0.000544134 | 0.000257525 |       699 |          9 |
-| sklearn.tree               | mfeat-karhunen                         |        0.8495    |   0.00811382  | 0.000371799 |      2000 |         32 |
-| sklearn.tree               | mfeat-morphological                    |        0.707     |   0.000915246 | 0.000317751 |      2000 |          6 |
-| sklearn.tree               | mfeat-zernike                          |        0.711     |   0.00770823  | 0.000504599 |      2000 |         32 |
-| sklearn.tree               | cmc                                    |        0.473184  |   0.000969205 | 0.000615932 |      1473 |          9 |
-| sklearn.tree               | optdigits                              |        0.837011  |   0.0192989   | 0.000489309 |      5620 |         32 |
-| sklearn.tree               | credit-approval                        |        0.855072  |   0.00131575  | 0.000761789 |       690 |         15 |
-| sklearn.tree               | credit-g                               |        0.7       |   0.00188027  | 0.00110425  |      1000 |         20 |
-| sklearn.tree               | pendigits                              |        0.866357  |   0.00591781  | 0.000507916 |     10992 |         16 |
-| sklearn.tree               | diabetes                               |        0.735677  |   0.000581013 | 0.000257911 |       768 |          8 |
-| sklearn.tree               | spambase                               |        0.81178   |   0.00846284  | 0.000434451 |      4601 |         32 |
-| sklearn.tree               | splice                                 |        0.897179  |   0.00799266  | 0.00412268  |      3190 |         60 |
-| sklearn.tree               | tic-tac-toe                            |        0.699374  |   0.000809202 | 0.000515452 |       958 |          9 |
-| sklearn.tree               | vehicle                                |        0.6513    |   0.00176043  | 0.000814694 |       846 |         18 |
-| sklearn.tree               | electricity                            |        0.757393  |   0.00912589  | 0.00165178  |     45312 |          8 |
-| sklearn.tree               | satimage                               |        0.833593  |   0.0170945   | 0.000639284 |      6430 |         32 |
-| sklearn.tree               | eucalyptus                             |        0.649457  |   0.00137875  | 0.000674697 |       736 |         19 |
-| sklearn.tree               | sick                                   |        0.965536  |   0.0035408   | 0.0020442   |      3772 |         29 |
-| sklearn.tree               | vowel                                  |        0.753535  |   0.00158869  | 0.000451254 |       990 |         12 |
-| sklearn.tree               | isolet                                 |        0.706297  |   0.0349843   | 0.000580085 |      7797 |         32 |
-| sklearn.tree               | analcatdata_authorship                 |        0.946492  |   0.00188661  | 0.000309451 |       841 |         32 |
-| sklearn.tree               | analcatdata_dmft                       |        0.194479  |   0.000496914 | 0.000317193 |       797 |          4 |
-| sklearn.tree               | mnist_784                              |        0.681357  |   0.305256    | 0.00315025  |     70000 |         32 |
-| sklearn.tree               | pc4                                    |        0.877915  |   0.00198968  | 0.000327046 |      1458 |         32 |
-| sklearn.tree               | pc3                                    |        0.897633  |   0.00185213  | 0.000399359 |      1563 |         32 |
-| sklearn.tree               | jm1                                    |        0.806523  |   0.00472139  | 0.000785381 |     10885 |         21 |
-| sklearn.tree               | kc2                                    |        0.850575  |   0.00115885  | 0.000542151 |       522 |         21 |
-| sklearn.tree               | kc1                                    |        0.845424  |   0.00154958  | 0.000650367 |      2109 |         21 |
-| sklearn.tree               | pc1                                    |        0.930568  |   0.00113562  | 0.000588958 |      1109 |         21 |
-| sklearn.tree               | adult                                  |        0.760718  |   0.0184432   | 0.011112    |     48842 |         14 |
-| sklearn.tree               | Bioresponse                            |        0.623567  |   0.00646343  | 0.000461626 |      3751 |         32 |
-| sklearn.tree               | wdbc                                   |        0.940246  |   0.001169    | 0.000333584 |       569 |         30 |
-| sklearn.tree               | phoneme                                |        0.754626  |   0.00150276  | 0.000343541 |      5404 |          5 |
-| sklearn.tree               | qsar-biodeg                            |        0.776303  |   0.00214816  | 0.000350213 |      1055 |         32 |
-| sklearn.tree               | wall-robot-navigation                  |        0.969758  |   0.00682716  | 0.000431827 |      5456 |         24 |
-| sklearn.tree               | semeion                                |        0.766478  |   0.00905957  | 0.00033549  |      1593 |         32 |
-| sklearn.tree               | ilpd                                   |        0.713551  |   0.000841413 | 0.00049533  |       583 |         10 |
-| sklearn.tree               | madelon                                |        0.5       |   0.00436917  | 0.000461519 |      2600 |         32 |
-| sklearn.tree               | nomao                                  |        0.892761  |   0.0988794   | 0.0190471   |     34465 |         61 |
-| sklearn.tree               | ozone-level-8hr                        |        0.936859  |   0.00288307  | 0.000450212 |      2534 |         32 |
-| sklearn.tree               | cnae-9                                 |        0.823148  |   0.0066333   | 0.000455638 |      1080 |         32 |
-| sklearn.tree               | first-order-theorem-proving            |        0.429552  |   0.0109696   | 0.000597719 |      6118 |         32 |
-| sklearn.tree               | banknote-authentication                |        0.91691   |   0.000827908 | 0.000360721 |      1372 |          4 |
-| sklearn.tree               | blood-transfusion-service-center       |        0.762032  |   0.000943043 | 0.000563594 |       748 |          4 |
-| sklearn.tree               | PhishingWebsites                       |        0.888919  |   0.00840965  | 0.00576216  |     11055 |         30 |
-| sklearn.tree               | cylinder-bands                         |        0.707407  |   0.00204057  | 0.00111676  |       540 |         37 |
-| sklearn.tree               | bank-marketing                         |        0.883015  |   0.0168485   | 0.0092257   |     45211 |         16 |
-| sklearn.tree               | GesturePhaseSegmentationProcessed      |        0.444343  |   0.0187319   | 0.0006348   |      9873 |         32 |
-| sklearn.tree               | har                                    |        0.790659  |   0.0266234   | 0.000655419 |     10299 |         32 |
-| sklearn.tree               | dresses-sales                          |        0.58      |   0.00129461  | 0.000882575 |       500 |         12 |
-| sklearn.tree               | texture                                |        0.852545  |   0.0208236   | 0.00047696  |      5500 |         32 |
-| sklearn.tree               | connect-4                              |        0.658303  |   0.0636795   | 0.0486303   |     67557 |         42 |
-| sklearn.tree               | MiceProtein                            |        0.87037   |   0.00417274  | 0.000392406 |      1080 |         32 |
-| sklearn.tree               | steel-plates-fault                     |        0.704276  |   0.00420728  | 0.000706189 |      1941 |         27 |
-| sklearn.tree               | climate-model-simulation-crashes       |        0.914815  |   0.000661035 | 0.000281025 |       540 |         18 |
-| sklearn.tree               | wilt                                   |        0.946063  |   0.00101431  | 0.000295266 |      4839 |          5 |
-| sklearn.tree               | car                                    |        0.805556  |   0.000754991 | 0.000490176 |      1728 |          6 |
-| sklearn.tree               | segment                                |        0.887879  |   0.00212265  | 0.000317427 |      2310 |         16 |
-| sklearn.tree               | mfeat-pixel                            |        0.88      |   0.00926018  | 0.000363759 |      2000 |         32 |
-| sklearn.tree               | Fashion-MNIST                          |        0.667943  |   0.271144    | 0.00318968  |     70000 |         32 |
-| sklearn.tree               | jungle_chess_2pcs_raw_endgame_complete |        0.6491    |   0.0041905   | 0.00126597  |     44819 |          6 |
-| sklearn.tree               | numerai28.6                            |        0.50517   |   0.0378668   | 0.00258362  |     96320 |         21 |
-| sklearn.tree               | Devnagari-Script                       |        0.229402  |   0.594973    | 0.00527931  |     92000 |         32 |
-| sklearn.tree               | CIFAR_10                               |        0.177533  |   0.11966     | 0.00255593  |     60000 |         32 |
-| sklearn.tree               | Internet-Advertisements                |        0.936566  |   0.174965    | 0.117385    |      3279 |       1558 |
-| sklearn.tree               | dna                                    |        0.853107  |   0.0203288   | 0.0128005   |      3186 |        180 |
-| sklearn.tree               | churn                                  |        0.8706    |   0.00344516  | 0.00147404  |      5000 |         20 |
-| sklearnmodels.tree[pandas] | kr-vs-kp                               |        0.942428  |   0.0527716   | 0.0199487   |      3196 |         36 |
-| sklearnmodels.tree[pandas] | letter                                 |        0.6089    |   0.428225    | 0.139504    |     20000 |         16 |
-| sklearnmodels.tree[pandas] | balance-scale                          |        0.7536    |   0.0100565   | 0.00330457  |       625 |          4 |
-| sklearnmodels.tree[pandas] | mfeat-factors                          |        0.838     |   1.02659     | 0.0168648   |      2000 |         32 |
-| sklearnmodels.tree[pandas] | mfeat-fourier                          |        0.816     |   1.09505     | 0.0133844   |      2000 |         32 |
-| sklearnmodels.tree[pandas] | breast-w                               |        0.958512  |   0.0286312   | 0.00325195  |       699 |          9 |
-| sklearnmodels.tree[pandas] | mfeat-karhunen                         |        0.8525    |   0.955033    | 0.0130638   |      2000 |         32 |
-| sklearnmodels.tree[pandas] | mfeat-morphological                    |        0.676     |   0.0140692   | 0.0107629   |      2000 |          6 |
-| sklearnmodels.tree[pandas] | mfeat-zernike                          |        0.74      |   1.11607     | 0.0133721   |      2000 |         32 |
-| sklearnmodels.tree[pandas] | cmc                                    |        0.488798  |   0.0165353   | 0.00886184  |      1473 |          9 |
-| sklearnmodels.tree[pandas] | optdigits                              |        0.844128  |   1.04014     | 0.0363983   |      5620 |         32 |
-| sklearnmodels.tree[pandas] | credit-approval                        |        0.555072  |   0.0314995   | 0.00300796  |       690 |         15 |
-| sklearnmodels.tree[pandas] | credit-g                               |        0.7       |   0.0355607   | 0.00452653  |      1000 |         20 |
-| sklearnmodels.tree[pandas] | pendigits                              |        0.858988  |   0.289777    | 0.0706802   |     10992 |         16 |
-| sklearnmodels.tree[pandas] | diabetes                               |        0.785156  |   0.034029    | 0.00432091  |       768 |          8 |
-| sklearnmodels.tree[pandas] | spambase                               |        0.845251  |   0.375016    | 0.0255598   |      4601 |         32 |
-| sklearnmodels.tree[pandas] | splice                                 |        0.797179  |   0.302436    | 0.022736    |      3190 |         60 |
-| sklearnmodels.tree[pandas] | tic-tac-toe                            |        0.699374  |   0.00824251  | 0.00517947  |       958 |          9 |
-| sklearnmodels.tree[pandas] | vehicle                                |        0.749409  |   0.188561    | 0.00631872  |       846 |         18 |
-| sklearnmodels.tree[pandas] | electricity                            |        0.575455  |   3.91781     | 0.183348    |     45312 |          8 |
-| sklearnmodels.tree[pandas] | satimage                               |        0.852877  |   0.804853    | 0.0393021   |      6430 |         32 |
-| sklearnmodels.tree[pandas] | eucalyptus                             |        0.290761  |   0.0443841   | 0.00322565  |       736 |         19 |
-| sklearnmodels.tree[pandas] | sick                                   |        0.938759  |   0.159994    | 0.0273612   |      3772 |         29 |
-| sklearnmodels.tree[pandas] | vowel                                  |        0.0909091 |   0.238095    | 0.0042055   |       990 |         12 |
-| sklearnmodels.tree[pandas] | isolet                                 |        0.750417  |   2.50749     | 0.055923    |      7797 |         32 |
-| sklearnmodels.tree[pandas] | analcatdata_authorship                 |        0.953627  |   0.264641    | 0.00480378  |       841 |         32 |
-| sklearnmodels.tree[pandas] | analcatdata_dmft                       |        0.303639  |   0.0138362   | 0.00591637  |       797 |          4 |
-| sklearnmodels.tree[pandas] | mnist_784                              |        0.729029  |   1.88539     | 0.489357    |     70000 |         32 |
-| sklearnmodels.tree[pandas] | pc4                                    |        0.91358   |   0.23426     | 0.00729949  |      1458 |         32 |
-| sklearnmodels.tree[pandas] | pc3                                    |        0.90723   |   0.152112    | 0.00703261  |      1563 |         32 |
-| sklearnmodels.tree[pandas] | jm1                                    |        0.806523  |   0.0319509   | 0.0413867   |     10885 |         21 |
-| sklearnmodels.tree[pandas] | kc2                                    |        0.871648  |   0.0842077   | 0.00239288  |       522 |         21 |
-| sklearnmodels.tree[pandas] | kc1                                    |        0.855382  |   0.0372199   | 0.00838804  |      2109 |         21 |
-| sklearnmodels.tree[pandas] | pc1                                    |        0.930568  |   0.0333064   | 0.00441644  |      1109 |         21 |
-| sklearnmodels.tree[pandas] | Bioresponse                            |        0.666489  |   0.164744    | 0.0171994   |      3751 |         32 |
-| sklearnmodels.tree[pandas] | wdbc                                   |        0.947276  |   0.0895011   | 0.00282231  |       569 |         30 |
-| sklearnmodels.tree[pandas] | adult                                  |        0.760718  |   6.51463     | 0.199408    |     48842 |         14 |
-| sklearnmodels.tree[pandas] | phoneme                                |        0.754071  |   0.0131485   | 0.0249056   |      5404 |          5 |
-| sklearnmodels.tree[pandas] | qsar-biodeg                            |        0.81327   |   0.308156    | 0.00602916  |      1055 |         32 |
-| sklearnmodels.tree[pandas] | wall-robot-navigation                  |        0.920088  |   0.244811    | 0.0291749   |      5456 |         24 |
-| sklearnmodels.tree[pandas] | semeion                                |        0.767734  |   1.01293     | 0.0106838   |      1593 |         32 |
-| sklearnmodels.tree[pandas] | ilpd                                   |        0.713551  |   0.0265674   | 0.0024971   |       583 |         10 |
-| sklearnmodels.tree[pandas] | madelon                                |        0.618462  |   0.101102    | 0.0111263   |      2600 |         32 |
-| sklearnmodels.tree[pandas] | nomao                                  |        0.714377  | 161.664       | 0.141761    |     34465 |         61 |
-| sklearnmodels.tree[pandas] | ozone-level-8hr                        |        0.936859  |   0.130265    | 0.0108487   |      2534 |         32 |
-| sklearnmodels.tree[pandas] | cnae-9                                 |        0.817593  |   0.626135    | 0.00771662  |      1080 |         32 |
-| sklearnmodels.tree[pandas] | first-order-theorem-proving            |        0.518797  |   1.2263      | 0.0412096   |      6118 |         32 |
-| sklearnmodels.tree[pandas] | banknote-authentication                |        0.931487  |   0.0137267   | 0.00671601  |      1372 |          4 |
-| sklearnmodels.tree[pandas] | blood-transfusion-service-center       |        0.762032  |   0.00296432  | 0.00279     |       748 |          4 |
-| sklearnmodels.tree[pandas] | PhishingWebsites                       |        0.888919  |   0.0934739   | 0.0666966   |     11055 |         30 |
-| sklearnmodels.tree[pandas] | cylinder-bands                         |        0.577778  |   0.0332358   | 0.00249133  |       540 |         37 |
-| sklearnmodels.tree[pandas] | bank-marketing                         |        0.883015  |   1.97116     | 0.216174    |     45211 |         16 |
-| sklearnmodels.tree[pandas] | GesturePhaseSegmentationProcessed      |        0.517877  |   1.01843     | 0.0637478   |      9873 |         32 |
-| sklearnmodels.tree[pandas] | har                                    |        0.81105   |   0.97803     | 0.0633139   |     10299 |         32 |
-| sklearnmodels.tree[pandas] | dresses-sales                          |        0.592     |   0.0194453   | 0.00306972  |       500 |         12 |
-| sklearnmodels.tree[pandas] | texture                                |        0.874545  |   0.923035    | 0.0355575   |      5500 |         32 |
-| sklearnmodels.tree[pandas] | connect-4                              |        0.685096  |   0.767395    | 0.447583    |     67557 |         42 |
-| sklearnmodels.tree[pandas] | MiceProtein                            |        0.841667  |   0.65681     | 0.00694359  |      1080 |         32 |
-| sklearnmodels.tree[pandas] | steel-plates-fault                     |        0.765585  |   0.521218    | 0.0124055   |      1941 |         27 |
-| sklearnmodels.tree[pandas] | climate-model-simulation-crashes       |        0.948148  |   0.0634521   | 0.00239673  |       540 |         18 |
-| sklearnmodels.tree[pandas] | wilt                                   |        0.946063  |   0.00168219  | 0.0133174   |      4839 |          5 |
-| sklearnmodels.tree[pandas] | car                                    |        0.819444  |   0.0104259   | 0.0107318   |      1728 |          6 |
-| sklearnmodels.tree[pandas] | segment                                |        0.899134  |   0.155715    | 0.013108    |      2310 |         16 |
-| sklearnmodels.tree[pandas] | mfeat-pixel                            |        0.867     |   0.953759    | 0.0128935   |      2000 |         32 |
-| sklearnmodels.tree[pandas] | Fashion-MNIST                          |        0.726457  |   1.69787     | 0.467065    |     70000 |         32 |
-| sklearnmodels.tree[pandas] | jungle_chess_2pcs_raw_endgame_complete |        0.721145  |   0.0307077   | 0.227125    |     44819 |          6 |
-| sklearnmodels.tree[pandas] | numerai28.6                            |        0.50517   |   0.0495775   | 0.264506    |     96320 |         21 |
-| sklearnmodels.tree[pandas] | Devnagari-Script                       |        0.366261  |   3.88793     | 0.69042     |     92000 |         32 |
-| sklearnmodels.tree[pandas] | CIFAR_10                               |        0.3036    |   1.87418     | 0.400869    |     60000 |         32 |
-| sklearnmodels.tree[pandas] | Internet-Advertisements                |        0.914303  |   9.94966     | 0.0331127   |      3279 |       1558 |
-| sklearnmodels.tree[pandas] | dna                                    |        0.886064  |   0.868212    | 0.0225196   |      3186 |        180 |
-| sklearnmodels.tree[pandas] | churn                                  |        0.8586    |   0.750717    | 0.0206998   |      5000 |         20 |
+| model                      | dataset                                |   train_accuracy |    train_time |   test_time |   samples |   features |   classes |   complexity | id                                                                |
+|:---------------------------|:---------------------------------------|-----------------:|--------------:|------------:|----------:|-----------:|----------:|-------------:|:------------------------------------------------------------------|
+| sklearn.tree               | kr-vs-kp                               |         0.940864 |   0.00422162  | 0.00278091  |      3196 |         36 |         2 |            9 | sklearn.tree_kr-vs-kp                                             |
+| sklearn.tree               | letter                                 |         0.60975  |   0.00833378  | 0.0013996   |     20000 |         16 |        26 |          109 | sklearn.tree_letter                                               |
+| sklearn.tree               | balance-scale                          |         0.7984   |   0.000538338 | 0.000268094 |       625 |          4 |         3 |           17 | sklearn.tree_balance-scale                                        |
+| sklearn.tree               | mfeat-factors                          |         0.8185   |   0.0100625   | 0.000338727 |      2000 |         32 |        10 |           57 | sklearn.tree_mfeat-factors                                        |
+| sklearn.tree               | mfeat-fourier                          |         0.785    |   0.00720972  | 0.000421293 |      2000 |         32 |        10 |           45 | sklearn.tree_mfeat-fourier                                        |
+| sklearn.tree               | breast-w                               |         0.942775 |   0.000536605 | 0.000253862 |       699 |          9 |         2 |            5 | sklearn.tree_breast-w                                             |
+| sklearn.tree               | mfeat-karhunen                         |         0.8495   |   0.00802147  | 0.000371579 |      2000 |         32 |        10 |           49 | sklearn.tree_mfeat-karhunen                                       |
+| sklearn.tree               | mfeat-morphological                    |         0.707    |   0.000896991 | 0.00031444  |      2000 |          6 |        10 |           19 | sklearn.tree_mfeat-morphological                                  |
+| sklearn.tree               | mfeat-zernike                          |         0.711    |   0.00851101  | 0.000356302 |      2000 |         32 |        10 |           65 | sklearn.tree_mfeat-zernike                                        |
+| sklearn.tree               | cmc                                    |         0.473184 |   0.00096813  | 0.000593889 |      1473 |          9 |         3 |            5 | sklearn.tree_cmc                                                  |
+| sklearn.tree               | optdigits                              |         0.837011 |   0.0191249   | 0.000492524 |      5620 |         32 |        10 |           45 | sklearn.tree_optdigits                                            |
+| sklearn.tree               | credit-approval                        |         0.855072 |   0.00129089  | 0.000713108 |       690 |         15 |         2 |            5 | sklearn.tree_credit-approval                                      |
+| sklearn.tree               | credit-g                               |         0.7      |   0.00184981  | 0.00109664  |      1000 |         20 |         2 |            3 | sklearn.tree_credit-g                                             |
+| sklearn.tree               | pendigits                              |         0.866357 |   0.00600115  | 0.00051583  |     10992 |         16 |        10 |           47 | sklearn.tree_pendigits                                            |
+| sklearn.tree               | diabetes                               |         0.735677 |   0.000580383 | 0.000253933 |       768 |          8 |         2 |            3 | sklearn.tree_diabetes                                             |
+| sklearn.tree               | spambase                               |         0.81178  |   0.00844677  | 0.000434344 |      4601 |         32 |         2 |            5 | sklearn.tree_spambase                                             |
+| sklearn.tree               | splice                                 |         0.897179 |   0.00810691  | 0.0042973   |      3190 |         60 |         3 |           17 | sklearn.tree_splice                                               |
+| sklearn.tree               | tic-tac-toe                            |         0.699374 |   0.000860518 | 0.000504715 |       958 |          9 |         2 |            3 | sklearn.tree_tic-tac-toe                                          |
+| sklearn.tree               | vehicle                                |         0.6513   |   0.00173224  | 0.000809387 |       846 |         18 |         4 |           19 | sklearn.tree_vehicle                                              |
+| sklearn.tree               | electricity                            |         0.757393 |   0.00892267  | 0.00151623  |     45312 |          8 |         2 |            3 | sklearn.tree_electricity                                          |
+| sklearn.tree               | satimage                               |         0.833593 |   0.0169762   | 0.000494672 |      6430 |         32 |         6 |           15 | sklearn.tree_satimage                                             |
+| sklearn.tree               | eucalyptus                             |         0.649457 |   0.00138045  | 0.000648191 |       736 |         19 |         5 |           17 | sklearn.tree_eucalyptus                                           |
+| sklearn.tree               | sick                                   |         0.965536 |   0.00368869  | 0.00205253  |      3772 |         29 |         2 |            3 | sklearn.tree_sick                                                 |
+| sklearn.tree               | vowel                                  |         0.753535 |   0.00157562  | 0.000428293 |       990 |         12 |        11 |           71 | sklearn.tree_vowel                                                |
+| sklearn.tree               | isolet                                 |         0.706297 |   0.0348499   | 0.00056858  |      7797 |         32 |        26 |          131 | sklearn.tree_isolet                                               |
+| sklearn.tree               | analcatdata_authorship                 |         0.946492 |   0.0018687   | 0.000308251 |       841 |         32 |         4 |           11 | sklearn.tree_analcatdata_authorship                               |
+| sklearn.tree               | analcatdata_dmft                       |         0.194479 |   0.000500853 | 0.000318221 |       797 |          4 |         6 |            1 | sklearn.tree_analcatdata_dmft                                     |
+| sklearn.tree               | mnist_784                              |         0.681357 |   0.290139    | 0.00328742  |     70000 |         32 |        10 |           45 | sklearn.tree_mnist_784                                            |
+| sklearn.tree               | pc4                                    |         0.877915 |   0.00206743  | 0.000355114 |      1458 |         32 |         2 |            3 | sklearn.tree_pc4                                                  |
+| sklearn.tree               | pc3                                    |         0.897633 |   0.00191192  | 0.000439549 |      1563 |         32 |         2 |            1 | sklearn.tree_pc3                                                  |
+| sklearn.tree               | jm1                                    |         0.806523 |   0.00482505  | 0.000856451 |     10885 |         21 |         2 |            1 | sklearn.tree_jm1                                                  |
+| sklearn.tree               | kc2                                    |         0.850575 |   0.00104357  | 0.000549264 |       522 |         21 |         2 |            3 | sklearn.tree_kc2                                                  |
+| sklearn.tree               | kc1                                    |         0.845424 |   0.00158895  | 0.000722245 |      2109 |         21 |         2 |            3 | sklearn.tree_kc1                                                  |
+| sklearn.tree               | pc1                                    |         0.930568 |   0.00134721  | 0.000645966 |      1109 |         21 |         2 |            1 | sklearn.tree_pc1                                                  |
+| sklearn.tree               | adult                                  |         0.760718 |   0.0184856   | 0.00965373  |     48842 |         14 |         2 |            3 | sklearn.tree_adult                                                |
+| sklearn.tree               | Bioresponse                            |         0.623567 |   0.00546125  | 0.000399529 |      3751 |         32 |         2 |            3 | sklearn.tree_Bioresponse                                          |
+| sklearn.tree               | wdbc                                   |         0.940246 |   0.00117442  | 0.000304781 |       569 |         30 |         2 |            5 | sklearn.tree_wdbc                                                 |
+| sklearn.tree               | phoneme                                |         0.754626 |   0.00147927  | 0.000356253 |      5404 |          5 |         2 |            3 | sklearn.tree_phoneme                                              |
+| sklearn.tree               | qsar-biodeg                            |         0.776303 |   0.00264941  | 0.000393546 |      1055 |         32 |         2 |            7 | sklearn.tree_qsar-biodeg                                          |
+| sklearn.tree               | wall-robot-navigation                  |         0.969758 |   0.00763566  | 0.000442131 |      5456 |         24 |         4 |           17 | sklearn.tree_wall-robot-navigation                                |
+| sklearn.tree               | semeion                                |         0.766478 |   0.00922821  | 0.000390339 |      1593 |         32 |        10 |           53 | sklearn.tree_semeion                                              |
+| sklearn.tree               | ilpd                                   |         0.713551 |   0.000984096 | 0.00056702  |       583 |         10 |         2 |            3 | sklearn.tree_ilpd                                                 |
+| sklearn.tree               | madelon                                |         0.5      |   0.00458262  | 0.000398093 |      2600 |         32 |         2 |            1 | sklearn.tree_madelon                                              |
+| sklearn.tree               | nomao                                  |         0.892761 |   0.0998926   | 0.017228    |     34465 |         61 |         2 |            9 | sklearn.tree_nomao                                                |
+| sklearn.tree               | ozone-level-8hr                        |         0.936859 |   0.00279788  | 0.000459309 |      2534 |         32 |         2 |            1 | sklearn.tree_ozone-level-8hr                                      |
+| sklearn.tree               | cnae-9                                 |         0.821296 |   0.00692959  | 0.000364672 |      1080 |         32 |         9 |           37 | sklearn.tree_cnae-9                                               |
+| sklearn.tree               | first-order-theorem-proving            |         0.429552 |   0.010541    | 0.000503997 |      6118 |         32 |         6 |            5 | sklearn.tree_first-order-theorem-proving                          |
+| sklearn.tree               | banknote-authentication                |         0.91691  |   0.000784253 | 0.000329596 |      1372 |          4 |         2 |            7 | sklearn.tree_banknote-authentication                              |
+| sklearn.tree               | blood-transfusion-service-center       |         0.762032 |   0.000863353 | 0.000476422 |       748 |          4 |         2 |            1 | sklearn.tree_blood-transfusion-service-center                     |
+| sklearn.tree               | PhishingWebsites                       |         0.888919 |   0.00878431  | 0.00600393  |     11055 |         30 |         2 |            3 | sklearn.tree_PhishingWebsites                                     |
+| sklearn.tree               | cylinder-bands                         |         0.707407 |   0.0021546   | 0.00123529  |       540 |         37 |         2 |            7 | sklearn.tree_cylinder-bands                                       |
+| sklearn.tree               | bank-marketing                         |         0.883015 |   0.0174044   | 0.0103082   |     45211 |         16 |         2 |            3 | sklearn.tree_bank-marketing                                       |
+| sklearn.tree               | GesturePhaseSegmentationProcessed      |         0.444343 |   0.0191803   | 0.000812228 |      9873 |         32 |         5 |            7 | sklearn.tree_GesturePhaseSegmentationProcessed                    |
+| sklearn.tree               | har                                    |         0.790659 |   0.0262504   | 0.000624693 |     10299 |         32 |         6 |           19 | sklearn.tree_har                                                  |
+| sklearn.tree               | dresses-sales                          |         0.58     |   0.0012885   | 0.000795852 |       500 |         12 |         2 |            1 | sklearn.tree_dresses-sales                                        |
+| sklearn.tree               | texture                                |         0.852545 |   0.0210705   | 0.00053108  |      5500 |         32 |        11 |           49 | sklearn.tree_texture                                              |
+| sklearn.tree               | connect-4                              |         0.658303 |   0.0637705   | 0.0476783   |     67557 |         42 |         3 |            1 | sklearn.tree_connect-4                                            |
+| sklearn.tree               | MiceProtein                            |         0.87037  |   0.0041364   | 0.000405238 |      1080 |         32 |         8 |           65 | sklearn.tree_MiceProtein                                          |
+| sklearn.tree               | steel-plates-fault                     |         0.704276 |   0.00434864  | 0.000727952 |      1941 |         27 |         7 |           25 | sklearn.tree_steel-plates-fault                                   |
+| sklearn.tree               | climate-model-simulation-crashes       |         0.914815 |   0.000670785 | 0.000268386 |       540 |         18 |         2 |            1 | sklearn.tree_climate-model-simulation-crashes                     |
+| sklearn.tree               | wilt                                   |         0.946063 |   0.00101239  | 0.00030071  |      4839 |          5 |         2 |            1 | sklearn.tree_wilt                                                 |
+| sklearn.tree               | car                                    |         0.805556 |   0.00116798  | 0.000760826 |      1728 |          6 |         4 |            7 | sklearn.tree_car                                                  |
+| sklearn.tree               | segment                                |         0.887879 |   0.00217301  | 0.000327527 |      2310 |         16 |         7 |           21 | sklearn.tree_segment                                              |
+| sklearn.tree               | mfeat-pixel                            |         0.8795   |   0.0112801   | 0.000366968 |      2000 |         32 |        10 |           59 | sklearn.tree_mfeat-pixel                                          |
+| sklearn.tree               | Fashion-MNIST                          |         0.667943 |   0.281108    | 0.0031211   |     70000 |         32 |        10 |           33 | sklearn.tree_Fashion-MNIST                                        |
+| sklearn.tree               | jungle_chess_2pcs_raw_endgame_complete |         0.6491   |   0.00451756  | 0.00144377  |     44819 |          6 |         3 |           11 | sklearn.tree_jungle_chess_2pcs_raw_endgame_complete               |
+| sklearn.tree               | numerai28.6                            |         0.50517  |   0.0360487   | 0.00379933  |     96320 |         21 |         2 |            1 | sklearn.tree_numerai28.6                                          |
+| sklearn.tree               | Devnagari-Script                       |         0.229326 |   0.566889    | 0.00475897  |     92000 |         32 |        46 |          101 | sklearn.tree_Devnagari-Script                                     |
+| sklearn.tree               | CIFAR_10                               |         0.177533 |   0.122391    | 0.00260757  |     60000 |         32 |        10 |            5 | sklearn.tree_CIFAR_10                                             |
+| sklearn.tree               | Internet-Advertisements                |         0.936566 |   0.207374    | 0.154723    |      3279 |       1558 |         2 |            5 | sklearn.tree_Internet-Advertisements                              |
+| sklearn.tree               | dna                                    |         0.853107 |   0.026576    | 0.013182    |      3186 |        180 |         3 |           13 | sklearn.tree_dna                                                  |
+| sklearn.tree               | churn                                  |         0.8706   |   0.00367226  | 0.0018352   |      5000 |         20 |         2 |            3 | sklearn.tree_churn                                                |
+| sklearn.tree               | nomao                                  |         0.866937 |   0.0801217   | 0.0185805   |     34465 |         61 |         2 |            5 | sklearn.tree_nomao                                                |
+| sklearnmodels.tree[pandas] | kr-vs-kp                               |         0.942428 |   0.100729    | 0.0200649   |      3196 |         36 |         2 |           20 | sklearnmodels.tree[pandas]_kr-vs-kp                               |
+| sklearnmodels.tree[pandas] | letter                                 |         0.53355  |   0.349118    | 0.129518    |     20000 |         16 |        26 |          119 | sklearnmodels.tree[pandas]_letter                                 |
+| sklearnmodels.tree[pandas] | balance-scale                          |         0.752    |   0.0097823   | 0.00324041  |       625 |          4 |         3 |           26 | sklearnmodels.tree[pandas]_balance-scale                          |
+| sklearnmodels.tree[pandas] | mfeat-factors                          |         0.764    |   0.513051    | 0.0125265   |      2000 |         32 |        10 |           86 | sklearnmodels.tree[pandas]_mfeat-factors                          |
+| sklearnmodels.tree[pandas] | mfeat-fourier                          |         0.7205   |   0.535857    | 0.0137579   |      2000 |         32 |        10 |           86 | sklearnmodels.tree[pandas]_mfeat-fourier                          |
+| sklearnmodels.tree[pandas] | breast-w                               |         0.958512 |   0.0291448   | 0.00335525  |       699 |          9 |         2 |           16 | sklearnmodels.tree[pandas]_breast-w                               |
+| sklearnmodels.tree[pandas] | mfeat-karhunen                         |         0.793    |   0.599059    | 0.0123194   |      2000 |         32 |        10 |           93 | sklearnmodels.tree[pandas]_mfeat-karhunen                         |
+| sklearnmodels.tree[pandas] | mfeat-morphological                    |         0.676    |   0.0123782   | 0.00991309  |      2000 |          6 |        10 |           19 | sklearnmodels.tree[pandas]_mfeat-morphological                    |
+| sklearnmodels.tree[pandas] | mfeat-zernike                          |         0.641    |   0.576994    | 0.0122269   |      2000 |         32 |        10 |           92 | sklearnmodels.tree[pandas]_mfeat-zernike                          |
+| sklearnmodels.tree[pandas] | cmc                                    |         0.484046 |   0.0188078   | 0.00879091  |      1473 |          9 |         3 |           12 | sklearnmodels.tree[pandas]_cmc                                    |
+| sklearnmodels.tree[pandas] | optdigits                              |         0.785765 |   0.583913    | 0.0331033   |      5620 |         32 |        10 |           85 | sklearnmodels.tree[pandas]_optdigits                              |
+| sklearnmodels.tree[pandas] | credit-approval                        |         0.855072 |   0.047715    | 0.00494947  |       690 |         15 |         2 |           21 | sklearnmodels.tree[pandas]_credit-approval                        |
+| sklearnmodels.tree[pandas] | credit-g                               |         0.726    |   0.108254    | 0.00631572  |      1000 |         20 |         2 |           22 | sklearnmodels.tree[pandas]_credit-g                               |
+| sklearnmodels.tree[pandas] | pendigits                              |         0.771288 |   0.208713    | 0.0670275   |     10992 |         16 |        10 |           60 | sklearnmodels.tree[pandas]_pendigits                              |
+| sklearnmodels.tree[pandas] | diabetes                               |         0.785156 |   0.0295799   | 0.00415226  |       768 |          8 |         2 |           20 | sklearnmodels.tree[pandas]_diabetes                               |
+| sklearnmodels.tree[pandas] | spambase                               |         0.841556 |   0.227236    | 0.0235081   |      4601 |         32 |         2 |           30 | sklearnmodels.tree[pandas]_spambase                               |
+| sklearnmodels.tree[pandas] | splice                                 |         0.739812 |   0.963314    | 0.0213797   |      3190 |         60 |         3 |           32 | sklearnmodels.tree[pandas]_splice                                 |
+| sklearnmodels.tree[pandas] | tic-tac-toe                            |         0.699374 |   0.00924165  | 0.00518821  |       958 |          9 |         2 |            8 | sklearnmodels.tree[pandas]_tic-tac-toe                            |
+| sklearnmodels.tree[pandas] | vehicle                                |         0.698582 |   0.1575      | 0.00506919  |       846 |         18 |         4 |           45 | sklearnmodels.tree[pandas]_vehicle                                |
+| sklearnmodels.tree[pandas] | electricity                            |         0.756555 |   0.0293953   | 0.261716    |     45312 |          8 |         2 |            7 | sklearnmodels.tree[pandas]_electricity                            |
+| sklearnmodels.tree[pandas] | satimage                               |         0.825194 |   0.311307    | 0.0346644   |      6430 |         32 |         6 |           42 | sklearnmodels.tree[pandas]_satimage                               |
+| sklearnmodels.tree[pandas] | eucalyptus                             |         0.360054 |   0.0847999   | 0.00521488  |       736 |         19 |         5 |           16 | sklearnmodels.tree[pandas]_eucalyptus                             |
+| sklearnmodels.tree[pandas] | sick                                   |         0.966596 |   0.0575513   | 0.0201615   |      3772 |         29 |         2 |            9 | sklearnmodels.tree[pandas]_sick                                   |
+| sklearnmodels.tree[pandas] | vowel                                  |         0.382828 |   0.132615    | 0.00718986  |       990 |         12 |        11 |           51 | sklearnmodels.tree[pandas]_vowel                                  |
+| sklearnmodels.tree[pandas] | isolet                                 |         0.62524  |   1.08525     | 0.0514995   |      7797 |         32 |        26 |          164 | sklearnmodels.tree[pandas]_isolet                                 |
+| sklearnmodels.tree[pandas] | analcatdata_authorship                 |         0.902497 |   0.168461    | 0.00426876  |       841 |         32 |         4 |           31 | sklearnmodels.tree[pandas]_analcatdata_authorship                 |
+| sklearnmodels.tree[pandas] | analcatdata_dmft                       |         0.271016 |   0.0114113   | 0.00521882  |       797 |          4 |         6 |           37 | sklearnmodels.tree[pandas]_analcatdata_dmft                       |
+| sklearnmodels.tree[pandas] | mnist_784                              |         0.664143 |   1.02029     | 0.437254    |     70000 |         32 |        10 |           82 | sklearnmodels.tree[pandas]_mnist_784                              |
+| sklearnmodels.tree[pandas] | pc4                                    |         0.893004 |   0.0870606   | 0.00623952  |      1458 |         32 |         2 |           13 | sklearnmodels.tree[pandas]_pc4                                    |
+| sklearnmodels.tree[pandas] | pc3                                    |         0.897633 |   0.0225251   | 0.00581604  |      1563 |         32 |         2 |            3 | sklearnmodels.tree[pandas]_pc3                                    |
+| sklearnmodels.tree[pandas] | jm1                                    |         0.806523 |   0.0243935   | 0.0412426   |     10885 |         21 |         2 |            3 | sklearnmodels.tree[pandas]_jm1                                    |
+| sklearnmodels.tree[pandas] | kc2                                    |         0.871648 |   0.0917762   | 0.0023649   |       522 |         21 |         2 |           21 | sklearnmodels.tree[pandas]_kc2                                    |
+| sklearnmodels.tree[pandas] | kc1                                    |         0.855382 |   0.0380342   | 0.0082648   |      2109 |         21 |         2 |            7 | sklearnmodels.tree[pandas]_kc1                                    |
+| sklearnmodels.tree[pandas] | pc1                                    |         0.930568 |   0.00609811  | 0.00311277  |      1109 |         21 |         2 |            1 | sklearnmodels.tree[pandas]_pc1                                    |
+| sklearnmodels.tree[pandas] | adult                                  |         0.787089 |   0.107712    | 0.306823    |     48842 |         14 |         2 |           17 | sklearnmodels.tree[pandas]_adult                                  |
+| sklearnmodels.tree[pandas] | Bioresponse                            |         0.632365 |   0.0647408   | 0.0152136   |      3751 |         32 |         2 |            8 | sklearnmodels.tree[pandas]_Bioresponse                            |
+| sklearnmodels.tree[pandas] | wdbc                                   |         0.936731 |   0.0505533   | 0.00251564  |       569 |         30 |         2 |           11 | sklearnmodels.tree[pandas]_wdbc                                   |
+| sklearnmodels.tree[pandas] | phoneme                                |         0.754071 |   0.0123617   | 0.0239078   |      5404 |          5 |         2 |           11 | sklearnmodels.tree[pandas]_phoneme                                |
+| sklearnmodels.tree[pandas] | qsar-biodeg                            |         0.81327  |   0.213092    | 0.00547659  |      1055 |         32 |         2 |           33 | sklearnmodels.tree[pandas]_qsar-biodeg                            |
+| sklearnmodels.tree[pandas] | wall-robot-navigation                  |         0.91184  |   0.179786    | 0.0275978   |      5456 |         24 |         4 |           38 | sklearnmodels.tree[pandas]_wall-robot-navigation                  |
+| sklearnmodels.tree[pandas] | semeion                                |         0.683616 |   0.620113    | 0.00994591  |      1593 |         32 |        10 |          102 | sklearnmodels.tree[pandas]_semeion                                |
+| sklearnmodels.tree[pandas] | ilpd                                   |         0.713551 |   0.0262473   | 0.00344657  |       583 |         10 |         2 |           15 | sklearnmodels.tree[pandas]_ilpd                                   |
+| sklearnmodels.tree[pandas] | madelon                                |         0.5      |   0.00895025  | 0.00727517  |      2600 |         32 |         2 |            1 | sklearnmodels.tree[pandas]_madelon                                |
+| sklearnmodels.tree[pandas] | nomao                                  |         0.878601 |   0.886869    | 0.219706    |     34465 |         61 |         2 |           22 | sklearnmodels.tree[pandas]_nomao                                  |
+| sklearnmodels.tree[pandas] | ozone-level-8hr                        |         0.936859 |   0.0115928   | 0.00707162  |      2534 |         32 |         2 |            1 | sklearnmodels.tree[pandas]_ozone-level-8hr                        |
+| sklearnmodels.tree[pandas] | cnae-9                                 |         0.784259 |   0.46202     | 0.00652362  |      1080 |         32 |         9 |           76 | sklearnmodels.tree[pandas]_cnae-9                                 |
+| sklearnmodels.tree[pandas] | first-order-theorem-proving            |         0.417457 |   0.0140359   | 0.0169408   |      6118 |         32 |         6 |            1 | sklearnmodels.tree[pandas]_first-order-theorem-proving            |
+| sklearnmodels.tree[pandas] | banknote-authentication                |         0.903061 |   0.0116504   | 0.00674699  |      1372 |          4 |         2 |           20 | sklearnmodels.tree[pandas]_banknote-authentication                |
+| sklearnmodels.tree[pandas] | blood-transfusion-service-center       |         0.762032 |   0.00300655  | 0.00282396  |       748 |          4 |         2 |            3 | sklearnmodels.tree[pandas]_blood-transfusion-service-center       |
+| sklearnmodels.tree[pandas] | PhishingWebsites                       |         0.888919 |   0.0996418   | 0.0667951   |     11055 |         30 |         2 |           16 | sklearnmodels.tree[pandas]_PhishingWebsites                       |
+| sklearnmodels.tree[pandas] | cylinder-bands                         |         0.612963 |   0.184849    | 0.00389382  |       540 |         37 |         2 |           13 | sklearnmodels.tree[pandas]_cylinder-bands                         |
+| sklearnmodels.tree[pandas] | bank-marketing                         |         0.886001 |   0.0927026   | 0.293342    |     45211 |         16 |         2 |           15 | sklearnmodels.tree[pandas]_bank-marketing                         |
+| sklearnmodels.tree[pandas] | GesturePhaseSegmentationProcessed      |         0.476653 |   0.291145    | 0.0501753   |      9873 |         32 |         5 |           32 | sklearnmodels.tree[pandas]_GesturePhaseSegmentationProcessed      |
+| sklearnmodels.tree[pandas] | har                                    |         0.748422 |   0.468542    | 0.0608839   |     10299 |         32 |         6 |           58 | sklearnmodels.tree[pandas]_har                                    |
+| sklearnmodels.tree[pandas] | dresses-sales                          |         0.59     |   0.0306559   | 0.00295736  |       500 |         12 |         2 |            6 | sklearnmodels.tree[pandas]_dresses-sales                          |
+| sklearnmodels.tree[pandas] | texture                                |         0.801455 |   0.496422    | 0.0339332   |      5500 |         32 |        11 |           74 | sklearnmodels.tree[pandas]_texture                                |
+| sklearnmodels.tree[pandas] | connect-4                              |         0.658303 |   0.0463143   | 0.281772    |     67557 |         42 |         3 |            1 | sklearnmodels.tree[pandas]_connect-4                              |
+| sklearnmodels.tree[pandas] | MiceProtein                            |         0.764815 |   0.499451    | 0.00665566  |      1080 |         32 |         8 |           87 | sklearnmodels.tree[pandas]_MiceProtein                            |
+| sklearnmodels.tree[pandas] | steel-plates-fault                     |         0.717671 |   0.376628    | 0.0127882   |      1941 |         27 |         7 |           70 | sklearnmodels.tree[pandas]_steel-plates-fault                     |
+| sklearnmodels.tree[pandas] | climate-model-simulation-crashes       |         0.948148 |   0.0447572   | 0.00234017  |       540 |         18 |         2 |           12 | sklearnmodels.tree[pandas]_climate-model-simulation-crashes       |
+| sklearnmodels.tree[pandas] | wilt                                   |         0.946063 |   0.00166198  | 0.0135029   |      4839 |          5 |         2 |            1 | sklearnmodels.tree[pandas]_wilt                                   |
+| sklearnmodels.tree[pandas] | car                                    |         0.819444 |   0.0149293   | 0.0100663   |      1728 |          6 |         4 |           26 | sklearnmodels.tree[pandas]_car                                    |
+| sklearnmodels.tree[pandas] | segment                                |         0.858874 |   0.127467    | 0.0123928   |      2310 |         16 |         7 |           45 | sklearnmodels.tree[pandas]_segment                                |
+| sklearnmodels.tree[pandas] | mfeat-pixel                            |         0.7895   |   0.565556    | 0.012245    |      2000 |         32 |        10 |           89 | sklearnmodels.tree[pandas]_mfeat-pixel                            |
+| sklearnmodels.tree[pandas] | Fashion-MNIST                          |         0.677471 |   1.03086     | 0.430569    |     70000 |         32 |        10 |           80 | sklearnmodels.tree[pandas]_Fashion-MNIST                          |
+| sklearnmodels.tree[pandas] | jungle_chess_2pcs_raw_endgame_complete |         0.721145 |   0.0273586   | 0.224042    |     44819 |          6 |         3 |           23 | sklearnmodels.tree[pandas]_jungle_chess_2pcs_raw_endgame_complete |
+| sklearnmodels.tree[pandas] | numerai28.6                            |         0.50517  |   0.0558287   | 0.272296    |     96320 |         21 |         2 |            1 | sklearnmodels.tree[pandas]_numerai28.6                            |
+| sklearnmodels.tree[pandas] | Devnagari-Script                       |         0.277315 |   1.96412     | 0.640588    |     92000 |         32 |        46 |          198 | sklearnmodels.tree[pandas]_Devnagari-Script                       |
+| sklearnmodels.tree[pandas] | CIFAR_10                               |         0.210917 |   0.544047    | 0.287745    |     60000 |         32 |        10 |           43 | sklearnmodels.tree[pandas]_CIFAR_10                               |
+| sklearnmodels.tree[pandas] | Internet-Advertisements                |         0.921013 | 120.153       | 0.0414731   |      3279 |       1558 |         2 |           11 | sklearnmodels.tree[pandas]_Internet-Advertisements                |
+| sklearnmodels.tree[pandas] | dna                                    |         0.871626 |   5.46196     | 0.0225437   |      3186 |        180 |         3 |           36 | sklearnmodels.tree[pandas]_dna                                    |
+| sklearnmodels.tree[pandas] | churn                                  |         0.8586   |   0.106604    | 0.03201     |      5000 |         20 |         2 |           20 | sklearnmodels.tree[pandas]_churn                                  |

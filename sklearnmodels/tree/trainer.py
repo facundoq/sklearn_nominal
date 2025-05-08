@@ -79,7 +79,7 @@ class BaseTreeTrainer(TreeTrainer):
         while len(subtrees) > 0:
             task = subtrees.pop()
             global_score = self.splitter.global_error(task.d)
-            new_tree = Tree(global_score.prediction, global_score.error, d.n)
+            new_tree = Tree(global_score.prediction, global_score.error, task.d.n)
             task.parent.branches[task.condition] = new_tree
             subtree_tasks = self.make_tree(new_tree, task)
             # bfs

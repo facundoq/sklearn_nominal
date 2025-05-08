@@ -78,3 +78,16 @@ class PandasDataset(Dataset):
     def drop(self, columns: list[str]) -> PandasDataset:
         x = self.x.drop(columns=columns)
         return PandasDataset(x, self.y)
+
+    def classes(self):
+        values = np.unique(self.y)
+        values.sort()
+        return values
+
+    def filter_by_class(self, c) -> Dataset:
+        idx = self.y == c
+        return PandasDataset(self.x.iloc[idx], y[idx])
+
+    def class_distribution(self) -> np.ndarray:
+        p: np.ndarray = np.bincount(self.y)
+        return p / p.sum()

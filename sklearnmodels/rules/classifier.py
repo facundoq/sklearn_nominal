@@ -19,14 +19,17 @@ class Predicate(Condition):
         return True
 
 
+ClassificationRule = tuple[Condition, np.ndarray]
+
+
 class RuleClassifier:
-    def __init__(self, rules: dict[Condition, np.ndarray], class_names: list[str]):
+    def __init__(self, rules: list[ClassificationRule], class_names: list[str]):
         self.rules = rules
         self.class_names = class_names
 
     def predict_proba(self, x: pd.Series):
 
-        for condition, p in self.rules.items():
+        for condition, p in self.rules:
             if condition(x):
                 return p
         c = len(self.class_names)

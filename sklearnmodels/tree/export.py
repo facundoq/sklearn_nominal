@@ -42,12 +42,18 @@ def make_color(height, max_height):
     return hsv
 
 
-def make_label(info: TreeInfo, class_names: list[str]):
-    prediction = ", ".join([f"{p:.2f}" for p in info.tree.prediction])
-    prediction = f"p: ({prediction})"
+def make_label(info: TreeInfo, class_names: list[str], max_classes: int):
+    best_class = info.tree.prediction.argmax()
+
+    if len(class_names) <= max_classes:
+        prediction = ", ".join([f"{p:.2f}" for p in info.tree.prediction])
+        prediction = f"p: ({prediction})"
+    else:
+        p = info.tree.prediction[best_class]
+        prediction = f"p={p}"
     class_info = ""
     if class_names is not None:
-        class_name = class_names[info.tree.prediction.argmax()]
+        class_name = class_names[best_class]
         class_info = f"<b> Class={class_name} </b> <br/>"
 
     column = ""
@@ -58,10 +64,12 @@ def make_label(info: TreeInfo, class_names: list[str]):
     return label
 
 
-def make_node(info: TreeInfo, max_height: int, class_names: list[str]):
+def make_node(
+    info: TreeInfo, max_height: int, class_names: list[str], max_classes: int
+):
     color = make_color(info.height, max_height)
     shape = "oval" if info.tree.leaf else "rect"
-    label = make_label(info, class_names)
+    label = make_label(info, class_names, max_classes)
     node = f'{info.id} [label={label}, fillcolor="{color}", shape="{shape}"];\n'
     return node
 
@@ -71,8 +79,8 @@ def make_edge(info: TreeInfo):
     return f'{info.parent_id}:s -> {info.id}:n [label="{html_escape(condition)}"] ;\n'
 
 
-def export_dot(tree: Tree, class_names: list[str], title=""):
-    class_names = list(map(html_escape, class_names))
+def export_dot(tree: Tree, class_names: list[str], title="", max_classes=10):
+    class_names = list(map(html_escape, map(str, class_names)))
     nodes: list[TreeInfo] = []
     global id
     id = 0
@@ -90,7 +98,7 @@ def export_dot(tree: Tree, class_names: list[str], title=""):
     max_height = max(1, max_height)
     body = ""
     for info in nodes:
-        body += make_node(info, max_height, class_names)
+        body += make_node(info, max_height, class_names, max_classes)
         if info.parent_id > 0:
             body += make_edge(info)
 

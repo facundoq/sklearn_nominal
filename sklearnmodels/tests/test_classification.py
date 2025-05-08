@@ -25,6 +25,19 @@ def read_classification_dataset(path: Path):
     return x, y, le.classes_
 
 
+def get_prism_classifier(criterion: str):
+    def build(x: pd.DataFrame, classes: int):
+        n, m = x.shape
+        max_height = min(max(int(np.log(m) * 3), 5), 30)
+        min_samples_leaf = max(10, int(n * (0.05 / classes)))
+        min_samples_split = min_samples_leaf
+        min_error_improvement = 0.05 / classes
+
+        pass
+
+    return build
+
+
 def get_nominal_tree_classifier(criterion: str):
     def build_nominal_tree_classifier(x: pd.DataFrame, classes: int):
         n, m = x.shape
@@ -141,6 +154,7 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         "sklearnmodels.tree[entropy]": get_nominal_tree_classifier("entropy"),
         "sklearnmodels.tree[gini]": get_nominal_tree_classifier("gini"),
         "sklearnmodels.tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
+        "sklearnmodels.prism": get_prism_classifier(),
     }
     datasets = [path / name for name in dataset_names]
     results_all = []

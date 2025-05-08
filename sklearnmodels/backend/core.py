@@ -70,3 +70,15 @@ class Dataset(abc.ABC):
     @abc.abstractmethod
     def unique_values(self, column: str, sorted: bool) -> np.ndarray:
         pass
+
+    @abc.abstractmethod
+    def classes(self) -> list:
+        pass
+
+    @abc.abstractmethod
+    def filter_by_class(self, c) -> Dataset:
+        pass
+
+    @abc.abstractmethod
+    def class_distribution(self) -> np.ndarray:
+        pass

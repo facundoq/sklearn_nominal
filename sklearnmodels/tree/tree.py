@@ -60,11 +60,17 @@ class Tree:
         else:
             return f"🪵({self.column})"
 
-    def height(self):
+    def n_leafs(self):
         if self.leaf:
             return 1
         else:
-            return 1 + max([t.height() for t in self.children()])
+            return sum([t.n_leafs() for t in self.children()])
+
+    def n_nodes(self):
+        return 1 + sum([t.n_nodes() for t in self.children()])
+
+    def height(self):
+        return 1 + max([t.height() for t in self.children()])
 
     def pretty_print(self, height=0, max_height=np.inf):
         result = ""
