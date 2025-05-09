@@ -88,6 +88,19 @@ class EntropyError(ClassificationError):
         return -np.sum(p * log(p, self.classes))
 
 
+class AccuracyError(ClassificationError):
+    def __init__(self, classes: int, class_weight: np.ndarray = None):
+        super().__init__(classes, class_weight)
+
+    def __call__(self, y: np.ndarray):
+        p = self.prediction(y)
+        i = p.argmax()
+
+        # largest_value = log(np.array([self.classes]),self.base)[0]
+
+        return 1 - np.sum(y == i) / len(y)
+
+
 class GiniError(ClassificationError):
     def __init__(self, classes: int, class_weight: np.ndarray, base=2):
         super().__init__(classes, class_weight)

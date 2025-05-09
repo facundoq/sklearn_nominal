@@ -85,7 +85,7 @@ class NumericColumnError(ColumnError):
         self.max_evals = max_evals
 
     def get_values(self, d: Dataset, column: str):
-        values = d.unique_values(column, True)
+        values = d.unique_values(column, False)
         n = len(values)
         if self.max_evals is not None:
             if n > self.max_evals:

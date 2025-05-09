@@ -68,3 +68,30 @@ class RangeCondition(Condition):
     def short_description(self):
         op = "<=" if self.less else ">"
         return f"{op} {self.value:.4g}"
+
+
+class Predicate(Condition):
+    def __init__(self, conditions: list[Condition]):
+        self.conditions = conditions
+
+    def short_description(self):
+        descriptions = [c.short_description() for c in self.conditions]
+        descriptions = ",".join(descriptions)
+        return f"({descriptions})"
+
+    def __call__(self, x: pd.Series):
+        for c in self.conditions:
+            if not c(x):
+                return False
+        return True
+
+
+class TrueCondition(Condition):
+    def __init__(self):
+        super().__init__("")
+
+    def __call__(self, x):
+        return True
+
+    def short_description(self):
+        return "()"

@@ -3,22 +3,6 @@ import pandas as pd
 
 from sklearnmodels.backend.conditions import Condition
 
-
-class Predicate(Condition):
-    def __init__(self, conditions: list[Condition]):
-        self.conditions = conditions
-
-    def short_description(self):
-        descriptions = [c.short_description() for c in self.conditions]
-        return "Predicate: " + (",".join(descriptions))
-
-    def __call__(self, x: pd.Series):
-        for c in self.conditions:
-            if not c(x):
-                return False
-        return True
-
-
 ClassificationRule = tuple[Condition, np.ndarray]
 
 
