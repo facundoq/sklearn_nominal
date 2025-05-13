@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Generator, Iterable
 
 
-from numpy import ndarray
+from numpy import dtype, ndarray
 from scipy.special import y1
 from .conditions import Condition, RangeCondition, ValueCondition
 from .core import ColumnType, Dataset
@@ -12,19 +12,31 @@ import numpy as np
 
 class PandasDataset(Dataset):
 
-    def __init__(self, x: pd.DataFrame, y: np.ndarray):
+    def __init__(self, x: pd.DataFrame, y: np.ndarray, idx=None):
         super().__init__()
         self._x: pd.DataFrame = x
         self._y: np.ndarray = y
-        self.cache = None
+        self.idx = idx
+        self._x_subset = None
+        self._y_subset = None
 
     @property
     def x(self) -> pd.DataFrame:
-        return self._x
+        if self.idx is None:
+            return self._x
+        else:
+            if self._x_subset is None:
+                self._x_subset: pd.DataFrame = self._x.loc[self.idx]
+            return self._x_subset
 
     @property
     def y(self) -> pd.ndarray:
-        return self._y
+        if self.idx is None:
+            return self._y
+        else:  # lazy filtering
+            if self._y_subset is None:
+                self._y_subset: np.ndarray = self._y[self.idx]
+            return self._y_subset
 
     def split(self, conditions: list[Condition]):
         return [self.filter(c) for c in conditions]
@@ -47,11 +59,12 @@ class PandasDataset(Dataset):
             else:
                 idx = self.x[rc.column] > rc.value
             idx.fillna(False, inplace=True)
-            return PandasDataset(self.x.loc[idx], self.y[idx])
+            return PandasDataset(self.x, self.y, idx=idx)
         elif isinstance(condition, ValueCondition):
             vc: ValueCondition = condition
             idx = self.x[vc.column] == vc.value
-            return PandasDataset(self.x.loc[idx], self.y[idx])
+            idx.fillna(False, inplace=True)
+            return PandasDataset(self.x, self.y, idx=idx)
         else:
             raise ValueError(f"Invalid condition: {condition}")
 
@@ -86,8 +99,25 @@ class PandasDataset(Dataset):
 
     def filter_by_class(self, c) -> Dataset:
         idx = self.y == c
-        return PandasDataset(self.x.iloc[idx], y[idx])
+        idx.fillna(False, inplace=True)
+        return PandasDataset(self.x, self.y, idx)
 
-    def class_distribution(self) -> np.ndarray:
+    def class_distribution(self, class_weight: np.ndarray) -> np.ndarray:
         p: np.ndarray = np.bincount(self.y)
-        return p / p.sum()
+        result = p / p.sum()
+        if class_weight is not None:
+            result *= class_weight
+            result /= result.sum()
+        return result
+
+    def mean_y(
+        self,
+    ) -> np.ndarray:
+        return self.y.mean(axis=0)
+
+    def std_y(
+        self,
+    ) -> float:
+        if self.y.shape[0] == 0:
+            return np.inf
+        return np.sum(np.std(self.y, axis=0))

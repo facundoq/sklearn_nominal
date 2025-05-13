@@ -8,7 +8,7 @@ import pandas as pd
 from sklearnmodels.backend.conditions import Condition, RangeCondition, ValueCondition
 from sklearnmodels.backend.core import Dataset, Partition
 from sklearnmodels.backend.split import RangeSplit, Split
-from sklearnmodels.tree.attribute_penalization import ColumnPenalization, NoPenalization
+from .attribute_penalization import ColumnPenalization, NoPenalization
 from sklearnmodels.backend.split import ValueSplit
 
 from .target_error import TargetError

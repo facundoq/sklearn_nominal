@@ -20,7 +20,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
 from sklearn.tree import DecisionTreeClassifier
-from sklearnmodels import SKLearnClassificationTree
+from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
 
 basepath = Path("benchmark/openml_cc18/")
 
@@ -62,20 +62,24 @@ def get_tree_parameters(x: pd.DataFrame, classes: int):
     return max_height, min_samples_leaf, min_samples_split, min_error_improvement
 
 
-def get_nominal_tree(x: pd.DataFrame, classes: int):
-    n, m = x.shape
-    max_height, min_samples_leaf, min_samples_split, min_error_improvement = (
-        get_tree_parameters(x, classes)
-    )
+def get_nominal_tree(backend: str):
+    def do_get_nominal_tree(x: pd.DataFrame, classes: int):
+        n, m = x.shape
+        max_height, min_samples_leaf, min_samples_split, min_error_improvement = (
+            get_tree_parameters(x, classes)
+        )
 
-    return SKLearnClassificationTree(
-        criterion="entropy",
-        max_depth=max_height,
-        min_samples_leaf=min_samples_leaf,
-        min_samples_split=min_samples_split,
-        min_error_decrease=min_error_improvement,
-        splitter=4,
-    )
+        return SKLearnClassificationTree(
+            criterion="entropy",
+            max_depth=max_height,
+            min_samples_leaf=min_samples_leaf,
+            min_samples_split=min_samples_split,
+            min_error_decrease=min_error_improvement,
+            splitter=4,
+            backend=backend,
+        )
+
+    return do_get_nominal_tree
 
 
 def get_sklearn_pipeline(x: pd.DataFrame, model):
@@ -137,7 +141,7 @@ def reduce_numeric_features(x: pd.DataFrame, max_numeric_features):
 def get_complexity(model):
 
     if isinstance(model, SKLearnClassificationTree):
-        return model.tree_.n_nodes()
+        return model.model_.n_nodes()
     elif isinstance(model, Pipeline):
         return model["classifier"].tree_.node_count
     else:
@@ -264,7 +268,7 @@ def compute_results(models: dict[str, tuple[typing.Callable, bool]]):
         if force:
             benchmark_result.reset()
 
-        print(f"{model_name}: Running benchmarks ")
+        print(f"Model {model_name}: running benchmarks ")
         benchmark(model, model_name, benchmark_result)
 
         print(f"{model_name}: Done")
@@ -294,7 +298,8 @@ def export_md(df: pd.DataFrame, pdf=False):
 if __name__ == "__main__":
     models = {
         "sklearn.tree": (get_sklearn_tree, False),
-        "sklearnmodels.tree[pandas]": (get_nominal_tree, False),
+        "tree[pandas]": (get_nominal_tree("pandas"), False),
+        "tree[pandas_pyarrow]": (get_nominal_tree("pandas_pyarrow"), False),
     }
 
     info = cpuinfo.get_cpu_info()
@@ -307,7 +312,7 @@ if __name__ == "__main__":
     )
     basepath = basepath / platform
     basepath.mkdir(exist_ok=True, parents=True)
-    print(f"Running on {platform}")
+    print(f"Running on platform: {platform}")
     df = compute_results(models)
     print(df)
 

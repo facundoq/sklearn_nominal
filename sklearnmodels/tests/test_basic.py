@@ -3,8 +3,8 @@
 import pytest
 from sklearn.datasets import load_diabetes, load_iris
 
-from sklearnmodels import SKLearnClassificationTree
-from sklearnmodels.scikit import SKLearnRegressionTree
+from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
+from sklearnmodels.scikit.tree_regression import SKLearnRegressionTree
 
 # Authors: scikit-learn-contrib developers
 # License: BSD 3 clause

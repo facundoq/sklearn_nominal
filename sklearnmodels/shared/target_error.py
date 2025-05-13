@@ -3,19 +3,19 @@ import abc
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.backend.core import Partition
+from sklearnmodels.backend.core import Dataset, Partition
 
 
 class TargetError(abc.ABC):
     @abc.abstractmethod
-    def __call__(self, y: np.ndarray) -> float:
+    def __call__(self, d: Dataset) -> float:
         pass
 
-    def average_split(self, partition: Partition):
+    def average_split(self, partition: list[Dataset]):
         error = 0.0
         n = 0
         for d_branch in partition:
-            branch_error = self(d_branch.y)
+            branch_error = self(d_branch)
             n_branch = d_branch.n
             error += n_branch * branch_error
             n += n_branch
@@ -25,7 +25,7 @@ class TargetError(abc.ABC):
             return error / n
 
     @abc.abstractmethod
-    def prediction(self, y: np.ndarray):
+    def prediction(self, d: Dataset):
         pass
 
     def __repr__(self):
@@ -56,7 +56,8 @@ class ClassificationError(TargetError):
         self.classes = classes
         self.class_weight = class_weight
 
-    def prediction(self, y: np.ndarray):
+    def prediction(self, d: Dataset):
+        y = d.y
         if len(y) == 0:
             result = np.ones(self.classes) / self.classes
         else:
@@ -81,8 +82,8 @@ class EntropyError(ClassificationError):
         super().__init__(classes, class_weight)
         self.base = base
 
-    def __call__(self, y: np.ndarray):
-        p = self.prediction(y)
+    def __call__(self, d: Dataset):
+        p = self.prediction(d)
         # largest_value = log(np.array([self.classes]),self.base)[0]
 
         return -np.sum(p * log(p, self.classes))
@@ -92,8 +93,8 @@ class AccuracyError(ClassificationError):
     def __init__(self, classes: int, class_weight: np.ndarray = None):
         super().__init__(classes, class_weight)
 
-    def __call__(self, y: np.ndarray):
-        p = self.prediction(y)
+    def __call__(self, d: Dataset):
+        p = self.prediction(d)
         i = p.argmax()
 
         # largest_value = log(np.array([self.classes]),self.base)[0]
@@ -106,19 +107,17 @@ class GiniError(ClassificationError):
         super().__init__(classes, class_weight)
         self.base = base
 
-    def __call__(self, y: np.ndarray):
-        p = self.prediction(y)
+    def __call__(self, d: Dataset):
+        p = self.prediction(d)
         # largest_value = log(np.array([self.classes]),self.base)[0]
         return 1 - np.sum(p**2)
 
 
 class RegressionError(TargetError):
-    def prediction(self, y: np.ndarray):
-        return np.mean(y, axis=0)
+    def prediction(self, d: Dataset):
+        return d.mean_y()
 
 
 class DeviationError(RegressionError):
-    def __call__(self, y: np.ndarray):
-        if y.shape[0] == 0:
-            return np.inf
-        return np.sum(np.std(y, axis=0))
+    def __call__(self, d: Dataset):
+        return d.std_y()

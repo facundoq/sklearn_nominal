@@ -1,11 +1,12 @@
+from os import error
 import sys
 
 import numpy as np
 from sklearnmodels.backend.conditions import TrueCondition
 from sklearnmodels.backend.core import Dataset
 from sklearnmodels.rules.classifier import ClassificationRule, RuleClassifier
-from sklearnmodels.tree.global_error import DefaultSplitter
-from sklearnmodels.tree.target_error import TargetError
+from sklearnmodels.model.global_error import DefaultSplitter
+from sklearnmodels.model.target_error import TargetError
 
 eps = 1e-16
 
@@ -54,11 +55,18 @@ class PRISMTrainer:
     # def propose_conditions(self,d:Dataset):
 
 
-class ZeroR:
+class ZeroRClassifier:
+
+    def fit(self, d: Dataset, class_weight=None):
+        return RuleClassifier(
+            [], d.classes(), default_prediction=d.class_distribution(class_weight)
+        )
+
+
+class ZeroRRegressor:
 
     def fit(self, d: Dataset):
-        rules = [(TrueCondition(""), d.class_distribution())]
-        return RuleClassifier(rules, d.classes())
+        return RuleClassifier([], d.classes(), default_prediction=d.mean_y())
 
 
 class OneR:
@@ -67,6 +75,12 @@ class OneR:
         self.splitter = DefaultSplitter(error_function)
 
     def fit(self, d: Dataset):
+        def pred(d: Dataset):
+            return self.error_function.prediction(d)
+
         e = self.splitter.split_columns(d)
-        rules = [(e, p.class_distribution()) for e, p in zip(e.conditions, e.partition)]
-        return RuleClassifier(rules, d.classes())
+        if e is None:
+            rules = []
+        else:
+            rules = [(e, pred(p)) for e, p in zip(e.conditions, e.partition)]
+        return RuleClassifier(rules, d.classes(), default_prediction=pred(d))

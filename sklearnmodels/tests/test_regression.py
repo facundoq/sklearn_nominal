@@ -13,7 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from tqdm import tqdm
 
-from sklearnmodels import SKLearnRegressionTree
+from sklearnmodels.scikit.tree_regression import SKLearnRegressionTree
 
 
 def read_regression_dataset(path: Path):
@@ -126,7 +126,7 @@ def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_
             percent = nominal / numeric
             message = f"{set} score of nominal tree ({nominal:.2f}) should be at most {at_most_percent*100:.2f}% of sklearn.tree ({numeric:.2f}) on dataset {nominal_results["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
             message += f"{nominal_model.get_params()}"
-            message += f"\n Tree:\n {nominal_model.tree_.pretty_print()}"
+            message += f"\n Tree:\n {nominal_model.model_.pretty_print()}"
             assert percent <= at_most_percent, message
         nominal_results_all.append(nominal_results)
         numeric_results_all.append(numeric_results)

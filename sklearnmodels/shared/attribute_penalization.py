@@ -5,7 +5,7 @@ import pandas as pd
 
 from sklearnmodels.backend.core import Partition
 from sklearnmodels.backend.split import Split
-from sklearnmodels.tree.target_error import log
+from .target_error import log
 
 
 class ColumnPenalization(abc.ABC):

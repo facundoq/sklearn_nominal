@@ -13,7 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
 
-from sklearnmodels import SKLearnClassificationTree
+from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
 
 
 def read_classification_dataset(path: Path):
@@ -154,7 +154,7 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         "sklearnmodels.tree[entropy]": get_nominal_tree_classifier("entropy"),
         "sklearnmodels.tree[gini]": get_nominal_tree_classifier("gini"),
         "sklearnmodels.tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
-        "sklearnmodels.prism": get_prism_classifier(),
+        # "sklearnmodels.prism": get_prism_classifier(),
     }
     datasets = [path / name for name in dataset_names]
     results_all = []

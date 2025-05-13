@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 
 from sklearnmodels.backend.core import ColumnType, Dataset
-from sklearnmodels.tree.attribute_penalization import ColumnPenalization
 
 from .column_error import (
     ColumnCallback,
@@ -59,8 +58,8 @@ class DefaultSplitter(Splitter):
         return f"Error({self.target_error})"
 
     def global_error(self, d: Dataset):
-        global_metric = self.target_error(d.y)
-        global_prediction = self.target_error.prediction(d.y)
+        global_metric = self.target_error(d)
+        global_prediction = self.target_error.prediction(d)
         return GlobalErrorResult(global_prediction, global_metric)
 
     def split_columns(self, d: Dataset) -> ColumnErrorResult | None:

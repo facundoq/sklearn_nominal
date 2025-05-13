@@ -80,5 +80,15 @@ class Dataset(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def class_distribution(self) -> np.ndarray:
+    def class_distribution(self, class_weight: np.ndarray) -> np.ndarray:
+        pass
+
+    @abc.abstractmethod
+    def mean_y(
+        self,
+    ) -> np.ndarray:
+        pass
+
+    @abc.abstractmethod
+    def std_y(self) -> float:
         pass

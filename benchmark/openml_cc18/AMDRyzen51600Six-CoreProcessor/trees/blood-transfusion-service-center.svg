@@ -33,7 +33,7 @@
 <ellipse fill="#4485e5" stroke="black" cx="115.97" cy="-35.36" rx="115.93" ry="35.21"/>
 <text text-anchor="start" x="76.97" y="-46.16" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=1 </text>
 <text text-anchor="start" x="149.97" y="-46.16" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="41.97" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.492, n=748 </text>
+<text text-anchor="start" x="41.97" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.492, n=373 </text>
 <text text-anchor="start" x="60.97" y="-18.16" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.89, 0.11) </text>
 </g>
 <!-- 1&#45;&gt;2 -->
@@ -49,7 +49,7 @@
 <ellipse fill="#4485e5" stroke="black" cx="419.97" cy="-35.36" rx="115.93" ry="35.21"/>
 <text text-anchor="start" x="380.97" y="-46.16" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00"> Class=1 </text>
 <text text-anchor="start" x="453.97" y="-46.16" font-family="Helvetica,sans-Serif" font-size="14.00"> </text>
-<text text-anchor="start" x="345.97" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.949, n=748 </text>
+<text text-anchor="start" x="345.97" y="-32.16" font-family="Helvetica,sans-Serif" font-size="14.00"> error: 0.949, n=375 </text>
 <text text-anchor="start" x="364.97" y="-18.16" font-family="Helvetica,sans-Serif" font-size="14.00"> p: (0.63, 0.37) </text>
 </g>
 <!-- 1&#45;&gt;3 -->

@@ -1,4 +1,4 @@
-from sklearnmodels.tree.column_error import ColumnErrorResult
+from ..shared.column_error import ColumnErrorResult
 from sklearnmodels.tree.tree import Tree
 
 

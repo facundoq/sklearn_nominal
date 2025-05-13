@@ -7,8 +7,8 @@ import pandas as pd
 from sklearnmodels.backend.core import Dataset
 from sklearnmodels.tree.pruning import PruneCriteria
 
-from .column_error import ColumnErrorResult
-from .global_error import Splitter
+from ..shared.column_error import ColumnErrorResult
+from ..shared.global_error import Splitter
 from .tree import Condition, Tree
 
 from dataclasses import dataclass
