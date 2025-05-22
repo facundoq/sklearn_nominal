@@ -13,6 +13,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
 
+from sklearnmodels.scikit.rule_oner import OneRClassifier
+from sklearnmodels.scikit.rule_prism import PRISMClassifier
+from sklearnmodels.scikit.rule_zeror import ZeroRClassifier
 from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
 
 
@@ -25,15 +28,34 @@ def read_classification_dataset(path: Path):
     return x, y, le.classes_
 
 
+def get_zeror_classifier(x: pd.DataFrame, classes: int):
+    model = ZeroRClassifier()
+    return model
+
+
+def get_oner_classifier(criterion: str):
+
+    def build(x: pd.DataFrame, classes: int):
+        model = OneRClassifier(criterion)
+        return model
+
+    return build
+
+
 def get_prism_classifier(criterion: str):
     def build(x: pd.DataFrame, classes: int):
         n, m = x.shape
-        max_height = min(max(int(np.log(m) * 3), 5), 30)
-        min_samples_leaf = max(10, int(n * (0.05 / classes)))
-        min_samples_split = min_samples_leaf
-        min_error_improvement = 0.05 / classes
+        max_length = min(max(int(np.log(m) * 3), 5), 30)
+        min_rule_support = max(10, int(n * (0.05 / classes)))
+        min_error_decrease = 0.05 / classes
+        model = PRISMClassifier(
+            criterion=criterion,
+            max_rule_length=max_length,
+            min_rule_support=min_rule_support,
+            error_tolerance=min_error_decrease,
+        )
 
-        pass
+        return model
 
     return build
 
@@ -44,14 +66,14 @@ def get_nominal_tree_classifier(criterion: str):
         max_height = min(max(int(np.log(m) * 3), 5), 30)
         min_samples_leaf = max(10, int(n * (0.05 / classes)))
         min_samples_split = min_samples_leaf
-        min_error_improvement = 0.05 / classes
+        min_error_decrease = 0.05 / classes
 
         return SKLearnClassificationTree(
             criterion=criterion,
             max_depth=max_height,
             min_samples_leaf=min_samples_leaf,
             min_samples_split=min_samples_split,
-            min_error_decrease=min_error_improvement,
+            min_error_decrease=min_error_decrease,
             splitter=4,
         )
 
@@ -143,18 +165,29 @@ def check_results(
             reference_score = reference[set]
             model_score = model_results[set]
             percent = model_score / reference_score
+            alp = at_least_percent[model_name]
             assert (
-                at_least_percent <= percent
-            ), f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {at_least_percent*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
+                alp <= percent
+            ), f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {alp*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
 
 
 def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset_names):
     models = {
         "sklearn.tree": get_sklearn_tree,
-        "sklearnmodels.tree[entropy]": get_nominal_tree_classifier("entropy"),
-        "sklearnmodels.tree[gini]": get_nominal_tree_classifier("gini"),
-        "sklearnmodels.tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
-        # "sklearnmodels.prism": get_prism_classifier(),
+        "tree[entropy]": get_nominal_tree_classifier("entropy"),
+        "tree[gini]": get_nominal_tree_classifier("gini"),
+        "tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
+        "zeror": get_zeror_classifier,
+        "oner[entropy]": get_oner_classifier("entropy"),
+        "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
+    }
+    at_least_percent = {
+        "tree[entropy]": 0.8,
+        "tree[gini]": 0.8,
+        "tree[gain_ratio]": 0.8,
+        "zeror": 0.1,
+        "oner[entropy]": 0.2,
+        "oner[gain_ratio]": 0.2,
     }
     datasets = [path / name for name in dataset_names]
     results_all = []

@@ -1,6 +1,9 @@
 import abc
 
+from sklearnmodels.backend import Output
+from sklearnmodels.backend import Input
 from sklearnmodels.backend.factory import make_dataset
+from sklearnmodels.shared.target_error import TargetError
 from .. import shared
 import numpy as np
 import pandas as pd
@@ -124,7 +127,7 @@ class NominalClassifier(NominalModel):
 
         return tags
 
-    def build_error(self, criterion: str, classes: int):
+    def build_error(self, criterion: str, classes: int) -> TargetError:
         errors = {
             "entropy": shared.EntropyError(classes, self.class_weight),
             "gini": shared.GiniError(classes, self.class_weight),
@@ -134,11 +137,11 @@ class NominalClassifier(NominalModel):
             raise ValueError(f"Unknown error function {criterion}")
         return errors[criterion]
 
-    def predict_proba(self, x: pd.DataFrame):
+    def predict_proba(self, x: Input) -> Output:
         x = self.validate_data_predict(x)
         return self.model_.predict(x)
 
-    def predict(self, x: pd.DataFrame):
+    def predict(self, x: Input) -> Output:
         p = self.predict_proba(x)
         c = p.argmax(axis=1)
         return c
@@ -159,7 +162,7 @@ class NominalRegressor(NominalModel):
             raise ValueError(f"Unknown error function {criterion}")
         return errors[criterion]
 
-    def predict(self, x: pd.DataFrame):
+    def predict(self, x: Input):
         x = self.validate_data_predict(x)
         y = self.model_.predict(x)
         if len(self._y_original_shape) == 1:

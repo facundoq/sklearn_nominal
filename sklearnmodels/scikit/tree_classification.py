@@ -1,4 +1,6 @@
-from .tree_scikit import SKLearnTree
+from scipy.odr import Output
+from sklearnmodels.backend import Input
+from .tree_base import SKLearnTree
 from ..scikit.nominal_model import NominalClassifier
 from sklearnmodels import tree, shared
 
@@ -44,7 +46,7 @@ class SKLearnClassificationTree(NominalClassifier, SKLearnTree):
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer
 
-    def fit(self, x: pd.DataFrame, y: np.ndarray):
+    def fit(self, x: Input, y: Output):
 
         d = self.validate_data_fit_classification(x, y)
         error = self.build_error(self.criterion, len(self.classes_))

@@ -5,8 +5,10 @@ import abc
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend import InputSample
 
-# A condition can filter rows of a dataframe (pd.Series),
+
+# A condition can filter rows of a Dataset
 # Returns a new boolean series
 class Condition(abc.ABC):
 
@@ -15,7 +17,7 @@ class Condition(abc.ABC):
         self.column = column
 
     @abc.abstractmethod
-    def __call__(self, x: pd.Series) -> np.ndarray:
+    def __call__(self, x: InputSample) -> bool:
         pass
 
     @abc.abstractmethod
@@ -34,7 +36,7 @@ class ValueCondition(Condition):
         super().__init__(column)
         self.value = value
 
-    def __call__(self, x: pd.Series):
+    def __call__(self, x: InputSample):
         return self.na_to_false(x[self.column] == self.value)
 
     def __repr__(self):
@@ -54,7 +56,7 @@ class RangeCondition(Condition):
     def make(cls, column, value):
         return [RangeCondition(column, value, t) for t in [True, False]]
 
-    def __call__(self, x: pd.Series):
+    def __call__(self, x: InputSample):
 
         if self.less:
             return self.na_to_false(x[self.column] <= self.value)
@@ -70,8 +72,10 @@ class RangeCondition(Condition):
         return f"{op} {self.value:.4g}"
 
 
-class Predicate(Condition):
+class AndCondition(Condition):
     def __init__(self, conditions: list[Condition]):
+        column = ",".join([c.column for c in conditions])
+        super().__init__(column)
         self.conditions = conditions
 
     def short_description(self):
@@ -79,7 +83,7 @@ class Predicate(Condition):
         descriptions = ",".join(descriptions)
         return f"({descriptions})"
 
-    def __call__(self, x: pd.Series):
+    def __call__(self, x: InputSample):
         for c in self.conditions:
             if not c(x):
                 return False
@@ -90,8 +94,20 @@ class TrueCondition(Condition):
     def __init__(self):
         super().__init__("")
 
-    def __call__(self, x):
+    def __call__(self, x: InputSample):
         return True
+
+    def short_description(self):
+        return "()"
+
+
+class NotCondition(Condition):
+    def __init__(self, condition: Condition):
+        super().__init__(condition.column)
+        self.condition = condition
+
+    def __call__(self, x: InputSample):
+        return ~self.condition(x)
 
     def short_description(self):
         return "()"

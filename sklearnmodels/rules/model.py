@@ -1,33 +1,28 @@
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend import Input, InputSample, Output
 from sklearnmodels.backend.conditions import Condition
 
-ClassificationRule = tuple[Condition, np.ndarray]
+PredictionRule = tuple[Condition, Output]
 
 
-class RuleClassifier:
+class RuleModel:
     def __init__(
         self,
-        rules: list[ClassificationRule],
-        class_names: list[str],
-        default_prediction: np.ndarray = None,
+        rules: list[PredictionRule],
+        default_prediction: Output,
     ):
-        if default_prediction is None:
-            c = len(class_names)
-            default_prediction = np.ones(c) / c
-
         self.default_prediction = default_prediction
         self.rules = rules
-        self.class_names = class_names
 
-    def predict_proba(self, x: pd.Series):
+    def predict_proba(self, x: InputSample):
         for condition, p in self.rules:
             if condition(x):
                 return p
         return self.default_prediction
 
-    def predict(self, x: pd.DataFrame):
+    def predict(self, x: Input):
         n = x.shape[0]
 
         predictions = np.zeros((n, len(self.default_prediction)))
@@ -35,5 +30,5 @@ class RuleClassifier:
             predictions[i, :] = self.predict_sample(row)
         return predictions
 
-    def predict_sample(self, x: pd.Series):
+    def predict_sample(self, x: InputSample):
         return self.predict_proba(x)

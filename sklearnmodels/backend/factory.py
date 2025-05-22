@@ -3,6 +3,8 @@ import pandas as pd
 from sklearnmodels.backend.core import Dataset
 from sklearnmodels.backend.pandas import PandasDataset
 
+DEFAULT_BACKEND = "pandas"
+
 
 def pyarrow_backed_pandas(x: pd.DataFrame) -> pd.DataFrame:
     import pyarrow as pa

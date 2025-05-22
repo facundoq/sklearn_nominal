@@ -5,6 +5,7 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend.conditions import Condition
 from sklearnmodels.backend.core import ColumnType, Dataset
 
 from .column_error import (
