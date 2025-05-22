@@ -51,11 +51,12 @@ class PRISM:
         conditions = []
         error = np.inf
         while len(conditions) < self.max_length and error > self.max_error:
-            proposal, error = self.splitter.split_values(d)
+            proposal, error, drop_column = None
             if proposal is None:
                 break
             d = d.filter(proposal)
-            d = d.drop(proposal.column)
+            if drop_column:
+                d = d.drop(proposal.column)
 
         if error > self.max_error:
             return None
