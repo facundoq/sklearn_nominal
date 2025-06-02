@@ -17,11 +17,17 @@ class ColumnType(enum.Enum):
 
 type Partition = list[Dataset]
 
+ColumnID = int
+
 
 class Dataset(abc.ABC):
 
     @abc.abstractmethod
     def split(self, conditions: list[Condition]) -> Partition:
+        pass
+
+    @abc.abstractmethod
+    def filter(self, condition: Condition) -> Dataset:
         pass
 
     @property
@@ -84,6 +90,10 @@ class Dataset(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def mean_x(self, col: ColumnID) -> np.ndarray:
+        pass
+
+    @abc.abstractmethod
     def mean_y(
         self,
     ) -> np.ndarray:
@@ -91,4 +101,8 @@ class Dataset(abc.ABC):
 
     @abc.abstractmethod
     def std_y(self) -> float:
+        pass
+
+    @abc.abstractmethod
+    def count_class(self, klass: int) -> int:
         pass

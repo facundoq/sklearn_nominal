@@ -49,11 +49,11 @@ class PandasDataset(Dataset):
     def split(self, conditions: list[Condition]):
         return [self.filter(c) for c in conditions]
 
-    def values(self, column: str):
+    def values(self, column: ColumnID):
         result: pd.Series = self.x[column].dropna()
         return result
 
-    def unique_values(self, column: str, sorted=False) -> np.ndarray:
+    def unique_values(self, column: ColumnID, sorted=False) -> np.ndarray:
         result = self.values(column).unique()
         if sorted:
             result.sort()
@@ -110,10 +110,10 @@ class PandasDataset(Dataset):
         return map(to_type, self.columns)
 
     @property
-    def columns(self) -> list[str]:
+    def columns(self) -> list[ColumnID]:
         return self.x.columns
 
-    def drop(self, columns: list[str]) -> PandasDataset:
+    def drop(self, columns: list[ColumnID]) -> PandasDataset:
         x = self.x.drop(columns=columns)
         return PandasDataset(x, self.y)
 
@@ -146,3 +146,9 @@ class PandasDataset(Dataset):
         if self.y.shape[0] == 0:
             return np.inf
         return np.sum(np.std(self.y, axis=0))
+
+    def mean_x(self, col: ColumnID) -> np.ndarray:
+        return self.x[col].mean()
+
+    def count_class(self, klass: int) -> int:
+        return np.sum(self.y == klass)
