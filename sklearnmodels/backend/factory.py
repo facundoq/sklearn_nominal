@@ -14,13 +14,14 @@ def pyarrow_backed_pandas(x: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def make_dataset(backend: str, x, y) -> Dataset:
+def make_dataset(backend: str, x, y, columns: list[str], dtype) -> Dataset:
+
     if backend == "pandas":
-        assert isinstance(x, pd.DataFrame)
+        x = pd.DataFrame(x, columns=columns, dtype=dtype)
         assert isinstance(y, np.ndarray)
         return PandasDataset(x, y)
     if backend == "pandas_pyarrow":
-        assert isinstance(x, pd.DataFrame)
+        x = pd.DataFrame(x, columns=columns, dtype=dtype)
         assert isinstance(y, np.ndarray)
         x = pyarrow_backed_pandas(x)
         return PandasDataset(x, y)

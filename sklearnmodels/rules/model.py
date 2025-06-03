@@ -32,3 +32,10 @@ class RuleModel:
 
     def predict_sample(self, x: InputSample):
         return self.predict_proba(x)
+
+    def __repr__(self):
+        return f"RuleModel(rules={len(self.rules)},p={self.default_prediction})"
+
+    def description(self):
+        rules = "\n".join([f"{c} => {p}" for c, p in self.rules])
+        return f"{rules}\nDefault: {self.default_prediction}"

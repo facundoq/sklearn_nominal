@@ -61,14 +61,9 @@ class ClassificationError(TargetError):
         if len(y) == 0:
             result = np.ones(self.classes) / self.classes
         else:
-            if np.issubdtype(y.dtype, object):
-                # string classes
-                y_cat = pd.Series(data=y.squeeze()).astype("category")
-                y = y_cat.cat.codes.to_numpy().reshape(-1, 1)
-            # numeric index classes classes
+            # Assumes classes start at 0
             counts = np.bincount(y, minlength=self.classes)
             result = counts / counts.sum()
-            # print(result.dtype,self.class_weight.dtype)
         result *= self.class_weight
         result /= result.sum()
         return result
@@ -83,6 +78,7 @@ class EntropyError(ClassificationError):
         self.base = base
 
     def __call__(self, d: Dataset):
+
         p = self.prediction(d)
         # largest_value = log(np.array([self.classes]),self.base)[0]
 
@@ -95,11 +91,31 @@ class AccuracyError(ClassificationError):
 
     def __call__(self, d: Dataset):
         p = self.prediction(d)
-        i = p.argmax()
+        klass = p.argmax()
+        return 1 - d.count_class(klass) / d.n
 
-        # largest_value = log(np.array([self.classes]),self.base)[0]
 
-        return 1 - np.sum(y == i) / len(y)
+class FixedClassAccuracyError(ClassificationError):
+    """
+    This error does not take into consideration samples to generate a prediction
+    Instead, it has a fixed prediction based on a specific class
+    And the accuracy error is also fixed on that specific class.
+    """
+
+    def __init__(self, klass: int, classes: int, class_weight: np.ndarray = None):
+        super().__init__(classes, class_weight)
+        self.klass = klass
+        self._prediction = np.zeros(classes)
+        self._prediction[klass] = 1
+        if class_weight is not None:
+            self._prediction *= self.class_weight
+            self._prediction /= self._prediction.sum()
+
+    def prediction(self, d: Dataset):
+        return self._prediction
+
+    def __call__(self, d: Dataset):
+        return 1 - d.count_class(self.klass) / d.n
 
 
 class GiniError(ClassificationError):
@@ -109,7 +125,6 @@ class GiniError(ClassificationError):
 
     def __call__(self, d: Dataset):
         p = self.prediction(d)
-        # largest_value = log(np.array([self.classes]),self.base)[0]
         return 1 - np.sum(p**2)
 
 

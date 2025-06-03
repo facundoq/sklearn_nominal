@@ -42,14 +42,13 @@ def get_oner_classifier(criterion: str):
     return build
 
 
-def get_prism_classifier(criterion: str):
+def get_prism_classifier():
     def build(x: pd.DataFrame, classes: int):
         n, m = x.shape
         max_length = min(max(int(np.log(m) * 3), 5), 30)
         min_rule_support = max(10, int(n * (0.05 / classes)))
         min_error_decrease = 0.05 / classes
         model = PRISMClassifier(
-            criterion=criterion,
             max_rule_length=max_length,
             min_rule_support=min_rule_support,
             error_tolerance=min_error_decrease,
@@ -174,6 +173,7 @@ def check_results(
 def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset_names):
     models = {
         "sklearn.tree": get_sklearn_tree,
+        "prism": get_prism_classifier(),
         "tree[entropy]": get_nominal_tree_classifier("entropy"),
         "tree[gini]": get_nominal_tree_classifier("gini"),
         "tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
@@ -182,6 +182,7 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
     }
     at_least_percent = {
+        "prism": 0.1,
         "tree[entropy]": 0.8,
         "tree[gini]": 0.8,
         "tree[gain_ratio]": 0.8,

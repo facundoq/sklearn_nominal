@@ -20,7 +20,7 @@ def test_classification_tree(classification_data):
     est.fit(*classification_data)
     assert hasattr(est, "is_fitted_")
     assert hasattr(est, "classes_")
-    assert hasattr(est, "tree_")
+    assert hasattr(est, "model_")
 
     X = classification_data[0]
     y_pred = est.predict(X)
@@ -34,11 +34,9 @@ def regression_data():
 
 def test_regression_tree(regression_data):
     x, y = regression_data
-    print(y.shape)
-    model = SKLearnRegressionTree()
+    model = SKLearnRegressionTree(max_depth=3)
     model.fit(x, y)
-    print(y.shape)
     assert hasattr(model, "is_fitted_")
-    assert hasattr(model, "tree_")
+    assert hasattr(model, "model_")
     y_pred = model.predict(x)
     assert y_pred.shape == (x.shape[0],)

@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 from typing import Generator, Iterable
 
-
+import numpy as np
+import pandas as pd
 from numpy import dtype, ndarray
 from scipy.special import y1
+
 from .conditions import (
     AndCondition,
     Condition,
@@ -12,9 +15,7 @@ from .conditions import (
     TrueCondition,
     ValueCondition,
 )
-from .core import ColumnType, Dataset
-import pandas as pd
-import numpy as np
+from .core import ColumnID, ColumnType, Dataset
 
 
 class PandasDataset(Dataset):
@@ -107,7 +108,7 @@ class PandasDataset(Dataset):
             else:
                 return ColumnType.Nominal
 
-        return map(to_type, self.columns)
+        return list(map(to_type, self.columns))
 
     @property
     def columns(self) -> list[ColumnID]:

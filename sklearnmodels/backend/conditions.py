@@ -30,6 +30,9 @@ class Condition(abc.ABC):
         else:
             return s
 
+    def is_similar(self, c: Condition):
+        pass
+
 
 class ValueCondition(Condition):
     def __init__(self, column: str, value):
@@ -44,6 +47,12 @@ class ValueCondition(Condition):
 
     def short_description(self):
         return f"{self.value}"
+
+    def is_similar(self, c: Condition):
+        if isinstance(c, ValueCondition):
+            return c.column == self.column
+        else:
+            return False
 
 
 class RangeCondition(Condition):
@@ -71,6 +80,12 @@ class RangeCondition(Condition):
         op = "<=" if self.less else ">"
         return f"{op} {self.value:.4g}"
 
+    def is_similar(self, c: Condition):
+        if isinstance(c, RangeCondition):
+            return c.column == self.column and c.less == self.less
+        else:
+            return False
+
 
 class AndCondition(Condition):
     def __init__(self, conditions: list[Condition]):
@@ -81,13 +96,31 @@ class AndCondition(Condition):
     def short_description(self):
         descriptions = [c.short_description() for c in self.conditions]
         descriptions = ",".join(descriptions)
-        return f"({descriptions})"
+        return f"And({descriptions})"
 
     def __call__(self, x: InputSample):
         for c in self.conditions:
             if not c(x):
                 return False
         return True
+
+    def __repr__(self):
+        conditions = [f"({c})" for c in self.conditions]
+        descriptions = " AND ".join(conditions)
+        return f"{descriptions}"
+
+    def is_similar(self, c: Condition):
+        if isinstance(c, AndCondition):
+            # must have the same number of conditions
+            if len(c.conditions) != len(self.conditions):
+                return False
+            for child in self.conditions:
+                # every child condition must be similar to a condition in c
+                if len(filter(child.is_similar, c.conditions)) == 0:
+                    return False
+            return True
+        else:
+            return False
 
 
 class TrueCondition(Condition):
@@ -98,7 +131,13 @@ class TrueCondition(Condition):
         return True
 
     def short_description(self):
-        return "()"
+        return "True"
+
+    def __repr__(self):
+        return self.short_description()
+
+    def is_similar(self, c: Condition):
+        return isinstance(c, TrueCondition)
 
 
 class NotCondition(Condition):
@@ -107,7 +146,15 @@ class NotCondition(Condition):
         self.condition = condition
 
     def __call__(self, x: InputSample):
-        return ~self.condition(x)
+        return not self.condition(x)
 
     def short_description(self):
-        return "()"
+        return f"NOT {self.condition.short_description}"
+
+    def __repr__(self):
+        return self.short_description()
+
+    def is_similar(self, c: Condition):
+        if isinstance(c, NotCondition):
+            return self.condition.is_similar(c.condition)
+        return False

@@ -1,4 +1,5 @@
 from scipy.odr import Output
+from sklearn.base import BaseEstimator
 from sklearnmodels.backend import Input
 from .tree_base import SKLearnTree
 from ..scikit.nominal_model import NominalClassifier
@@ -8,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 
-class SKLearnClassificationTree(NominalClassifier, SKLearnTree):
+class SKLearnClassificationTree(NominalClassifier, SKLearnTree, BaseEstimator):
     def __init__(
         self,
         criterion="entropy",
