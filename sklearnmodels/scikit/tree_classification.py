@@ -1,5 +1,6 @@
 from scipy.odr import Output
 from sklearn.base import BaseEstimator
+from sklearn.utils import compute_class_weight
 from sklearnmodels.backend import Input
 from .tree_base import SKLearnTree
 from ..scikit.nominal_model import NominalClassifier
@@ -48,9 +49,10 @@ class SKLearnClassificationTree(NominalClassifier, SKLearnTree, BaseEstimator):
         return trainer
 
     def fit(self, x: Input, y: Output):
+        d, class_weight = self.validate_data_fit_classification(x, y)
 
-        d = self.validate_data_fit_classification(x, y)
-        error = self.build_error(self.criterion, len(self.classes_))
+        error = self.build_error(self.criterion, class_weight)
+
         trainer = self.build_trainer(error)
         model = trainer.fit(d)
         self.set_model(model)

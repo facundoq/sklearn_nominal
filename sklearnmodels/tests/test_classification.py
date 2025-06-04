@@ -13,6 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
 
+from sklearnmodels.scikit.rule_cn2 import CN2Classifier
 from sklearnmodels.scikit.rule_oner import OneRClassifier
 from sklearnmodels.scikit.rule_prism import PRISMClassifier
 from sklearnmodels.scikit.rule_zeror import ZeroRClassifier
@@ -42,6 +43,24 @@ def get_oner_classifier(criterion: str):
     return build
 
 
+def get_cn2_classifier(criterion: str):
+    def build(x: pd.DataFrame, classes: int):
+        n, m = x.shape
+        max_length = min(max(int(np.log(m) * 3), 5), 30)
+        min_rule_support = max(10, int(n * (0.05 / classes)))
+        max_error_per_rule = 0.01 / classes
+        model = CN2Classifier(
+            criterion=criterion,
+            max_rule_length=max_length,
+            min_rule_support=min_rule_support,
+            max_error_per_rule=max_error_per_rule,
+        )
+
+        return model
+
+    return build
+
+
 def get_prism_classifier():
     def build(x: pd.DataFrame, classes: int):
         n, m = x.shape
@@ -51,7 +70,7 @@ def get_prism_classifier():
         model = PRISMClassifier(
             max_rule_length=max_length,
             min_rule_support=min_rule_support,
-            error_tolerance=min_error_decrease,
+            max_error_per_rule=min_error_decrease,
         )
 
         return model
@@ -174,6 +193,8 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
     models = {
         "sklearn.tree": get_sklearn_tree,
         "prism": get_prism_classifier(),
+        "cn2[entropy]": get_cn2_classifier("entropy"),
+        "cn2[gini]": get_cn2_classifier("gini"),
         "tree[entropy]": get_nominal_tree_classifier("entropy"),
         "tree[gini]": get_nominal_tree_classifier("gini"),
         "tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
@@ -182,7 +203,9 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
     }
     at_least_percent = {
-        "prism": 0.1,
+        "prism": 0.75,
+        "cn2[entropy]": 0.70,
+        "cn2[gini]": 0.70,
         "tree[entropy]": 0.8,
         "tree[gini]": 0.8,
         "tree[gain_ratio]": 0.8,
@@ -198,8 +221,8 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         }
         check_results(at_least_percent, results, "sklearn.tree")
         results_all += list(results.values())
-
-    print(pd.DataFrame.from_records(results_all))
+    with pd.option_context("display.max_rows", None, "display.max_columns", None):
+        print(pd.DataFrame.from_records(results_all))
 
 
 if __name__ == "__main__":

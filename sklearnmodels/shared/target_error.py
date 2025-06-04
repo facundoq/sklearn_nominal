@@ -49,44 +49,36 @@ def log(x, base):
 
 
 class ClassificationError(TargetError):
-    def __init__(self, classes: int, class_weight: np.ndarray = None):
-        if class_weight is None:
-            class_weight = np.ones(classes)
-
+    def __init__(self, classes: int, class_weight: np.ndarray):
         self.classes = classes
         self.class_weight = class_weight
 
     def prediction(self, d: Dataset):
         y = d.y
         if len(y) == 0:
-            result = np.ones(self.classes) / self.classes
+            return self.class_weight / self.class_weight.sum()
         else:
             # Assumes classes start at 0
-            counts = np.bincount(y, minlength=self.classes)
-            result = counts / counts.sum()
-        result *= self.class_weight
-        result /= result.sum()
-        return result
+            return d.class_distribution(self.class_weight)
 
     def __repr__(self):
         return f"{super().__repr__()}(classes={self.classes})"
 
 
 class EntropyError(ClassificationError):
-    def __init__(self, classes: int, class_weight: np.ndarray = None, base=2):
+    def __init__(self, classes: int, class_weight: np.ndarray, base=2):
         super().__init__(classes, class_weight)
         self.base = base
 
     def __call__(self, d: Dataset):
 
         p = self.prediction(d)
-        # largest_value = log(np.array([self.classes]),self.base)[0]
 
         return -np.sum(p * log(p, self.classes))
 
 
 class AccuracyError(ClassificationError):
-    def __init__(self, classes: int, class_weight: np.ndarray = None):
+    def __init__(self, classes: int, class_weight: np.ndarray):
         super().__init__(classes, class_weight)
 
     def __call__(self, d: Dataset):
@@ -102,14 +94,11 @@ class FixedClassAccuracyError(ClassificationError):
     And the accuracy error is also fixed on that specific class.
     """
 
-    def __init__(self, klass: int, classes: int, class_weight: np.ndarray = None):
+    def __init__(self, klass: int, classes: int, class_weight: np.ndarray):
         super().__init__(classes, class_weight)
         self.klass = klass
         self._prediction = np.zeros(classes)
         self._prediction[klass] = 1
-        if class_weight is not None:
-            self._prediction *= self.class_weight
-            self._prediction /= self._prediction.sum()
 
     def prediction(self, d: Dataset):
         return self._prediction

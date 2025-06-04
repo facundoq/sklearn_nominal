@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 Output = np.ndarray
-Input = pd.DataFrame
+Input = pd.DataFrame | np.ndarray
 InputSample = pd.Series
 
 

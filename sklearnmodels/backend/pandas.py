@@ -129,11 +129,11 @@ class PandasDataset(Dataset):
         return PandasDataset(self.x, self.y, idx)
 
     def class_distribution(self, class_weight: np.ndarray) -> np.ndarray:
-        p: np.ndarray = np.bincount(self.y)
-        result = p / p.sum()
-        if class_weight is not None:
-            result *= class_weight
-            result /= result.sum()
+        classes = len(class_weight)
+        p: np.ndarray = np.bincount(self.y, minlength=classes)
+        result = p
+        result = result * class_weight
+        result /= result.sum()
         return result
 
     def mean_y(

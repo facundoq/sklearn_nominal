@@ -15,7 +15,8 @@ from sklearnmodels.backend.conditions import (
 )
 from sklearnmodels.backend.core import ColumnID, ColumnType, Dataset
 from sklearnmodels.rules.model import PredictionRule, RuleModel
-from sklearnmodels.shared.target_error import FixedClassAccuracyError, TargetError
+
+from sklearnmodels.shared.target_error import TargetError
 
 
 @dataclass
@@ -26,46 +27,43 @@ class ConditionProposal:
     drop: bool
 
 
+def is_close(a: float, b: float):
+    return abs(a - b) < 1e-32
+
+
 ConditionGenerator = Generator[None, None, tuple[Condition, bool]]
 
 
-class PRISM:
+class CN2:
 
     def __init__(
         self,
         class_weight: np.ndarray,
-        max_length_per_rule: int = 1000,
-        max_rules_per_class: int = 10000,
-        min_rule_support: int = 1,
-        max_error_per_rule: float = 0.1,
+        error: TargetError,
+        max_length_per_rule: int,
+        max_rules: int,
+        min_rule_support: int,
+        max_error_per_rule: float,
     ):
         self.max_length_per_rule = max_length_per_rule
-        self.max_rules_per_class = max_rules_per_class
         self.min_rule_support = min_rule_support
+        self.max_rules = max_rules
         self.max_error_per_rule = max_error_per_rule
         self.class_weight = class_weight
+        self.error = error
 
     def fit(self, d: Dataset):
         rules = []
-        classes = d.classes()
-        for klass in classes:
-            error = FixedClassAccuracyError(klass, len(classes), self.class_weight)
-            rules += self.fit_dataset(d, error)
-
-        model = RuleModel(rules, d.class_distribution(self.class_weight))
-        return model
-
-    def fit_dataset(self, d: Dataset, error: TargetError):
-        rules = []
-        while d.n > self.min_rule_support and len(rules) < self.max_rules_per_class:
-            rule = self.generate_rule(d, error)
+        while d.n > self.min_rule_support and len(rules) < self.max_rules:
+            rule = self.generate_rule(d, self.error)
             if rule is None:
                 break  # unable to generate rule; stop process
             rules.append(rule)
             condition, prediction = rule
             # keep samples that do not match the condition
             d = d.filter(NotCondition(condition))
-        return rules
+        model = RuleModel(rules, self.error.prediction(d))
+        return model
 
     def remove_similar(condition: Condition, conditions: list[Condition]):
         # remove range conditions that are similar
@@ -142,6 +140,11 @@ class PRISM:
                 error = target_error(d_condition)
                 if error >= base_error:
                     continue
-                if best is None or error < best.error:
+
+                if (
+                    best is None
+                    or error < best.error
+                    or (is_close(error, best.error) and best.dataset.n < d_condition.n)
+                ):
                     best = ConditionProposal(error, condition, d_condition, drop)
         return best

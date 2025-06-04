@@ -17,7 +17,7 @@ from sklearn.utils._tags import (
 )
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_y, validate_data
-from sklearn.utils import validation
+from sklearn.utils import compute_class_weight, validation
 
 from sklearnmodels.backend import Input, Output
 from sklearnmodels.backend.factory import make_dataset
@@ -54,8 +54,19 @@ class NominalModel(metaclass=abc.ABCMeta):
         tags.input_tags.sparse = False
         tags.input_tags.allow_nan = True
         tags.input_tags.string = True
-
         return tags
+
+    @abc.abstractmethod
+    def make_model(self, class_weight: np.ndarray, error: TargetError):
+        pass
+
+    def fit(self, x: Input, y: Output):
+        d, class_weight = self.validate_data_fit_classification(x, y)
+        error = self.build_error(self.criterion, class_weight)
+        trainer = self.make_model(error)
+        model = trainer.fit(d)
+        self.set_model(model)
+        return self
 
     def check_is_fitted(self) -> bool:
         validation.check_is_fitted(self)
@@ -78,11 +89,6 @@ class NominalModel(metaclass=abc.ABCMeta):
         return pd.DataFrame(x, columns=self.get_feature_names(), dtype=None)
 
     def validate_data_fit_regression(self, x, y) -> Dataset:
-        if hasattr(x, "dtypes"):
-            dtype = x.dtypes
-        else:
-            dtype = None
-
         x, y = validate_data(
             self,
             x,
@@ -98,7 +104,7 @@ class NominalModel(metaclass=abc.ABCMeta):
         self._y_original_shape = y.shape
         y = atleast_2d(y)
 
-        return make_dataset(self.backend, x, y, self.get_feature_names(), dtype)
+        return make_dataset(self.backend, x, y, self.get_feature_names(), None)
 
     def get_feature_names(self):
         if not hasattr(self, "feature_names_in_"):
@@ -124,10 +130,29 @@ class NominalModel(metaclass=abc.ABCMeta):
         y = y_cat.cat.codes.to_numpy()
         return y
 
+    def set_model(self, model):
+        self.model_ = model
+        self.is_fitted_ = True
+
+
+class NominalClassifier(NominalModel):
+    def __init__(self, class_weight=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.class_weight = class_weight
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.estimator_type = "classifier"
+        tags.classifier_tags = ClassifierTags()
+        tags.classifier_tags.multi_class = True
+
+        return tags
+
     def validate_data_fit_classification(self, x, y) -> Dataset:
         check_classification_targets(y)
         # print("fit", x.dtypes)
-        x_, y = validate_data(
+        x, y = validate_data(
             self,
             x,
             y,
@@ -142,33 +167,26 @@ class NominalModel(metaclass=abc.ABCMeta):
         self.classes_ = np.unique(y)
         if len(self.classes_) < 2:
             raise ValueError("Can't train classifier with one class.")
-        y = self.get_y(y)
         # dtype = x_original.dtype
-        return make_dataset(self.backend, x, y, self.get_feature_names(), None)
+        class_weight = self.get_class_weights(y)
+        return (
+            make_dataset(
+                self.backend, x, self.get_y(y), self.get_feature_names(), None
+            ),
+            class_weight,
+        )
 
-    def set_model(self, model):
-        self.model_ = model
-        self.is_fitted_ = True
+    def get_class_weights(self, y):
+        return compute_class_weight(
+            class_weight=self.class_weight, classes=self.classes_, y=y
+        )
 
-
-class NominalClassifier(NominalModel):
-    def __init__(self, class_weight=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.class_weight = class_weight
-
-    def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
-        tags.estimator_type = "classifier"
-        tags.classifier_tags = ClassifierTags()
-        tags.classifier_tags.multi_class = True
-
-        return tags
-
-    def build_error(self, criterion: str, classes: int) -> TargetError:
+    def build_error(self, criterion: str, class_weight: np.array) -> TargetError:
+        classes = len(class_weight)
         errors = {
-            "entropy": shared.EntropyError(classes, self.class_weight),
-            "gini": shared.GiniError(classes, self.class_weight),
-            "gain_ratio": shared.EntropyError(classes, self.class_weight),
+            "entropy": shared.EntropyError(classes, class_weight),
+            "gini": shared.GiniError(classes, class_weight),
+            "gain_ratio": shared.EntropyError(classes, class_weight),
         }
         if criterion not in errors.keys():
             raise ValueError(f"Unknown error function {criterion}")
