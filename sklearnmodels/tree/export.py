@@ -14,7 +14,7 @@ def dot_template(body: str, title: str):
 splines=false;
 graph [pad=".25", ranksep="0.5", nodesep="1"];
 node [shape=rect, style="filled", color="black", fontname="helvetica",fillcolor="white"] ;
-edge [fontname="helvetica"] ;
+edge [fontname="helvetica-bold"] ;
 """  # noqa: E501
         + title_dot
         + body
@@ -42,19 +42,18 @@ def make_color(height, max_height):
     return hsv
 
 
-def make_label(info: TreeInfo, class_names: list[str], max_classes: int):
-    best_class = info.tree.prediction.argmax()
-
-    if len(class_names) <= max_classes:
-        prediction = ", ".join([f"{p:.2f}" for p in info.tree.prediction])
-        prediction = f"p: ({prediction})"
-    else:
-        p = info.tree.prediction[best_class]
-        prediction = f"p={p}"
+def make_label(info: TreeInfo, class_names: list[str] | None, max_classes: int):
     class_info = ""
+    prediction = ", ".join([f"{p:.2f}" for p in info.tree.prediction])
+    prediction = f"p: {prediction}"
     if class_names is not None:
+        best_class = info.tree.prediction.argmax()
+        if len(class_names) > max_classes:
+            p = info.tree.prediction[best_class]
+            prediction = f"p={p}"
         class_name = class_names[best_class]
-        class_info = f"<b> Class={class_name} </b> <br/>"
+        separator = "-" * (len(class_name) + 7)
+        class_info = f"Class: <b> {class_name} </b> <br/> {separator} <br/>"
 
     column = ""
     if not info.tree.leaf:
@@ -65,12 +64,15 @@ def make_label(info: TreeInfo, class_names: list[str], max_classes: int):
 
 
 def make_node(
-    info: TreeInfo, max_height: int, class_names: list[str], max_classes: int
+    info: TreeInfo, max_height: int, class_names: list[str] | None, max_classes: int
 ):
     color = make_color(info.height, max_height)
-    shape = "oval" if info.tree.leaf else "rect"
+    shape = "rect" if info.tree.leaf else "rect"
+    style = ', style="filled,rounded"' if info.tree.leaf else ""
     label = make_label(info, class_names, max_classes)
-    node = f'{info.id} [label={label}, fillcolor="{color}", shape="{shape}"];\n'
+    node = (
+        f'{info.id} [ label={label}, fillcolor="{color}", shape="{shape}" {style}];\n'
+    )
     return node
 
 
@@ -79,8 +81,11 @@ def make_edge(info: TreeInfo):
     return f'{info.parent_id}:s -> {info.id}:n [label="{html_escape(condition)}"] ;\n'
 
 
-def export_dot(tree: Tree, class_names: list[str], title="", max_classes=10):
-    class_names = list(map(html_escape, map(str, class_names)))
+def export_dot(tree: Tree, class_names: list[str] = None, title=None, max_classes=10):
+    if title is None:
+        title = f"{tree}"
+    if class_names is not None:
+        class_names = list(map(html_escape, map(str, class_names)))
     nodes: list[TreeInfo] = []
     global id
     id = 0
@@ -126,3 +131,12 @@ def export_image(
     dot = export_dot(tree, class_names, title=title)
     graph = pygraphviz.AGraph(string=dot)
     graph.draw(path=str(filepath), prog=prog)
+
+
+def display(model: Tree, title=None, class_names: list[str] = None, max_classes=10):
+    import graphviz
+
+    dot_graph = export_dot(
+        model, title=title, class_names=class_names, max_classes=max_classes
+    )
+    return graphviz.Source(dot_graph)

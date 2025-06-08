@@ -1,7 +1,8 @@
 from scipy.odr import Output
 from sklearn.base import BaseEstimator
 from sklearnmodels.backend import Input
-from .tree_base import SKLearnTree
+from sklearnmodels.backend.core import Dataset
+from .tree_base import BaseTree
 from ..scikit.nominal_model import NominalRegressor
 from ..tree.pruning import PruneCriteria
 from sklearnmodels import tree, shared
@@ -9,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 
-class SKLearnRegressionTree(NominalRegressor, SKLearnTree, BaseEstimator):
+class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
     def __init__(
         self,
         criterion="std",
@@ -17,7 +18,7 @@ class SKLearnRegressionTree(NominalRegressor, SKLearnTree, BaseEstimator):
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
-        min_error_decrease=0.0,
+        min_error_decrease=1e-16,
         backend="pandas",
     ):
         super().__init__(
@@ -30,25 +31,11 @@ class SKLearnRegressionTree(NominalRegressor, SKLearnTree, BaseEstimator):
             backend=backend,
         )
 
-    def build_trainer(self, error: shared.TargetError):
+    def make_model(self, d: Dataset):
+        error = self.build_error(self.criterion)
         column_penalization = self.build_attribute_penalizer()
         scorers = self.build_splitter(error, column_penalization)
         scorer = shared.DefaultSplitter(error, scorers)
-        prune_criteria = PruneCriteria(
-            max_height=self.max_depth,
-            min_samples_leaf=self.min_samples_leaf,
-            min_error_decrease=self.min_error_decrease,
-            min_samples_split=self.min_samples_split,
-        )
+        prune_criteria = self.make_prune_criteria()
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer
-
-    def fit(self, x: Input, y: Output):
-        d = self.validate_data_fit_regression(x, y)
-
-        error = self.build_error(self.criterion)
-        trainer = self.build_trainer(error)
-
-        model = trainer.fit(d)
-        self.set_model(model)
-        return self

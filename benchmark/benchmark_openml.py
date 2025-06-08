@@ -20,7 +20,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from tqdm import tqdm
 from sklearn.tree import DecisionTreeClassifier
-from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
+from sklearnmodels.scikit.tree_classification import TreeClassifier
+from sklearnmodels.tests import get_model_complexity
 
 basepath = Path("benchmark/openml_cc18/")
 
@@ -56,9 +57,9 @@ class BenchmarkResult:
 def get_tree_parameters(x: pd.DataFrame, classes: int):
     n, m = x.shape
     max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(n * (0.05 / np.sqrt(classes))))
+    min_samples_leaf = max(10, int(n * (0.01 / np.sqrt(classes))))
     min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05 / np.sqrt(classes)
+    min_error_improvement = 0.005 / np.sqrt(classes)
     return max_height, min_samples_leaf, min_samples_split, min_error_improvement
 
 
@@ -69,7 +70,7 @@ def get_nominal_tree(backend: str):
             get_tree_parameters(x, classes)
         )
 
-        return SKLearnClassificationTree(
+        return TreeClassifier(
             criterion="entropy",
             max_depth=max_height,
             min_samples_leaf=min_samples_leaf,
@@ -138,16 +139,6 @@ def reduce_numeric_features(x: pd.DataFrame, max_numeric_features):
     return x
 
 
-def get_complexity(model):
-
-    if isinstance(model, SKLearnClassificationTree):
-        return model.model_.n_nodes()
-    elif isinstance(model, Pipeline):
-        return model["classifier"].tree_.node_count
-    else:
-        raise ValueError(f"Cannot determine complexity for model {model}")
-
-
 def benchmark(
     model_generator: typing.Callable, model_name: str, benchmark_result: BenchmarkResult
 ):
@@ -187,7 +178,7 @@ def benchmark(
         y_pred = model.predict(x)
         test_elapsed = (time.time_ns() - start) / 10e9
         acc = sklearn.metrics.accuracy_score(y, y_pred)
-        complexity = get_complexity(model)
+        complexity = get_model_complexity(model)
         benchmark_result.append(
             id,
             {
@@ -203,7 +194,7 @@ def benchmark(
             },
         )
 
-        if isinstance(model, SKLearnClassificationTree):
+        if isinstance(model, TreeClassifier):
             image_folderpath = basepath / "trees"
             image_folderpath.mkdir(exist_ok=True)
             image_filepath = image_folderpath / f"{dataset.name}.svg"
@@ -242,10 +233,10 @@ def plot_results(df: pd.DataFrame):
             + lp.theme(legend_position="top")
         )
         save_plot(plot, f"{y}.png")
-    for x in ["samples", "features"]:
-        for y in ["train_time", "test_time"]:
-            plot = lp.ggplot(df, lp.aes(x=x, y=y, color="model")) + common_options
-            save_plot(plot, f"{x}_{y}.png")
+    for x in ["dataset"]:
+        # for y in ["train_time", "test_time"]:
+        #     plot = lp.ggplot(df, lp.aes(x=x, y=y, color="model")) + common_options
+        #     save_plot(plot, f"{x}_{y}.png")
         aes_speedup = lp.ylim(0, 1.5) + lp.geom_hline(
             yintercept=1, color="black", linetype="longdash"
         )

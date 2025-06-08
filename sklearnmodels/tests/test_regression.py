@@ -1,19 +1,19 @@
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
-import sklearn.datasets
-import sklearn.tree
-from sklearn.compose import ColumnTransformer
-from sklearn.discriminant_analysis import StandardScaler
-from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
 from tqdm import tqdm
 
-from sklearnmodels.scikit.tree_regression import SKLearnRegressionTree
+from sklearnmodels.scikit.tree_regression import TreeRegressor
+from sklearnmodels.tests import get_model_complexity
+from sklearnmodels.tests.models_regression import (
+    get_cn2,
+    get_oner,
+    get_tree,
+    get_sklearn_tree,
+    get_zeror,
+)
 
 
 def read_regression_dataset(path: Path):
@@ -23,24 +23,7 @@ def read_regression_dataset(path: Path):
     return x, y
 
 
-def get_nominal_tree_regressor(x: pd.DataFrame, y: np.ndarray):
-    n, m = x.shape
-    max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(np.log(n) * (0.05 / y.std())))
-    min_samples_split = min_samples_leaf
-    min_error_improvement = 0.01 * y.std()
-
-    return SKLearnRegressionTree(
-        criterion="std",
-        max_depth=max_height,
-        min_samples_leaf=min_samples_leaf,
-        min_samples_split=min_samples_split,
-        min_error_decrease=min_error_improvement,
-        splitter="best",
-    )
-
-
-def train_test_classification_model(model_name: str, model_generator, dataset: Path):
+def train_test_regression_model(model_name: str, model_generator, dataset: Path):
     dataset_name = dataset.name.split(".")[0]
     x, y = read_regression_dataset(dataset)
     x_train, x_test, y_train, y_test = train_test_split(
@@ -58,44 +41,8 @@ def train_test_classification_model(model_name: str, model_generator, dataset: P
         "Dataset": dataset_name,
         "Train": score_train,
         "Test": score_test,
-    }, model
-
-
-def get_sklearn_pipeline(x: pd.DataFrame, model):
-    numeric_features = x.select_dtypes(include=["int64", "float64"]).columns
-    numeric_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy="median")),
-            ("scaler", StandardScaler()),
-        ]
-    )
-
-    categorical_features = x.select_dtypes(exclude=["int64", "float64"]).columns
-    categorical_transformer = OneHotEncoder(handle_unknown="ignore")
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, categorical_features),
-        ]
-    )
-    return Pipeline(steps=[("preprocessor", preprocessor), ("classifier", model)])
-
-
-def get_sklearn_tree(x: pd.DataFrame, y: np.ndarray):
-    n, m = x.shape
-    max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(n * (0.05 / y.std())))
-    min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05 * y.std()
-    model = sklearn.tree.DecisionTreeRegressor(
-        max_depth=max_height,
-        min_samples_leaf=min_samples_leaf,
-        min_samples_split=min_samples_split,
-        min_impurity_decrease=min_error_improvement,
-        criterion="squared_error",
-    )
-    return get_sklearn_pipeline(x, model)
+        "Complexity": get_model_complexity(model),
+    }
 
 
 path = Path("datasets/regression")
@@ -107,31 +54,50 @@ dataset_names = [
 ]
 
 
-def test_performance_similar_sklearn(at_most_percent=1.5, dataset_names=dataset_names):
+def check_results(
+    at_most_percent: float, results: dict[str, dict[str, float]], reference_model: str
+):
+    results = results.copy()
+    reference = results.pop(reference_model)
 
-    datasets = [path / name for name in dataset_names]
-    nominal_results_all = []
-    numeric_results_all = []
-    for dataset in tqdm(datasets, desc="Datasets"):
-        nominal_results, nominal_model = train_test_classification_model(
-            "NominalTree", get_nominal_tree_regressor, dataset
-        )
-        nominal_model: SKLearnRegressionTree = nominal_model
-        numeric_results, model = train_test_classification_model(
-            "SklearnTree", get_sklearn_tree, dataset
-        )
+    for model_name, model_results in results.items():
+
         for set in ["Train", "Test"]:
-            numeric = numeric_results[set]
-            nominal = nominal_results[set]
-            percent = nominal / numeric
-            message = f"{set} score of nominal tree ({nominal:.2f}) should be at most {at_most_percent*100:.2f}% of sklearn.tree ({numeric:.2f}) on dataset {nominal_results["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
-            message += f"{nominal_model.get_params()}"
-            message += f"\n Tree:\n {nominal_model.model_.pretty_print()}"
-            assert percent <= at_most_percent, message
-        nominal_results_all.append(nominal_results)
-        numeric_results_all.append(numeric_results)
-    print(pd.DataFrame.from_records(nominal_results_all))
-    print(pd.DataFrame.from_records(numeric_results_all))
+            reference_score = reference[set]
+            model_score = model_results[set]
+            percent = model_score / reference_score
+            amp = at_most_percent[model_name]
+            message = f"{set} score of {model_name} ({model_score:.2f}) should be at most {amp*100:.2f}% of sklearn.tree ({reference_score:.2f}) on dataset {reference["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
+            assert percent <= amp, message
+            # f"{set} score of {model_name} ({model_score:.2g}) should be at least {alp*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
+
+
+def test_performance_similar_sklearn(at_most_percent=0.8, dataset_names=dataset_names):
+    models = {
+        "sklearn.tree": get_sklearn_tree,
+        "cn2[std]": get_cn2("std"),
+        "tree[std]": get_tree("std"),
+        "oner[std]": get_oner("std"),
+        "zeror[std]": get_zeror("std"),
+    }
+    at_most_percent = {
+        "cn2[std]": 4,
+        "tree[std]": 4,
+        "oner[std]": 5.0,
+        "zeror[std]": 5.0,
+    }
+    datasets = [path / name for name in dataset_names]
+    results_all = []
+    for dataset in tqdm(datasets, desc="Datasets"):
+        results = {
+            k: train_test_regression_model(k, m, dataset) for k, m in models.items()
+        }
+        check_results(at_most_percent, results, "sklearn.tree")
+        results_all += list(results.values())
+    with pd.option_context(
+        "display.max_rows", None, "display.max_columns", None, "display.width", 120
+    ):
+        print(pd.DataFrame.from_records(results_all))
 
 
 if __name__ == "__main__":

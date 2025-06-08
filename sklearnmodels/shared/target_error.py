@@ -15,6 +15,8 @@ class TargetError(abc.ABC):
         error = 0.0
         n = 0
         for d_branch in partition:
+            if d_branch.n == 0:
+                continue
             branch_error = self(d_branch)
             n_branch = d_branch.n
             error += n_branch * branch_error
@@ -124,4 +126,9 @@ class RegressionError(TargetError):
 
 class DeviationError(RegressionError):
     def __call__(self, d: Dataset):
-        return d.std_y()
+        if d.n == 0:
+            return np.inf
+        elif d.n == 1:
+            return 0
+        else:
+            return d.std_y()

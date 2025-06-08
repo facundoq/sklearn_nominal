@@ -5,12 +5,12 @@ from ._version import __version__
 
 from . import tree
 from . import rules
-from .scikit.tree_regression import SKLearnRegressionTree
-from .scikit.tree_classification import SKLearnClassificationTree
+from .scikit.tree_regression import TreeRegressor
+from .scikit.tree_classification import TreeClassifier
 
 __all__ = [
     "tree",
     "rules",
-    "SKLearnRegressionTree",
+    "TreeRegressor",
     "SKLearnClassificationTree" "__version__",
 ]

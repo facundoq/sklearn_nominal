@@ -18,4 +18,4 @@ from .trainer import (
     TreeCreationCallbackResult,
 )
 
-from .export import export_dot, export_dot_file, export_image
+from .export import export_dot, export_dot_file, export_image, display

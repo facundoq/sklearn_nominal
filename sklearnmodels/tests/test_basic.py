@@ -3,8 +3,8 @@
 import pytest
 from sklearn.datasets import load_diabetes, load_iris
 
-from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
-from sklearnmodels.scikit.tree_regression import SKLearnRegressionTree
+from sklearnmodels.scikit.tree_classification import TreeClassifier
+from sklearnmodels.scikit.tree_regression import TreeRegressor
 
 # Authors: scikit-learn-contrib developers
 # License: BSD 3 clause
@@ -16,7 +16,7 @@ def classification_data():
 
 
 def test_classification_tree(classification_data):
-    est = SKLearnClassificationTree()
+    est = TreeClassifier()
     est.fit(*classification_data)
     assert hasattr(est, "is_fitted_")
     assert hasattr(est, "classes_")
@@ -34,7 +34,7 @@ def regression_data():
 
 def test_regression_tree(regression_data):
     x, y = regression_data
-    model = SKLearnRegressionTree(max_depth=3)
+    model = TreeRegressor(max_depth=3)
     model.fit(x, y)
     assert hasattr(model, "is_fitted_")
     assert hasattr(model, "model_")

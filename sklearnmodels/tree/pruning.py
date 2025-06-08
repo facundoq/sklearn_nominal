@@ -59,4 +59,4 @@ class PruneCriteria:
 
     def post_split_prune(self, tree: Tree, best_column: ColumnErrorResult):
         error_improvement = tree.error - best_column.error
-        return error_improvement < self.min_error_decrease
+        return error_improvement <= self.min_error_decrease

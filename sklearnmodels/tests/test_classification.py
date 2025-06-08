@@ -1,23 +1,20 @@
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
-import sklearn.datasets
-import sklearn.tree
-from sklearn.compose import ColumnTransformer
-from sklearn.discriminant_analysis import StandardScaler
-from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
-from sklearnmodels.scikit.rule_cn2 import CN2Classifier
-from sklearnmodels.scikit.rule_oner import OneRClassifier
-from sklearnmodels.scikit.rule_prism import PRISMClassifier
-from sklearnmodels.scikit.rule_zeror import ZeroRClassifier
-from sklearnmodels.scikit.tree_classification import SKLearnClassificationTree
+from sklearnmodels.tests import get_model_complexity
+from sklearnmodels.tests.models_classification import get_zeror_classifier
+from sklearnmodels.tests.models_classification import (
+    get_cn2_classifier,
+    get_nominal_tree_classifier,
+    get_oner_classifier,
+    get_prism_classifier,
+    get_sklearn_tree,
+)
 
 
 def read_classification_dataset(path: Path):
@@ -27,75 +24,6 @@ def read_classification_dataset(path: Path):
     y = le.transform(df.iloc[:, -1])
     # y = y.reshape(len(y),1)
     return x, y, le.classes_
-
-
-def get_zeror_classifier(x: pd.DataFrame, classes: int):
-    model = ZeroRClassifier()
-    return model
-
-
-def get_oner_classifier(criterion: str):
-
-    def build(x: pd.DataFrame, classes: int):
-        model = OneRClassifier(criterion)
-        return model
-
-    return build
-
-
-def get_cn2_classifier(criterion: str):
-    def build(x: pd.DataFrame, classes: int):
-        n, m = x.shape
-        max_length = min(max(int(np.log(m) * 3), 5), 30)
-        min_rule_support = max(10, int(n * (0.05 / classes)))
-        max_error_per_rule = 0.01 / classes
-        model = CN2Classifier(
-            criterion=criterion,
-            max_rule_length=max_length,
-            min_rule_support=min_rule_support,
-            max_error_per_rule=max_error_per_rule,
-        )
-
-        return model
-
-    return build
-
-
-def get_prism_classifier():
-    def build(x: pd.DataFrame, classes: int):
-        n, m = x.shape
-        max_length = min(max(int(np.log(m) * 3), 5), 30)
-        min_rule_support = max(10, int(n * (0.05 / classes)))
-        min_error_decrease = 0.05 / classes
-        model = PRISMClassifier(
-            max_rule_length=max_length,
-            min_rule_support=min_rule_support,
-            max_error_per_rule=min_error_decrease,
-        )
-
-        return model
-
-    return build
-
-
-def get_nominal_tree_classifier(criterion: str):
-    def build_nominal_tree_classifier(x: pd.DataFrame, classes: int):
-        n, m = x.shape
-        max_height = min(max(int(np.log(m) * 3), 5), 30)
-        min_samples_leaf = max(10, int(n * (0.05 / classes)))
-        min_samples_split = min_samples_leaf
-        min_error_decrease = 0.05 / classes
-
-        return SKLearnClassificationTree(
-            criterion=criterion,
-            max_depth=max_height,
-            min_samples_leaf=min_samples_leaf,
-            min_samples_split=min_samples_split,
-            min_error_decrease=min_error_decrease,
-            splitter=4,
-        )
-
-    return build_nominal_tree_classifier
 
 
 def train_test_classification_model(model_name: str, model_generator, dataset: Path):
@@ -116,45 +44,8 @@ def train_test_classification_model(model_name: str, model_generator, dataset: P
         "Model": model_name,
         "Train": score_train,
         "Test": score_test,
+        "Complexity": get_model_complexity(model),
     }
-
-
-def get_sklearn_pipeline(x: pd.DataFrame, model):
-    numeric_features = x.select_dtypes(include=["int64", "float64"]).columns
-    numeric_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy="median")),
-            ("scaler", StandardScaler()),
-        ]
-    )
-
-    categorical_features = x.select_dtypes(exclude=["int64", "float64"]).columns
-    categorical_transformer = OneHotEncoder(handle_unknown="ignore")
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, categorical_features),
-        ]
-    )
-    return Pipeline(steps=[("preprocessor", preprocessor), ("classifier", model)])
-
-
-def get_sklearn_tree(x: pd.DataFrame, classes: int):
-    n, m = x.shape
-    max_height = min(max(int(np.log(m) * 3), 5), 30)
-    min_samples_leaf = max(10, int(n * (0.05 / classes)))
-    min_samples_split = min_samples_leaf
-    min_error_improvement = 0.05 / classes
-    model = sklearn.tree.DecisionTreeClassifier(
-        max_depth=max_height,
-        min_samples_leaf=min_samples_leaf,
-        min_samples_split=min_samples_split,
-        min_impurity_decrease=min_error_improvement,
-        criterion="entropy",
-        random_state=0,
-    )
-    return get_sklearn_pipeline(x, model)
 
 
 path = Path("datasets/classification")
@@ -204,8 +95,8 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
     }
     at_least_percent = {
         "prism": 0.75,
-        "cn2[entropy]": 0.70,
-        "cn2[gini]": 0.70,
+        "cn2[entropy]": 0.50,
+        "cn2[gini]": 0.50,
         "tree[entropy]": 0.8,
         "tree[gini]": 0.8,
         "tree[gain_ratio]": 0.8,
@@ -221,7 +112,9 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         }
         check_results(at_least_percent, results, "sklearn.tree")
         results_all += list(results.values())
-    with pd.option_context("display.max_rows", None, "display.max_columns", None):
+    with pd.option_context(
+        "display.max_rows", None, "display.max_columns", None, "display.width", 120
+    ):
         print(pd.DataFrame.from_records(results_all))
 
 

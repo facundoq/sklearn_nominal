@@ -86,7 +86,7 @@ class PRISM:
         self, d: Dataset, target_error: TargetError
     ) -> None | PredictionRule:
 
-        conditions = []
+        conditions: list[Condition] = []
         error = np.inf
         while len(conditions) < self.max_length_per_rule:
             p = self.propose_condition(d, error, target_error)
@@ -108,7 +108,7 @@ class PRISM:
                     conditions.remove(similar)
             conditions.append(p.condition)
             error = p.error
-        if error >= self.max_error_per_rule:
+        if error >= self.max_error_per_rule or len(conditions) == 0:
             # if the generated conditions are not acceptable in terms of error
             # don't generate a rule
             return None

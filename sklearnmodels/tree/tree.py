@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend.core import Model
+
 from ..backend.conditions import Condition
 
 type Branches = dict[Condition, Tree]
@@ -14,7 +16,7 @@ class TreeInfo:
         self.categorical_values = categorical_values
 
 
-class Tree:
+class Tree(Model):
     def __init__(
         self,
         prediction: np.ndarray,
@@ -30,12 +32,8 @@ class Tree:
         self.column: str = None
         self.error = error
 
-    def predict(self, x: pd.DataFrame):
-        n = x.shape[0]
-        predictions = np.zeros((n, len(self.prediction)))
-        for i, (idx, row) in enumerate(x.iterrows()):
-            predictions[i, :] = self.predict_sample(row)
-        return predictions
+    def output_size(self):
+        return len(self.prediction)
 
     def predict_sample(self, x: pd.Series):
         for condition, child in self.branches.items():
@@ -72,12 +70,20 @@ class Tree:
     def height(self):
         return 1 + max([t.height() for t in self.children()])
 
-    def pretty_print(self, height=0, max_height=np.inf):
+    def complexity(self):
+        return self.n_leafs()
+
+    def pretty_print(self, height=0, max_height=np.inf, class_names=None):
+
         result = ""
         if height == 0:
             result = "root"
         if self.leaf:
-            result = f"{self}"
+            result = f"{self.prediction}"
+            if class_names is not None:
+
+                klass = self.prediction.argmax()
+                result = f"{class_names[klass]}"
 
         if height >= max_height:
             return ""
@@ -88,7 +94,7 @@ class Tree:
         else:
             children = "\n" + "\n".join(
                 [
-                    f"{indent}{base_sep}🪵{c} => {t.pretty_print(height+1)}"
+                    f"{indent}{base_sep}🪵{c} => {t.pretty_print(height+1,max_height=max_height,class_names=class_names)}"
                     for c, t in self.branches.items()
                 ]
             )

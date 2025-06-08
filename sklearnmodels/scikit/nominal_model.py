@@ -4,8 +4,10 @@ from socket import has_dualstack_ipv6
 from matplotlib.pylab import isinteractive
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
 import scipy
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from sklearn.calibration import LabelEncoder
 from sklearn.exceptions import NotFittedError
 from sklearn.utils._tags import (
     ClassifierTags,
@@ -46,6 +48,10 @@ class NominalModel(metaclass=abc.ABCMeta):
         super().__init__(*args, **kwargs)
         self.backend = backend
 
+    def complexity(self):
+        self.check_is_fitted()
+        return self.model_.complexity()
+
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
         tags.target_tags.single_output = False
@@ -56,17 +62,9 @@ class NominalModel(metaclass=abc.ABCMeta):
         tags.input_tags.string = True
         return tags
 
-    @abc.abstractmethod
-    def make_model(self, class_weight: np.ndarray, error: TargetError):
-        pass
-
-    def fit(self, x: Input, y: Output):
-        d, class_weight = self.validate_data_fit_classification(x, y)
-        error = self.build_error(self.criterion, class_weight)
-        trainer = self.make_model(error)
-        model = trainer.fit(d)
-        self.set_model(model)
-        return self
+    def pretty_print(self, class_names: list[str] = None):
+        self.check_is_fitted()
+        return self.model_.pretty_print(class_names=class_names)
 
     def check_is_fitted(self) -> bool:
         validation.check_is_fitted(self)
@@ -74,6 +72,7 @@ class NominalModel(metaclass=abc.ABCMeta):
             raise NotFittedError()
 
     def validate_data_predict(self, x):
+        dtypes = self.get_dtypes(x)
         self.check_is_fitted()
         x = validate_data(
             self,
@@ -86,29 +85,20 @@ class NominalModel(metaclass=abc.ABCMeta):
         n = len(x)
         if n == 0:
             raise ValueError(f"Input contains 0 samples.")
-        return pd.DataFrame(x, columns=self.get_feature_names(), dtype=None)
+        df = pd.DataFrame(x, columns=self.get_feature_names())
+        df.astype(dtypes)
+        return df
 
-    def validate_data_fit_regression(self, x, y) -> Dataset:
-        x, y = validate_data(
-            self,
-            x,
-            y,
-            reset=True,
-            multi_output=True,
-            y_numeric=True,
-            ensure_all_finite=False,
-            dtype=None,
-            accept_sparse=False,
-        )
-        y = _check_y(y, multi_output=True, y_numeric=True, estimator=self)
-        self._y_original_shape = y.shape
-        y = atleast_2d(y)
-
-        return make_dataset(self.backend, x, y, self.get_feature_names(), None)
+    def get_dtypes(self, x):
+        if isinstance(x, pd.DataFrame):
+            dtypes = x.dtypes.to_dict()
+        else:
+            dtypes = None
+        return dtypes
 
     def get_feature_names(self):
         if not hasattr(self, "feature_names_in_"):
-            return [f"f{i}" for i in range(self.n_features_in_)]
+            return None
         else:
             return self.feature_names_in_
 
@@ -122,13 +112,6 @@ class NominalModel(metaclass=abc.ABCMeta):
             raise ValueError(
                 f"Only pd.Dataframe or np.ndarray supported, received: {x}"
             )
-
-    def get_y(self, y):
-        y = _check_y(y, multi_output=True, y_numeric=False, estimator=self)
-        # TODO make pure numpy
-        y_cat = pd.Series(data=y.squeeze()).astype("category")
-        y = y_cat.cat.codes.to_numpy()
-        return y
 
     def set_model(self, model):
         self.model_ = model
@@ -151,7 +134,7 @@ class NominalClassifier(NominalModel):
 
     def validate_data_fit_classification(self, x, y) -> Dataset:
         check_classification_targets(y)
-        # print("fit", x.dtypes)
+        dtypes = self.get_dtypes(x)
         x, y = validate_data(
             self,
             x,
@@ -163,7 +146,6 @@ class NominalClassifier(NominalModel):
             dtype=None,
             accept_sparse=False,
         )
-
         self.classes_ = np.unique(y)
         if len(self.classes_) < 2:
             raise ValueError("Can't train classifier with one class.")
@@ -171,10 +153,29 @@ class NominalClassifier(NominalModel):
         class_weight = self.get_class_weights(y)
         return (
             make_dataset(
-                self.backend, x, self.get_y(y), self.get_feature_names(), None
+                self.backend, x, self.get_y(y), self.get_feature_names(), dtypes
             ),
             class_weight,
         )
+
+    def get_y(self, y):
+        y = _check_y(y, multi_output=True, y_numeric=False, estimator=self)
+        # TODO make pure numpy
+        self.le_ = LabelEncoder()
+        y = self.le_.fit_transform(y)
+        return y
+
+    @abc.abstractmethod
+    def make_model(self, d: Dataset, class_weight: np.ndarray):
+        pass
+
+    def fit(self, x: Input, y: Output):
+        d, class_weight = self.validate_data_fit_classification(x, y)
+
+        trainer = self.make_model(d, class_weight)
+        model = trainer.fit(d)
+        self.set_model(model)
+        return self
 
     def get_class_weights(self, y):
         return compute_class_weight(
@@ -200,10 +201,11 @@ class NominalClassifier(NominalModel):
     def predict(self, x: Input) -> Output:
         p = self.predict_proba(x)
         c = p.argmax(axis=1)
-        return c
+        y = self.le_.inverse_transform(c)
+        return y
 
 
-class NominalRegressor(NominalModel):
+class NominalRegressor(NominalModel, RegressorMixin):
 
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
@@ -211,6 +213,24 @@ class NominalRegressor(NominalModel):
         tags.regressor_tags = RegressorTags()
         tags.target_tags.required = True
         return tags
+
+    def validate_data_fit_regression(self, x, y) -> Dataset:
+        dtypes = self.get_dtypes(x)
+        x, y = validate_data(
+            self,
+            x,
+            y,
+            reset=True,
+            multi_output=True,
+            y_numeric=True,
+            ensure_all_finite=False,
+            dtype=None,
+            accept_sparse=False,
+        )
+        y = _check_y(y, multi_output=True, y_numeric=True, estimator=self)
+        self._y_original_shape = y.shape
+        y = atleast_2d(y)
+        return make_dataset(self.backend, x, y, self.get_feature_names(), dtypes)
 
     def build_error(self, criterion: str):
         errors = {
@@ -227,3 +247,14 @@ class NominalRegressor(NominalModel):
         if len(self._y_original_shape) == 1:
             y = y.squeeze()
         return y
+
+    @abc.abstractmethod
+    def make_model(self, d: Dataset):
+        pass
+
+    def fit(self, x: Input, y: Output):
+        d = self.validate_data_fit_regression(x, y)
+        trainer = self.make_model(d)
+        model = trainer.fit(d)
+        self.set_model(model)
+        return self

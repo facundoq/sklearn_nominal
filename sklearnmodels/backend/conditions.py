@@ -89,7 +89,7 @@ class RangeCondition(Condition):
 
 class AndCondition(Condition):
     def __init__(self, conditions: list[Condition]):
-        column = ",".join([c.column for c in conditions])
+        column = ",".join([str(c.column) for c in conditions])
         super().__init__(column)
         self.conditions = conditions
 

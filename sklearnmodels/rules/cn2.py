@@ -38,7 +38,6 @@ class CN2:
 
     def __init__(
         self,
-        class_weight: np.ndarray,
         error: TargetError,
         max_length_per_rule: int,
         max_rules: int,
@@ -49,7 +48,6 @@ class CN2:
         self.min_rule_support = min_rule_support
         self.max_rules = max_rules
         self.max_error_per_rule = max_error_per_rule
-        self.class_weight = class_weight
         self.error = error
 
     def fit(self, d: Dataset):
@@ -106,7 +104,7 @@ class CN2:
                     conditions.remove(similar)
             conditions.append(p.condition)
             error = p.error
-        if error >= self.max_error_per_rule:
+        if error >= self.max_error_per_rule or len(conditions) == 0:
             # if the generated conditions are not acceptable in terms of error
             # don't generate a rule
             return None

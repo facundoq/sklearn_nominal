@@ -1,6 +1,7 @@
 from sklearn.base import BaseEstimator
 from sklearn.utils import compute_class_weight
 from sklearnmodels.backend import Input, Output
+from sklearnmodels.backend.core import Dataset
 from sklearnmodels.backend.factory import DEFAULT_BACKEND
 from sklearnmodels.rules.zeror import ZeroR as ZeroR
 from sklearnmodels.scikit.nominal_model import NominalClassifier, NominalRegressor
@@ -20,25 +21,22 @@ class ZeroRClassifier(NominalClassifier, BaseEstimator):
         super().__init__(backend=backend, class_weight=class_weight)
         self.criterion = criterion
 
-    def fit(self, x: Input, y: Output):
-        d, class_weight = self.validate_data_fit_classification(x, y)
+    def make_model(self, d: Dataset, class_weight: np.ndarray):
         error = self.build_error(self.criterion, class_weight)
-        trainer = ZeroR(error)
-        model = trainer.fit(d)
-        self.set_model(model)
-        return self
+        return ZeroR(error)
 
 
 class ZeroRRegressor(NominalRegressor, BaseEstimator):
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.regressor_tags.poor_score = True
+        return tags
 
     def __init__(self, criterion="std", backend=DEFAULT_BACKEND):
         super().__init__(backend=backend)
         self.criterion = criterion
 
-    def fit(self, x: Input, y: Output):
-        d = self.validate_data_fit_regression(x, y)
+    def make_model(self, d: Dataset):
         error = self.build_error(self.criterion)
-        trainer = ZeroR(error)
-        model = trainer.fit(d)
-        self.set_model(model)
-        return self
+        return ZeroR(error_function=error)

@@ -4,6 +4,7 @@ from scipy.odr import Output
 from sklearn.base import BaseEstimator
 from sklearn.utils import compute_class_weight
 from sklearnmodels.backend import Input
+from sklearnmodels.backend.core import Dataset
 from sklearnmodels.backend.factory import DEFAULT_BACKEND
 from sklearnmodels.rules.oner import OneR
 from sklearnmodels.rules.prism import PRISM
@@ -31,15 +32,11 @@ class PRISMClassifier(NominalClassifier, BaseEstimator):
         self.min_rule_support = min_rule_support
         self.max_error_per_rule = max_error_per_rule
 
-    def fit(self, x: Input, y: Output):
-        d, class_weight = self.validate_data_fit_classification(x, y)
-        trainer = PRISM(
+    def make_model(self, d: Dataset, class_weight: np.ndarray):
+        return PRISM(
             class_weight,
             self.max_rule_length,
             self.max_rules_per_class,
             self.min_rule_support,
             self.max_error_per_rule,
         )
-        model = trainer.fit(d)
-        self.set_model(model)
-        return self

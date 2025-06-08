@@ -7,6 +7,8 @@ from typing import Generator, Iterable
 import numpy as np
 import pandas as pd
 
+from sklearnmodels.backend import Input, InputSample
+
 from .conditions import Condition
 
 
@@ -16,7 +18,6 @@ class ColumnType(enum.Enum):
 
 
 type Partition = list[Dataset]
-
 ColumnID = int
 
 
@@ -105,4 +106,30 @@ class Dataset(abc.ABC):
 
     @abc.abstractmethod
     def count_class(self, klass: int) -> int:
+        pass
+
+
+class Model(abc.ABC):
+
+    @abc.abstractmethod
+    def predict_sample(self, x: InputSample):
+        pass
+
+    @abc.abstractmethod
+    def output_size(self):
+        pass
+
+    def predict(self, x: Input):
+        n = x.shape[0]
+        predictions = np.zeros((n, self.output_size()))
+        for i, (idx, row) in enumerate(x.iterrows()):
+            predictions[i, :] = self.predict_sample(row)
+        return predictions
+
+    @abc.abstractmethod
+    def pretty_print(self, class_names: list[str] = None) -> str:
+        pass
+
+    @abc.abstractmethod
+    def complexity(self, d: Dataset):
         pass

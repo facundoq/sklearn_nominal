@@ -1,11 +1,12 @@
 import numpy as np
 from sklearnmodels.backend.core import ColumnType
+from sklearnmodels.tree.pruning import PruneCriteria
 
 
 from .. import tree, shared
 
 
-class SKLearnTree:
+class BaseTree:
 
     def __init__(
         self,
@@ -45,8 +46,27 @@ class SKLearnTree:
         }
         return scorers
 
-    def export_dot(self, filepath, class_names=None):
-        tree.export_dot_file(self.model_, filepath, class_names=class_names)
+    def make_prune_criteria(self):
+        return PruneCriteria(
+            max_height=self.max_depth,
+            min_samples_leaf=self.min_samples_leaf,
+            min_error_decrease=self.min_error_decrease,
+            min_samples_split=self.min_samples_split,
+        )
 
-    def export_image(self, filepath, class_names=None):
-        tree.export_image(self.model_, filepath, class_names=class_names)
+    def pretty_print(self, class_names=None):
+        return self.model_.pretty_print(class_names=class_names)
+
+    def export_dot(self, class_names=None, title=""):
+        return tree.export_dot(self.model_, title=title, class_names=class_names)
+
+    def export_dot_file(self, filepath, class_names=None, title=""):
+        tree.export_dot_file(
+            self.model_, filepath, title=title, class_names=class_names
+        )
+
+    def export_image(self, filepath, class_names=None, title=""):
+        tree.export_image(self.model_, filepath, title=title, class_names=class_names)
+
+    def display(self, class_names=None, title=""):
+        return tree.display(self.model_, title=title, class_names=class_names)
