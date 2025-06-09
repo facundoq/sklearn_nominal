@@ -148,8 +148,11 @@ class PandasDataset(Dataset):
             return np.inf
         return np.sum(np.std(self.y, axis=0))
 
-    def mean_x(self, col: ColumnID) -> np.ndarray:
+    def mean_x(self, col: ColumnID) -> float:
         return self.x[col].mean()
+
+    def std_x(self, col: ColumnID, ddof=1) -> float:
+        return self.x[col].std(ddof=ddof)
 
     def count_class(self, klass: int) -> int:
         return np.sum(self.y == klass)

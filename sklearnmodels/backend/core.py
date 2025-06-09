@@ -91,7 +91,11 @@ class Dataset(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def mean_x(self, col: ColumnID) -> np.ndarray:
+    def mean_x(self, col: ColumnID) -> float:
+        pass
+
+    @abc.abstractmethod
+    def std_x(self, col: ColumnID, ddof=1) -> float:
         pass
 
     @abc.abstractmethod
@@ -132,4 +136,15 @@ class Model(abc.ABC):
 
     @abc.abstractmethod
     def complexity(self, d: Dataset):
+        pass
+
+
+class Model(abc.ABC):
+    def predict():
+        pass
+
+
+class Trainer(abc.ABC):
+
+    def fit(d: Dataset) -> Model:
         pass
