@@ -200,7 +200,6 @@ class NominalClassifier(NominalModel):
 
     def predict(self, x: Input) -> Output:
         p = self.predict_proba(x)
-        print("predict nominal", x, p)
         c = p.argmax(axis=1)
         y = self.le_.inverse_transform(c)
         return y
