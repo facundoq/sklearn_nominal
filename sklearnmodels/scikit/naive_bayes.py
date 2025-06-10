@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearnmodels.backend.core import Dataset
 from sklearnmodels.backend.factory import DEFAULT_BACKEND
-from sklearnmodels.bayes.naive import NaiveBayesTrainer
+from sklearnmodels.bayes.trainer import NaiveBayesTrainer
 from sklearnmodels.scikit.nominal_model import NominalClassifier
 
 

@@ -26,9 +26,9 @@ class NaiveBayesTrainer(Trainer):
         self.class_weight = class_weight
 
     def fit_column(self, d: Dataset, column: ColumnID, nominal_values: dict):
-        if d.types[column] == ColumnType.Numeric:
+        if d.types_dict[column] == ColumnType.Numeric:
             return self.fit_numeric(d, column)
-        elif d.types[column] == ColumnType.Nominal:
+        elif d.types_dict[column] == ColumnType.Nominal:
             return self.fit_nominal(d, column, nominal_values[column])
         else:
             raise ValueError(f"Unsupported column {column}")
@@ -57,12 +57,14 @@ class NaiveBayesTrainer(Trainer):
 
     def fit(self, d: Dataset):
         nominal_values = {
-            c: d.unique_values(c) for c in d.columns if d.types[c] == ColumnType.Nominal
+            c: d.unique_values(c)
+            for c in d.columns
+            if d.types_dict[c] == ColumnType.Nominal
         }
         class_models = [
-            self.fit_class(d.filter_by_class(c, nominal_values)) for c in d.classes
+            self.fit_class(d.filter_by_class(c), nominal_values) for c in d.classes()
         ]
         pi = d.class_distribution(self.class_weight)
-        pi = {c: v for c, v in zip(d.classes, pi)}
+        pi = {c: v for c, v in zip(d.classes(), pi)}
         class_probabilities = CategoricalVariable(pi)
-        return NaiveBayes(d.classes, class_models, class_probabilities)
+        return NaiveBayes(d.classes(), class_models, class_probabilities)

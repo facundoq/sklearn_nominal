@@ -26,7 +26,7 @@ from sklearnmodels.backend.factory import make_dataset
 from sklearnmodels.shared.target_error import TargetError
 
 from .. import shared, tree
-from ..backend.core import Dataset
+from ..backend.core import Dataset, Model
 from ..backend.pandas import PandasDataset
 
 
@@ -114,7 +114,7 @@ class NominalModel(metaclass=abc.ABCMeta):
             )
 
     def set_model(self, model):
-        self.model_ = model
+        self.model_: Model = model
         self.is_fitted_ = True
 
 
@@ -200,6 +200,7 @@ class NominalClassifier(NominalModel):
 
     def predict(self, x: Input) -> Output:
         p = self.predict_proba(x)
+        print("predict nominal", x, p)
         c = p.argmax(axis=1)
         y = self.le_.inverse_transform(c)
         return y

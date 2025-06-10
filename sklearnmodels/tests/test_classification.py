@@ -7,7 +7,10 @@ from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
 from sklearnmodels.tests import get_model_complexity
-from sklearnmodels.tests.models_classification import get_zeror_classifier
+from sklearnmodels.tests.models_classification import (
+    get_naive_bayes,
+    get_zeror_classifier,
+)
 from sklearnmodels.tests.models_classification import (
     get_cn2_classifier,
     get_nominal_tree_classifier,
@@ -82,6 +85,7 @@ def check_results(
 
 def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset_names):
     models = {
+        "naivebayes": get_naive_bayes(smoothing=0.01),
         "sklearn.tree": get_sklearn_tree,
         "prism": get_prism_classifier(),
         "cn2[entropy]": get_cn2_classifier("entropy"),
@@ -94,6 +98,7 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
         "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
     }
     at_least_percent = {
+        "naivebayes": 0.3,
         "prism": 0.75,
         "cn2[entropy]": 0.50,
         "cn2[gini]": 0.50,

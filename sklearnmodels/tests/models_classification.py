@@ -5,6 +5,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 import sklearn.tree
+from sklearnmodels.scikit.naive_bayes import NaiveBayesClassifier
 from sklearnmodels.scikit.nominal_model import NominalModel
 from sklearnmodels.scikit.rule_cn2 import CN2Classifier
 from sklearnmodels.scikit.rule_oner import OneRClassifier
@@ -21,6 +22,15 @@ def get_oner_classifier(criterion: str):
 
     def build(x: pd.DataFrame, classes: int):
         model = OneRClassifier(criterion)
+        return model
+
+    return build
+
+
+def get_naive_bayes(smoothing: float):
+
+    def build(x: pd.DataFrame, classes: int):
+        model = NaiveBayesClassifier(smoothing=smoothing)
         return model
 
     return build

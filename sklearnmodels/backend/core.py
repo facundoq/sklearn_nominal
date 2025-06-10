@@ -61,6 +61,13 @@ class Dataset(abc.ABC):
 
     @property
     @abc.abstractmethod
+    def types_dict(
+        self,
+    ) -> dict[ColumnID, ColumnType]:
+        pass
+
+    @property
+    @abc.abstractmethod
     def columns(
         self,
     ) -> list[str]:
@@ -140,11 +147,11 @@ class Model(abc.ABC):
 
 
 class Model(abc.ABC):
-    def predict():
+    def predict(self, x: pd.Series):
         pass
 
 
 class Trainer(abc.ABC):
 
-    def fit(d: Dataset) -> Model:
+    def fit(self, d: Dataset) -> Model:
         pass

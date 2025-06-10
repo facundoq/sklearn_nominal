@@ -99,6 +99,10 @@ class PandasDataset(Dataset):
         return self.y.shape[0]
 
     @property
+    def types_dict(self) -> dict[ColumnID, ColumnType]:
+        return dict(zip(self.columns, self.types))
+
+    @property
     def types(self) -> list[ColumnType]:
         numeric = self.x.select_dtypes(include="number").columns
 
@@ -125,7 +129,8 @@ class PandasDataset(Dataset):
 
     def filter_by_class(self, c) -> Dataset:
         idx = self.y == c
-        idx.fillna(False, inplace=True)
+        idx = np.nan_to_num(idx, nan=False)
+        # idx.fillna(False, inplace=True)
         return PandasDataset(self.x, self.y, idx)
 
     def class_distribution(self, class_weight: np.ndarray) -> np.ndarray:

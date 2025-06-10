@@ -1,3 +1,7 @@
+from abc import ABC
+import abc
+
+from scipy.stats import norm
 from sklearnmodels.backend.core import Model
 
 
@@ -6,8 +10,13 @@ import pandas as pd
 
 
 class Variable(ABC):
-    @abstractmethod
-    def predict(x, debug=False):
+
+    @abc.abstractmethod
+    def predict(x):
+        pass
+
+    @abc.abstractmethod
+    def complexity(self) -> int:
         pass
 
 
@@ -16,13 +25,16 @@ class GaussianVariable(Variable):
     def __init__(self, mu: float, std: float, smoothing: float = 0) -> None:
         self.mu = mu
         self.std = std
-        self.norm = norm(mu, std + smoothing)
+        self.normal = norm(mu, std + smoothing)
 
     def predict(self, x: pd.Series):
-        return self.norm.pdf(x.values)
+        return self.normal.pdf(x.values)
 
     def __repr__(self) -> str:
         return f"N~({self.mu},{self.std})"
+
+    def complexity(self):
+        return 1
 
 
 class CategoricalVariable(Variable):
@@ -35,6 +47,9 @@ class CategoricalVariable(Variable):
 
     def __repr__(self) -> str:
         return f"C~({self.probabilities})"
+
+    def complexity(self):
+        return len(self.probabilities)
 
 
 class NaiveBayesSingleClass:
@@ -54,6 +69,9 @@ class NaiveBayesSingleClass:
         variables = "\n\n".join([f"{k}: {v}" for k, v in self.variables.items()])
         return f"Distributions:\n\n {variables}"
 
+    def complexity(self) -> int:
+        return max([[v.complexity() for v in self.variables.values()]])
+
 
 class NaiveBayes(Model):
 
@@ -67,7 +85,7 @@ class NaiveBayes(Model):
         self.class_models = class_models
         self.class_probabilities = class_probabilities
 
-    def predict(self, x: pd.DataFrame, callback=None):
+    def predict(self, x: pd.DataFrame):
 
         n = len(x)
         classes = self.class_names
@@ -75,7 +93,7 @@ class NaiveBayes(Model):
         for c in range(len(classes)):
             p_x = self.class_models[c].predict(x)
             name = self.class_names[c]
-            p_class = self.class_probabilities.predict([name])[0]
+            p_class = self.class_probabilities.predict(pd.Series([name]))[0]
             results[:, c] = p_x * p_class
         #     if debug:
         #         name = self.class_names[c]
@@ -118,3 +136,6 @@ class NaiveBayes(Model):
                 rows.append([f"{k}", f"{v}"])
 
         return rows
+
+    def complexity(self) -> int:
+        return max([m.complexity() for m in self.class_models])
