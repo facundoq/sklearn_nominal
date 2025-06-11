@@ -44,12 +44,11 @@ class NaiveBayesTrainer(Trainer):
 
         s = self.smoothing
         # TODO move computation to backend
-        conditions = [(v, ValueCondition(column, v)) for v in values]
-        conditions = zip(values, d.filter(conditions))
-        probabilities = {v: (dv.n + s) / d.n for v, dv in conditions}
-        total = sum(probabilities.values())
-        probabilities = {v: p / total for v, p in probabilities.items()}
-        return CategoricalVariable(probabilities)
+        conditions = [ValueCondition(column, v) for v in values]
+        probabilities = np.array([(dv.n + s) / d.n for dv in d.split(conditions)])
+        probabilities /= probabilities.sum()
+        d_probabilities = {v: p for v, p in zip(values, probabilities)}
+        return CategoricalVariable(d_probabilities)
 
     def fit_class(self, d: Dataset, nominal_values: dict):
         p = {c: self.fit_column(d, c, nominal_values) for c in d.columns}

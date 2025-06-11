@@ -146,12 +146,6 @@ class Model(abc.ABC):
         pass
 
 
-class Model(abc.ABC):
-    def predict(self, x: pd.Series):
-        pass
-
-
 class Trainer(abc.ABC):
-
     def fit(self, d: Dataset) -> Model:
         pass

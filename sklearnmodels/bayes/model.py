@@ -2,6 +2,7 @@ from abc import ABC
 import abc
 
 from scipy.stats import norm
+from sklearnmodels.backend import Input, InputSample
 from sklearnmodels.backend.core import Model
 
 
@@ -85,7 +86,12 @@ class NaiveBayes(Model):
         self.class_models = class_models
         self.class_probabilities = class_probabilities
 
-    def predict(self, x: pd.DataFrame):
+    def predict_sample(self, x: InputSample) -> int:
+        df = pd.DataFrame([x])
+        y = self.predict(df)
+        return df.iloc[0, :]
+
+    def predict(self, x: Input):
 
         n = len(x)
         classes = self.class_names
@@ -139,3 +145,6 @@ class NaiveBayes(Model):
 
     def complexity(self) -> int:
         return max([m.complexity() for m in self.class_models])
+
+    def output_size(self) -> int:
+        return len(self.class_names)

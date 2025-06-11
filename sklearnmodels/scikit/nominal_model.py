@@ -195,8 +195,13 @@ class NominalClassifier(NominalModel):
 
     def predict_proba(self, x: Input) -> Output:
         self.check_is_fitted()
+
+        # print("nominal predict proba",self.model_)
         x = self.validate_data_predict(x)
-        return self.model_.predict(x)
+        # print("nominal predict proba after validate",x)
+        y = self.model_.predict(x)
+        # print("nominal predict proba after predict",y,self.model_)
+        return y
 
     def predict(self, x: Input) -> Output:
         p = self.predict_proba(x)
