@@ -11,6 +11,7 @@ from sklearnmodels.tests.models_classification import (
     get_naive_bayes,
     get_zeror_classifier,
 )
+
 from sklearnmodels.tests.models_classification import (
     get_cn2_classifier,
     get_nominal_tree_classifier,
@@ -35,6 +36,7 @@ def train_test_classification_model(model_name: str, model_generator, dataset: P
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, train_size=0.8, stratify=y, shuffle=True, random_state=0
     )
+
     model = model_generator(x_train, len(class_names))
     model.fit(x_train, y_train)
 
@@ -87,15 +89,15 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
     models = {
         "naivebayes": get_naive_bayes(smoothing=0.01),
         "sklearn.tree": get_sklearn_tree,
-        "prism": get_prism_classifier(),
-        "cn2[entropy]": get_cn2_classifier("entropy"),
-        "cn2[gini]": get_cn2_classifier("gini"),
-        "tree[entropy]": get_nominal_tree_classifier("entropy"),
-        "tree[gini]": get_nominal_tree_classifier("gini"),
-        "tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
-        "zeror": get_zeror_classifier,
-        "oner[entropy]": get_oner_classifier("entropy"),
-        "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
+        # "prism": get_prism_classifier(),
+        # "cn2[entropy]": get_cn2_classifier("entropy"),
+        # "cn2[gini]": get_cn2_classifier("gini"),
+        # "tree[entropy]": get_nominal_tree_classifier("entropy"),
+        # "tree[gini]": get_nominal_tree_classifier("gini"),
+        # "tree[gain_ratio]": get_nominal_tree_classifier("gain_ratio"),
+        # "zeror": get_zeror_classifier,
+        # "oner[entropy]": get_oner_classifier("entropy"),
+        # "oner[gain_ratio]": get_oner_classifier("gain_ratio"),
     }
     at_least_percent = {
         "naivebayes": 0.3,

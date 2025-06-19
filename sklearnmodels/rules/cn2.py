@@ -13,7 +13,8 @@ from sklearnmodels.backend.conditions import (
     TrueCondition,
     ValueCondition,
 )
-from sklearnmodels.backend.core import ColumnID, ColumnType, Dataset
+from sklearnmodels.backend import ColumnID
+from sklearnmodels.backend.core import ColumnType, Dataset
 from sklearnmodels.rules.model import PredictionRule, RuleModel
 
 from sklearnmodels.shared.target_error import TargetError

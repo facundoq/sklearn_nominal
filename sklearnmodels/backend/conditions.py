@@ -5,14 +5,14 @@ import abc
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.backend import InputSample
+from sklearnmodels.backend import InputSample, ColumnID
 
 
 # A condition can filter rows of a Dataset
 # Returns a new boolean series
 class Condition(abc.ABC):
 
-    def __init__(self, column: str):
+    def __init__(self, column: ColumnID):
         super().__init__()
         self.column = column
 
@@ -35,7 +35,7 @@ class Condition(abc.ABC):
 
 
 class ValueCondition(Condition):
-    def __init__(self, column: str, value):
+    def __init__(self, column: ColumnID, value):
         super().__init__(column)
         self.value = value
 
@@ -56,7 +56,7 @@ class ValueCondition(Condition):
 
 
 class RangeCondition(Condition):
-    def __init__(self, column: str, value: float, less: bool):
+    def __init__(self, column: ColumnID, value: float, less: bool):
         super().__init__(column)
         self.value = value
         self.less = less

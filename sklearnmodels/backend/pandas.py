@@ -15,7 +15,8 @@ from .conditions import (
     TrueCondition,
     ValueCondition,
 )
-from .core import ColumnID, ColumnType, Dataset
+from . import ColumnID
+from .core import ColumnType, Dataset
 
 
 class PandasDataset(Dataset):

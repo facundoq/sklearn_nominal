@@ -86,7 +86,8 @@ class NominalModel(metaclass=abc.ABCMeta):
         if n == 0:
             raise ValueError(f"Input contains 0 samples.")
         df = pd.DataFrame(x, columns=self.get_feature_names())
-        df.astype(dtypes)
+        if dtypes is not None:
+            df = df.astype(dtypes)
         return df
 
     def get_dtypes(self, x):
@@ -151,12 +152,10 @@ class NominalClassifier(NominalModel):
             raise ValueError("Can't train classifier with one class.")
         # dtype = x_original.dtype
         class_weight = self.get_class_weights(y)
-        return (
-            make_dataset(
-                self.backend, x, self.get_y(y), self.get_feature_names(), dtypes
-            ),
-            class_weight,
+        dataset = make_dataset(
+            self.backend, x, self.get_y(y), self.get_feature_names(), dtypes
         )
+        return dataset, class_weight
 
     def get_y(self, y):
         y = _check_y(y, multi_output=True, y_numeric=False, estimator=self)

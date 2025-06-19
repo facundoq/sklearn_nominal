@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import abc
 import enum
-from typing import Generator, Iterable
 
 import numpy as np
 import pandas as pd
 
-from sklearnmodels.backend import Input, InputSample
+from sklearnmodels.backend import ColumnID, Input, InputSample
 
 from .conditions import Condition
 
@@ -18,7 +17,6 @@ class ColumnType(enum.Enum):
 
 
 type Partition = list[Dataset]
-ColumnID = int
 
 
 class Dataset(abc.ABC):
@@ -142,7 +140,7 @@ class Model(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def complexity(self, d: Dataset):
+    def complexity(self) -> int:
         pass
 
 

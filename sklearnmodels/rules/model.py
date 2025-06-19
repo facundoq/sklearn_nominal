@@ -39,6 +39,11 @@ class RuleModel(Model):
             else:
                 return class_names[p.argmax()]
 
-        rules = "\n".join([f"{c} => {format(p)}" for c, p in self.rules])
-        rules += "\n" if rules != "" else ""
+        if len(self.rules) > 0:
+            conditions_str = list(zip(*self.rules))[0]
+            pad = max(map(len, map(str, conditions_str))) + 2
+            rules = "\n".join([f"{str(c):{pad}} => {format(p)}" for c, p in self.rules])
+            rules += "\n" if rules != "" else ""
+        else:
+            rules = ""
         return f"{rules}Default: {self.default_prediction}"

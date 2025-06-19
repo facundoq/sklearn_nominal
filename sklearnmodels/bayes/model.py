@@ -13,7 +13,7 @@ import pandas as pd
 class Variable(ABC):
 
     @abc.abstractmethod
-    def predict(x):
+    def predict(x: pd.Series) -> np.ndarray:
         pass
 
     @abc.abstractmethod
@@ -28,11 +28,13 @@ class GaussianVariable(Variable):
         self.std = std
         self.normal = norm(mu, std + smoothing)
 
-    def predict(self, x: pd.Series):
-        return self.normal.pdf(x.values)
+    def predict(self, x: pd.Series) -> np.ndarray:
+        result = self.normal.pdf(x.values)
+        result[np.isnan(x.values)] = 1
+        return result
 
     def __repr__(self) -> str:
-        return f"N~({self.mu},{self.std})"
+        return f"N({self.mu:.4g},{self.std:.4g})"
 
     def complexity(self):
         return 1
@@ -43,11 +45,18 @@ class CategoricalVariable(Variable):
     def __init__(self, probabilities: dict[str, float]) -> None:
         self.probabilities = probabilities
 
-    def predict(self, x: pd.Series):
-        return np.array([self.probabilities[v] for v in x.values])
+    def p(self, x: str, default=1.0) -> float:
+        if x in self.probabilities:
+            return self.probabilities[x]
+        else:
+            return default
+
+    def predict(self, x: pd.Series) -> np.ndarray:
+        return np.array(list(map(self.p, x.values)))
 
     def __repr__(self) -> str:
-        return f"C~({self.probabilities})"
+        variables = ", ".join([f"{k}={v:.4g}" for k, v in self.probabilities.items()])
+        return f"C({variables})"
 
     def complexity(self):
         return len(self.probabilities)
@@ -67,11 +76,14 @@ class NaiveBayesSingleClass:
         return p
 
     def pretty_print(self) -> str:
-        variables = "\n\n".join([f"{k}: {v}" for k, v in self.variables.items()])
-        return f"Distributions:\n\n {variables}"
+        max_name_length = max(map(len, self.variables.keys())) + 2
+        variables = "\n".join(
+            [f"    {k:{max_name_length}} ~ {v}" for k, v in self.variables.items()]
+        )
+        return f"{variables}"
 
     def complexity(self) -> int:
-        return max([[v.complexity() for v in self.variables.values()]])
+        return max([v.complexity() for v in self.variables.values()])
 
 
 class NaiveBayes(Model):
@@ -92,7 +104,6 @@ class NaiveBayes(Model):
         return df.iloc[0, :]
 
     def predict(self, x: Input):
-
         n = len(x)
         classes = self.class_names
         results = np.zeros((n, len(classes)))
@@ -117,16 +128,18 @@ class NaiveBayes(Model):
     #     pred = np.array([self.class_names[i] for i in classes])
     #     return pred
 
-    def pretty_print(self) -> str:
+    def pretty_print(self, class_names: list[str] = None) -> str:
 
-        def class_description(i: int):
-            name = self.class_names[i]
-            p_c = self.class_probabilities.predict([name])[0]
-            return f"Class {name}: (P(c={name})={p_c}):\n\n {self.class_models[i]}"
+        def class_description(i: int, name: str):
+            x = pd.Series([name])
+            p_c = self.class_probabilities.predict(x)[0]
+            return f"Class {name} (p={p_c:.3g}):\n{self.class_models[i].pretty_print()}"
 
-        class_descriptions = [class_description(i) for i in range(self.n_classes)]
-        class_descriptions = "\n\n".join(class_descriptions)
-        return f"{NaiveBayes.__name__}\n\n {class_descriptions}"
+        class_descriptions = [
+            class_description(i, name) for i, name in enumerate(self.class_names)
+        ]
+        class_descriptions = "\n".join(class_descriptions)
+        return f"{NaiveBayes.__name__}(classes={len(self.class_names)})\n{class_descriptions}"
 
     def table(self) -> str:
         rows = []

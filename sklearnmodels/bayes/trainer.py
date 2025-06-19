@@ -9,8 +9,9 @@ from pandas.api.types import is_string_dtype, is_numeric_dtype, is_bool_dtype
 from pandas.api.types import is_numeric_dtype
 from sklearn.dummy import class_distribution
 
+from sklearnmodels.backend import ColumnID
 from sklearnmodels.backend.conditions import ValueCondition
-from sklearnmodels.backend.core import ColumnID, ColumnType, Dataset, Trainer
+from sklearnmodels.backend.core import ColumnType, Dataset, Trainer
 from sklearnmodels.bayes.model import NaiveBayes
 
 from sklearnmodels.bayes.model import (
@@ -66,4 +67,5 @@ class NaiveBayesTrainer(Trainer):
         pi = d.class_distribution(self.class_weight)
         pi = {c: v for c, v in zip(d.classes(), pi)}
         class_probabilities = CategoricalVariable(pi)
-        return NaiveBayes(d.classes(), class_models, class_probabilities)
+        model = NaiveBayes(d.classes(), class_models, class_probabilities)
+        return model
