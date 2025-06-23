@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+from multiprocessing import Value
 
 import numpy as np
 import pandas as pd
@@ -54,6 +55,14 @@ class ValueCondition(Condition):
         else:
             return False
 
+    def __eq__(self, x):
+        if not isinstance(x, ValueCondition):
+            return False
+        return self.value == x.value and self.column == x.column
+
+    def __hash__(self):
+        return hash((self.column, self.value))
+
 
 class RangeCondition(Condition):
     def __init__(self, column: ColumnID, value: float, less: bool):
@@ -86,6 +95,14 @@ class RangeCondition(Condition):
         else:
             return False
 
+    def __eq__(self, x):
+        if not isinstance(x, RangeCondition):
+            return False
+        return self.value == x.value and self.column == x.column and self.less == x.less
+
+    def __hash__(self):
+        return hash((self.column, self.value, self.less))
+
 
 class AndCondition(Condition):
     def __init__(self, conditions: list[Condition]):
@@ -116,11 +133,25 @@ class AndCondition(Condition):
                 return False
             for child in self.conditions:
                 # every child condition must be similar to a condition in c
-                if len(filter(child.is_similar, c.conditions)) == 0:
+                if not any([a.is_similar(child) for a in c.conditions]):
                     return False
             return True
         else:
             return False
+
+    def __eq__(self, x):
+        if not isinstance(x, AndCondition):
+            return False
+        if len(x.conditions) != len(self.conditions):
+            return False
+        for child in self.conditions:
+            # every child condition must be similar to a condition in x
+            if not any([a == child for a in x.conditions]):
+                return False
+        return True
+
+    def __hash__(self):
+        return hash(self.conditions)
 
 
 class TrueCondition(Condition):
@@ -138,6 +169,12 @@ class TrueCondition(Condition):
 
     def is_similar(self, c: Condition):
         return isinstance(c, TrueCondition)
+
+    def __eq__(self, x):
+        return isinstance(x, TrueCondition)
+
+    def __hash__(self):
+        return 1
 
 
 class NotCondition(Condition):
@@ -158,3 +195,11 @@ class NotCondition(Condition):
         if isinstance(c, NotCondition):
             return self.condition.is_similar(c.condition)
         return False
+
+    def __eq__(self, x):
+        if not isinstance(x, NotCondition):
+            return False
+        return self.condition == x.condition
+
+    def __hash__(self):
+        return hash((1, self.condition))

@@ -113,7 +113,6 @@ class BaseTreeTrainer(TreeTrainer):
         self.do_creation_callback(r)
 
         # RECURSIVE CASE: use best column to split
-        tree.column = best_column.column
         subtrees = []
 
         for i, (d_branch, condition) in enumerate(

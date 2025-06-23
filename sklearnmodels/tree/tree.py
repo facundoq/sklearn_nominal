@@ -29,11 +29,16 @@ class Tree(Model):
         self.branches = branches
         self.prediction = prediction
         self.samples = samples
-        self.column: str = None
         self.error = error
 
     def output_size(self):
         return len(self.prediction)
+
+    @property
+    def columns(
+        self,
+    ):
+        return list(set([c.column for c in self.conditions()]))
 
     def predict_sample(self, x: pd.Series):
         for condition, child in self.branches.items():
@@ -56,7 +61,8 @@ class Tree(Model):
         if self.leaf:
             return f"🍁({self.prediction},n={self.samples})"
         else:
-            return f"🪵({self.column})"
+            columns_str = ", ".join(self.columns)
+            return f"🪵({columns_str})"
 
     def n_leafs(self):
         if self.leaf:
@@ -73,7 +79,7 @@ class Tree(Model):
     def complexity(self):
         return self.n_leafs()
 
-    def pretty_print(self, height=0, max_height=np.inf, class_names=None):
+    def pretty_print(self, class_names=None, height=0, max_height=np.inf):
 
         result = ""
         if height == 0:
@@ -94,9 +100,25 @@ class Tree(Model):
         else:
             children = "\n" + "\n".join(
                 [
-                    f"{indent}{base_sep}🪵{c} => {t.pretty_print(height+1,max_height=max_height,class_names=class_names)}"
+                    f"{indent}{base_sep}🪵{c} => {t.pretty_print(height=height+1,max_height=max_height,class_names=class_names)}"
                     for c, t in self.branches.items()
                 ]
             )
-
         return f"{result}{children}"
+
+    def __eq__(self, x):
+        if not isinstance(x, Tree):
+            return False
+        if not np.allclose(self.prediction, x.prediction, atol=1e-8):
+            return False
+        if len(self.branches) != len(x.branches):
+            return False
+        for c in self.branches.keys():
+            if not c in x.branches.keys():
+                return False
+            if self.branches[c] != x.branches[c]:
+                return False
+        return True
+
+    def __hash__(self):
+        return hash((self.columns, self.prediction))

@@ -1,5 +1,6 @@
 from abc import ABC
 import abc
+from typing import Any
 
 from scipy.stats import norm
 from sklearnmodels.backend import Input, InputSample
@@ -13,12 +14,15 @@ import pandas as pd
 class Variable(ABC):
 
     @abc.abstractmethod
-    def predict(x: pd.Series) -> np.ndarray:
+    def predict(self, x: pd.Series) -> np.ndarray:
         pass
 
     @abc.abstractmethod
     def complexity(self) -> int:
         pass
+
+
+atol = 1e-02
 
 
 class GaussianVariable(Variable):
@@ -39,13 +43,34 @@ class GaussianVariable(Variable):
     def complexity(self):
         return 1
 
+    def __eq__(self, x):
+        if not isinstance(x, GaussianVariable):
+            return False
+        return np.allclose(self.mu, x.mu, atol=atol) and np.allclose(
+            self.std, x.std, atol=atol
+        )
+
+
+def dict_allclose(x: dict[Any, float], y: dict[Any, float]):
+    def keys(x: dict):
+        return sorted(list(x.keys()))
+
+    def values(x: dict):
+        return np.array([x[k] for k in keys(x)])
+
+    return (
+        len(x) == len(y)
+        and keys(x) == keys(y)
+        and np.allclose(values(x), values(y), atol=atol)
+    )
+
 
 class CategoricalVariable(Variable):
 
     def __init__(self, probabilities: dict[str, float]) -> None:
         self.probabilities = probabilities
 
-    def p(self, x: str, default=1.0) -> float:
+    def p(self, x: str, default: float = 1.0) -> float:
         if x in self.probabilities:
             return self.probabilities[x]
         else:
@@ -60,6 +85,11 @@ class CategoricalVariable(Variable):
 
     def complexity(self):
         return len(self.probabilities)
+
+    def __eq__(self, x):
+        if not isinstance(x, CategoricalVariable):
+            return False
+        return dict_allclose(self.probabilities, x.probabilities)
 
 
 class NaiveBayesSingleClass:
@@ -85,18 +115,22 @@ class NaiveBayesSingleClass:
     def complexity(self) -> int:
         return max([v.complexity() for v in self.variables.values()])
 
+    def __eq__(self, x):
+        if not isinstance(x, NaiveBayesSingleClass):
+            return False
+
+        return self.variables == x.variables
+
 
 class NaiveBayes(Model):
 
     def __init__(
         self,
-        class_names: list[str],
         class_models: list[NaiveBayesSingleClass],
-        class_probabilities: CategoricalVariable,
+        class_probabilities: np.ndarray,
     ):
-        self.class_names = class_names
-        self.class_models = class_models
-        self.class_probabilities = class_probabilities
+        self.models = class_models
+        self.pi = class_probabilities
 
     def predict_sample(self, x: InputSample) -> int:
         df = pd.DataFrame([x])
@@ -105,13 +139,14 @@ class NaiveBayes(Model):
 
     def predict(self, x: Input):
         n = len(x)
-        classes = self.class_names
-        results = np.zeros((n, len(classes)))
-        for c in range(len(classes)):
-            p_x = self.class_models[c].predict(x)
-            name = self.class_names[c]
-            p_class = self.class_probabilities.predict(pd.Series([name]))[0]
+        n_classes = len(self.models)
+        results = np.zeros((n, n_classes))
+        for c in range(n_classes):
+            p_x = self.models[c].predict(x)
+            p_class = self.pi[c]
             results[:, c] = p_x * p_class
+
+        results /= results.sum(axis=1, keepdims=True)
         #     if debug:
         #         name = self.class_names[c]
         #         details.append([f"Clase {name}","","","",""])
@@ -129,35 +164,29 @@ class NaiveBayes(Model):
     #     return pred
 
     def pretty_print(self, class_names: list[str] = None) -> str:
+        n_classes = len(self.models)
 
-        def class_description(i: int, name: str):
-            x = pd.Series([name])
-            p_c = self.class_probabilities.predict(x)[0]
-            return f"Class {name} (p={p_c:.3g}):\n{self.class_models[i].pretty_print()}"
+        def class_description(i: int):
+            name = f"{i}" if class_names is None else class_names[i]
+            p_c = self.pi[i]
+            return f"Class {name} (p={p_c:.3g}):\n{self.models[i].pretty_print()}"
 
-        class_descriptions = [
-            class_description(i, name) for i, name in enumerate(self.class_names)
-        ]
+        class_descriptions = [class_description(i) for i in range(n_classes)]
         class_descriptions = "\n".join(class_descriptions)
-        return f"{NaiveBayes.__name__}(classes={len(self.class_names)})\n{class_descriptions}"
-
-    def table(self) -> str:
-        rows = []
-        for c, cm in enumerate(self.class_models):
-            name = self.class_names[c]
-            rows.append(
-                [
-                    f"Class {name}",
-                    f"P(c={name}) = {self.class_probabilities.predict([name])[0]}",
-                ]
-            )
-            for k, v in cm.variables.items():
-                rows.append([f"{k}", f"{v}"])
-
-        return rows
+        return f"{NaiveBayes.__name__}(classes={n_classes})\n{class_descriptions}"
 
     def complexity(self) -> int:
-        return max([m.complexity() for m in self.class_models])
+        return max([m.complexity() for m in self.models])
 
     def output_size(self) -> int:
-        return len(self.class_names)
+        return len(self.models)
+
+    def __eq__(self, x):
+        if not isinstance(x, NaiveBayes):
+            return False
+        return (
+            self.pi.shape == x.pi.shape
+            and np.allclose(self.pi, x.pi, atol=atol)
+            and len(self.models) == len(x.models)
+            and all([a == b for a, b in zip(self.models, x.models)])
+        )

@@ -47,3 +47,20 @@ class RuleModel(Model):
         else:
             rules = ""
         return f"{rules}Default: {self.default_prediction}"
+
+    def __eq__(self, x):
+        if not isinstance(x, RuleModel):
+            return False
+        if self.default_prediction.shape != x.default_prediction.shape or (
+            not np.allclose(self.default_prediction, x.default_prediction, atol=1e-8)
+        ):
+            return False
+        if len(self.rules) != len(x.rules):
+            return False
+        if len(self.rules) == 0:
+            return True
+        conditions, predictions = zip(*self.rules)
+        x_conditions, x_predictions = zip(*x.rules)
+        return conditions == x_conditions and all(
+            [np.allclose(a, b) for a, b in zip(predictions, x_predictions)]
+        )

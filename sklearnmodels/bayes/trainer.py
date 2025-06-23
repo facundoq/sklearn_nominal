@@ -65,7 +65,5 @@ class NaiveBayesTrainer(Trainer):
             self.fit_class(d.filter_by_class(c), nominal_values) for c in d.classes()
         ]
         pi = d.class_distribution(self.class_weight)
-        pi = {c: v for c, v in zip(d.classes(), pi)}
-        class_probabilities = CategoricalVariable(pi)
-        model = NaiveBayes(d.classes(), class_models, class_probabilities)
+        model = NaiveBayes(class_models, pi)
         return model

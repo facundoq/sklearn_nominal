@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -21,13 +22,18 @@ from sklearnmodels.tests.models_classification import (
 )
 
 
-def read_classification_dataset(path: Path):
+def read_classification_dataset(path: Path, reencode_y=True):
     df = pd.read_csv(path)
     x = df.iloc[:, :-1]
-    le = LabelEncoder().fit(df.iloc[:, -1])
-    y = le.transform(df.iloc[:, -1])
+    if reencode_y:
+        le = LabelEncoder().fit(df.iloc[:, -1])
+        y = le.transform(df.iloc[:, -1])
+        classes = le.classes_
+    else:
+        y = df.iloc[:, -1].values
+        classes = np.unique(y)
     # y = y.reshape(len(y),1)
-    return x, y, le.classes_
+    return x, y, classes
 
 
 def train_test_classification_model(model_name: str, model_generator, dataset: Path):

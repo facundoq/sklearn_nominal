@@ -143,6 +143,13 @@ class PRISM:
                 error = target_error(d_condition)
                 if error >= base_error:
                     continue
-                if best is None or error < best.error:
+                if (
+                    best is None
+                    or error < best.error
+                    or (
+                        abs(error - best.error) < 1e-8
+                        and d_condition.n > best.dataset.n
+                    )
+                ):
                     best = ConditionProposal(error, condition, d_condition, drop)
         return best
