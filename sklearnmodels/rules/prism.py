@@ -147,7 +147,7 @@ class PRISM:
                     best is None
                     or error < best.error
                     or (
-                        abs(error - best.error) < 1e-8
+                        abs(error - best.error) < 1e-16
                         and d_condition.n > best.dataset.n
                     )
                 ):

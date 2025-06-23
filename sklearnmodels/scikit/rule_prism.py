@@ -17,6 +17,12 @@ eps = 1e-16
 
 
 class PRISMClassifier(NominalClassifier, BaseEstimator):
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.classifier_tags.poor_score = True
+        return tags
+
     def __init__(
         self,
         max_rule_length: int = sys.maxsize,
