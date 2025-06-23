@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.base import BaseEstimator
+
 from sklearn_nominal.backend.core import Dataset
 from sklearn_nominal.backend.factory import DEFAULT_BACKEND
 from sklearn_nominal.bayes.trainer import NaiveBayesTrainer

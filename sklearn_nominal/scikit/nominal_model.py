@@ -1,14 +1,13 @@
 import abc
-from socket import has_dualstack_ipv6
 
-from matplotlib.pylab import isinteractive
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
 import scipy
+from pandas import DataFrame
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.calibration import LabelEncoder
 from sklearn.exceptions import NotFittedError
+from sklearn.utils import compute_class_weight, validation
 from sklearn.utils._tags import (
     ClassifierTags,
     RegressorTags,
@@ -19,7 +18,6 @@ from sklearn.utils._tags import (
 )
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_y, validate_data
-from sklearn.utils import compute_class_weight, validation
 
 from sklearn_nominal.backend import Input, Output
 from sklearn_nominal.backend.factory import make_dataset
@@ -43,10 +41,6 @@ def atleast_2d(x):
 
 class NominalModel(metaclass=abc.ABCMeta):
     check_parameters = {"dtype": None}
-
-    def __init__(self, backend: str = "pandas", *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.backend = backend
 
     def __init__(self, backend: str = "pandas", *args, **kwargs):
         super().__init__(*args, **kwargs)

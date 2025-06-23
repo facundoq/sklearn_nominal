@@ -1,22 +1,20 @@
 from abc import ABC, abstractmethod
 from typing import Any
+
 import numpy as np
+import pandas as pd
+from pandas.api.types import is_bool_dtype, is_numeric_dtype, is_string_dtype
 from pyparsing import col
 from scipy.stats import norm
-import pandas as pd
-
-from pandas.api.types import is_string_dtype, is_numeric_dtype, is_bool_dtype
-from pandas.api.types import is_numeric_dtype
 from sklearn.dummy import class_distribution
 
 from sklearn_nominal.backend import ColumnID
 from sklearn_nominal.backend.conditions import ValueCondition
 from sklearn_nominal.backend.core import ColumnType, Dataset, Trainer
-from sklearn_nominal.bayes.model import NaiveBayes
-
 from sklearn_nominal.bayes.model import (
-    GaussianVariable,
     CategoricalVariable,
+    GaussianVariable,
+    NaiveBayes,
     NaiveBayesSingleClass,
 )
 

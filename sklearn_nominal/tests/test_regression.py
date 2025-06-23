@@ -10,8 +10,8 @@ from sklearn_nominal.tests import get_model_complexity
 from sklearn_nominal.tests.models_regression import (
     get_cn2,
     get_oner,
-    get_tree,
     get_sklearn_tree,
+    get_tree,
     get_zeror,
 )
 

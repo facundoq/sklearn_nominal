@@ -1,14 +1,13 @@
-from abc import ABC
 import abc
+from abc import ABC
 from typing import Any
-
-from scipy.stats import norm
-from sklearn_nominal.backend import Input, InputSample
-from sklearn_nominal.backend.core import Model
-
 
 import numpy as np
 import pandas as pd
+from scipy.stats import norm
+
+from sklearn_nominal.backend import Input, InputSample
+from sklearn_nominal.backend.core import Model
 
 
 class Variable(ABC):
@@ -135,7 +134,7 @@ class NaiveBayes(Model):
     def predict_sample(self, x: InputSample) -> int:
         df = pd.DataFrame([x])
         y = self.predict(df)
-        return df.iloc[0, :]
+        return y[0, :]
 
     def predict(self, x: Input):
         n = len(x)
@@ -147,21 +146,8 @@ class NaiveBayes(Model):
             results[:, c] = p_x * p_class
 
         results /= results.sum(axis=1, keepdims=True)
-        #     if debug:
-        #         name = self.class_names[c]
-        #         details.append([f"Clase {name}","","","",""])
-        #         for i in range(n):
-        #             details.append([f"Ejemplo {i}", f"P(c={name})={p_class:.2f}", f"p(x \| c={name})={p_x[i]:.2e}",f"p(c={name} \| x)={results[i,c]:.2e}"])
-        # if debug:
-        #     return results, details
-        # else:
-        return results
 
-    # def predict_classes(self,x:pd.DataFrame,debug=False):
-    #     prob = self.predict(x,debug=debug)
-    #     classes = prob.argmax(axis=1)
-    #     pred = np.array([self.class_names[i] for i in classes])
-    #     return pred
+        return results
 
     def pretty_print(self, class_names: list[str] = None) -> str:
         n_classes = len(self.models)

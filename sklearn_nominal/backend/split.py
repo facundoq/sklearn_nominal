@@ -1,13 +1,10 @@
-from .conditions import Condition, RangeCondition, ValueCondition
-
+import abc
+from typing import Iterable
 
 import numpy as np
 import pandas as pd
 
-
-import abc
-
-from typing import Iterable
+from .conditions import Condition, RangeCondition, ValueCondition
 from .core import Dataset, Partition
 
 

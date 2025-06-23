@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 from sklearn_nominal.backend.core import Dataset
 from sklearn_nominal.backend.pandas import PandasDataset
 

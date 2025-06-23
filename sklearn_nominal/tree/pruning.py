@@ -1,9 +1,9 @@
-from ..shared.column_error import ColumnErrorResult
-from sklearn_nominal.tree.tree import Tree
-
-
 import numpy as np
 import pandas as pd
+
+from sklearn_nominal.tree.tree import Tree
+
+from ..shared.column_error import ColumnErrorResult
 
 
 class PruneCriteria:

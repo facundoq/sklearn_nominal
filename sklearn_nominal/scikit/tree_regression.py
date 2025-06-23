@@ -1,13 +1,15 @@
-from scipy.odr import Output
-from sklearn.base import BaseEstimator
-from sklearn_nominal.backend import Input
-from sklearn_nominal.backend.core import Dataset
-from .tree_base import BaseTree
-from ..scikit.nominal_model import NominalRegressor
-from ..tree.pruning import PruneCriteria
-from sklearn_nominal import tree, shared
 import numpy as np
 import pandas as pd
+from scipy.odr import Output
+from sklearn.base import BaseEstimator
+
+from sklearn_nominal import shared, tree
+from sklearn_nominal.backend import Input
+from sklearn_nominal.backend.core import Dataset
+
+from ..scikit.nominal_model import NominalRegressor
+from ..tree.pruning import PruneCriteria
+from .tree_base import BaseTree
 
 
 class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):

@@ -1,16 +1,16 @@
+import numpy as np
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.tree import DecisionTreeRegressor
+
 from sklearn_nominal.scikit.rule_cn2 import CN2Regressor
 from sklearn_nominal.scikit.rule_oner import OneRRegressor
 from sklearn_nominal.scikit.rule_zeror import ZeroRRegressor
 from sklearn_nominal.scikit.tree_regression import TreeRegressor
-from sklearn.tree import DecisionTreeRegressor
-
-import numpy as np
-import pandas as pd
 
 
 def get_zeror(criterion: str):

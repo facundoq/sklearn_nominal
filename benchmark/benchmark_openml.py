@@ -6,20 +6,20 @@ from pathlib import Path
 
 import cpuinfo
 import lets_plot as lp
-
 import numpy as np
 import openml
 import pandas as pd
 import sklearn
-from sklearn import base
 import sklearn.impute
+from sklearn import base
 from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from tqdm import tqdm
 from sklearn.tree import DecisionTreeClassifier
+from tqdm import tqdm
+
 from sklearn_nominal.scikit.tree_classification import TreeClassifier
 from sklearn_nominal.tests import get_model_complexity
 
@@ -281,7 +281,10 @@ def export_md(df: pd.DataFrame, pdf=False):
         f.write(df.to_markdown(index=False))
     if pdf:
         pdf_filepath = basepath / "results.pdf"
-        command = f"cd '{basepath.absolute()}' && pandoc -f gfm '{filepath.absolute()}' -o '{pdf_filepath.absolute()}'"
+        command_cd = f"cd '{basepath.absolute()}'"
+        command_pandoc = f"pandoc -f gfm '{filepath.absolute()}' -o \
+                        '{pdf_filepath.absolute()}'"
+        command = f"{command_cd} && {command_pandoc}"
         print(command)
         subprocess.run(command, shell=True)
 

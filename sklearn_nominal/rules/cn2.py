@@ -5,6 +5,7 @@ from typing import Generator
 import numpy as np
 from h11 import Data
 
+from sklearn_nominal.backend import ColumnID
 from sklearn_nominal.backend.conditions import (
     AndCondition,
     Condition,
@@ -13,10 +14,8 @@ from sklearn_nominal.backend.conditions import (
     TrueCondition,
     ValueCondition,
 )
-from sklearn_nominal.backend import ColumnID
 from sklearn_nominal.backend.core import ColumnType, Dataset
 from sklearn_nominal.rules.model import PredictionRule, RuleModel
-
 from sklearn_nominal.shared.target_error import TargetError
 
 

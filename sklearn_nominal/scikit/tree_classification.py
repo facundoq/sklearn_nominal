@@ -1,14 +1,15 @@
+import numpy as np
+import pandas as pd
 from scipy.odr import Output
 from sklearn.base import BaseEstimator
 from sklearn.utils import compute_class_weight
+
+from sklearn_nominal import shared, tree
 from sklearn_nominal.backend import Input
 from sklearn_nominal.backend.core import Dataset
-from .tree_base import BaseTree
-from ..scikit.nominal_model import NominalClassifier
-from sklearn_nominal import tree, shared
 
-import numpy as np
-import pandas as pd
+from ..scikit.nominal_model import NominalClassifier
+from .tree_base import BaseTree
 
 
 class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):

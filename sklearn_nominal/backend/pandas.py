@@ -7,6 +7,7 @@ import pandas as pd
 from numpy import dtype, ndarray
 from scipy.special import y1
 
+from . import ColumnID
 from .conditions import (
     AndCondition,
     Condition,
@@ -15,7 +16,6 @@ from .conditions import (
     TrueCondition,
     ValueCondition,
 )
-from . import ColumnID
 from .core import ColumnType, Dataset
 
 

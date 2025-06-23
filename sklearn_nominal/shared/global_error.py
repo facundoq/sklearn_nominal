@@ -1,5 +1,4 @@
 import abc
-from os import error
 from typing import Callable
 
 import numpy as np

@@ -98,11 +98,16 @@ class Tree(Model):
         if self.leaf:
             children = ""
         else:
+
+            def format(c, t):
+                node = f"{indent}{base_sep}🪵{c}"
+                children = t.pretty_print(
+                    height=height + 1, max_height=max_height, class_names=class_names
+                )
+                return f"{node} => {children}"
+
             children = "\n" + "\n".join(
-                [
-                    f"{indent}{base_sep}🪵{c} => {t.pretty_print(height=height+1,max_height=max_height,class_names=class_names)}"
-                    for c, t in self.branches.items()
-                ]
+                [format(c, t) for c, t in self.branches.items()]
             )
         return f"{result}{children}"
 
@@ -114,7 +119,7 @@ class Tree(Model):
         if len(self.branches) != len(x.branches):
             return False
         for c in self.branches.keys():
-            if not c in x.branches.keys():
+            if c not in x.branches.keys():
                 return False
             if self.branches[c] != x.branches[c]:
                 return False

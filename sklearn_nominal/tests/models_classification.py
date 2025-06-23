@@ -1,18 +1,16 @@
 import numpy as np
+import pandas as pd
+import sklearn.tree
 from sklearn.compose import ColumnTransformer
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
-import sklearn.tree
+
 from sklearn_nominal.scikit.naive_bayes import NaiveBayesClassifier
 from sklearn_nominal.scikit.nominal_model import NominalSupervisedModel
 from sklearn_nominal.scikit.rule_cn2 import CN2Classifier
 from sklearn_nominal.scikit.rule_oner import OneRClassifier
-
-
-import pandas as pd
-
 from sklearn_nominal.scikit.rule_prism import PRISMClassifier
 from sklearn_nominal.scikit.rule_zeror import ZeroRClassifier
 from sklearn_nominal.scikit.tree_classification import TreeClassifier

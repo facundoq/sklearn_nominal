@@ -1,4 +1,5 @@
 import abc
+from dataclasses import dataclass
 from typing import Callable
 
 import numpy as np
@@ -10,8 +11,6 @@ from sklearn_nominal.tree.pruning import PruneCriteria
 from ..shared.column_error import ColumnErrorResult
 from ..shared.global_error import Splitter
 from .tree import Condition, Tree
-
-from dataclasses import dataclass
 
 
 class TreeTrainer(abc.ABC):

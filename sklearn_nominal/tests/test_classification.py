@@ -9,16 +9,13 @@ from tqdm import tqdm
 
 from sklearn_nominal.tests import get_model_complexity
 from sklearn_nominal.tests.models_classification import (
-    get_naive_bayes,
-    get_zeror_classifier,
-)
-
-from sklearn_nominal.tests.models_classification import (
     get_cn2_classifier,
+    get_naive_bayes,
     get_nominal_tree_classifier,
     get_oner_classifier,
     get_prism_classifier,
     get_sklearn_tree,
+    get_zeror_classifier,
 )
 
 

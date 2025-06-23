@@ -5,6 +5,7 @@ import pandas as pd
 
 from sklearn_nominal.backend.core import Partition
 from sklearn_nominal.backend.split import Split
+
 from .target_error import log
 
 

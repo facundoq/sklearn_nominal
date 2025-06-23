@@ -1,9 +1,9 @@
 import numpy as np
+
 from sklearn_nominal.backend.core import ColumnType
 from sklearn_nominal.tree.pruning import PruneCriteria
 
-
-from .. import tree, shared
+from .. import shared, tree
 
 
 class BaseTree:

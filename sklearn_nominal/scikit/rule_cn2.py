@@ -1,8 +1,11 @@
 import sys
 
+import numpy as np
+import pandas as pd
 from scipy.odr import Output
 from sklearn.base import BaseEstimator
 from sklearn.utils import compute_class_weight
+
 from sklearn_nominal.backend import Input
 from sklearn_nominal.backend.core import Dataset
 from sklearn_nominal.backend.factory import DEFAULT_BACKEND
@@ -10,9 +13,6 @@ from sklearn_nominal.rules.cn2 import CN2
 from sklearn_nominal.rules.oner import OneR
 from sklearn_nominal.rules.prism import PRISM
 from sklearn_nominal.scikit.nominal_model import NominalClassifier, NominalRegressor
-
-import numpy as np
-import pandas as pd
 
 eps = 1e-16
 

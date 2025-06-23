@@ -1,16 +1,15 @@
 import abc
 from typing import Callable
 
-from h11 import Data
 import numpy as np
 import pandas as pd
+from h11 import Data
 
 from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition
 from sklearn_nominal.backend.core import Dataset, Partition
-from sklearn_nominal.backend.split import RangeSplit, Split
-from .attribute_penalization import ColumnPenalization, NoPenalization
-from sklearn_nominal.backend.split import ValueSplit
+from sklearn_nominal.backend.split import RangeSplit, Split, ValueSplit
 
+from .attribute_penalization import ColumnPenalization, NoPenalization
 from .target_error import TargetError
 
 type ColumnCallback = Callable[[ColumnErrorResult], None]

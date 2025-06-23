@@ -6,7 +6,7 @@ from multiprocessing import Value
 import numpy as np
 import pandas as pd
 
-from sklearn_nominal.backend import InputSample, ColumnID
+from sklearn_nominal.backend import ColumnID, InputSample
 
 
 # A condition can filter rows of a Dataset

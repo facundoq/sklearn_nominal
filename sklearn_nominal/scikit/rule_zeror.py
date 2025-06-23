@@ -1,13 +1,13 @@
+import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.utils import compute_class_weight
+
 from sklearn_nominal.backend import Input, Output
 from sklearn_nominal.backend.core import Dataset
 from sklearn_nominal.backend.factory import DEFAULT_BACKEND
 from sklearn_nominal.rules.zeror import ZeroR as ZeroR
 from sklearn_nominal.scikit.nominal_model import NominalClassifier, NominalRegressor
-
-import numpy as np
-import pandas as pd
 
 
 class ZeroRClassifier(NominalClassifier, BaseEstimator):
