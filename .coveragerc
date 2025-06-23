@@ -2,5 +2,5 @@
 
 [run]
 branch = True
-source = sklearnmodels
-include = */sklearnmodels/*
+source = sklearn_nominal
+include = */sklearn_nominal/*

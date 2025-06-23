@@ -1991,7 +1991,7 @@ wheels = [
 ]
 
 [[package]]
-name = "sklearnmodels"
+name = "sklearn_nominal"
 source = { editable = "." }
 dependencies = [
     { name = "data-science-types" },
@@ -2022,7 +2022,7 @@ dev = [
     { name = "py-cpuinfo" },
     { name = "pyarrow" },
     { name = "scipy-stubs" },
-    { name = "sklearnmodels" },
+    { name = "sklearn_nominal" },
     { name = "snakeviz" },
     { name = "tabulate" },
     { name = "tqdm" },
@@ -2056,7 +2056,7 @@ dev = [
     { name = "py-cpuinfo", specifier = ">=9.0.0" },
     { name = "pyarrow", specifier = ">=19.0.1" },
     { name = "scipy-stubs", specifier = ">=1.15.2.1" },
-    { name = "sklearnmodels", editable = "." },
+    { name = "sklearn_nominal", editable = "." },
     { name = "snakeviz", specifier = ">=2.2.2" },
     { name = "tabulate", specifier = ">=0.9.0" },
     { name = "tqdm", specifier = ">=4.67.1" },

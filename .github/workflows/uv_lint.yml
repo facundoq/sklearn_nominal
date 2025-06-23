@@ -30,4 +30,4 @@ jobs:
         run: uvx ruff check
 
       - name: Run tests
-        run: uv run pytest sklearnmodels/tests
+        run: uv run pytest sklearn_nominal/tests

@@ -36,7 +36,7 @@ jobs:
         - build
         environment:
             name: pypi
-            url: https://pypi.org/p/sklearnmodels
+            url: https://pypi.org/p/sklearn_nominal
         permissions:
             # IMPORTANT: this permission is mandatory for trusted publishing
             id-token: write

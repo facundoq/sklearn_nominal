@@ -10,10 +10,10 @@ import sys
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 from importlib.metadata import version as get_version
 
-project = "sklearnmodels"
+project = "sklearn_nominal"
 copyright = "2025, Facundo Manuel Quiroga"
 author = "Facundo Manuel Quiroga"
-release = get_version("sklearnmodels")
+release = get_version("sklearn_nominal")
 version = ".".join(release.split(".")[:3])
 
 # -- General configuration ---------------------------------------------------
@@ -58,7 +58,7 @@ html_sidebars = {
 
 html_theme_options = {
     "external_links": [],
-    "github_url": "https://github.com/facundoq/sklearnmodels",
+    "github_url": "https://github.com/facundoq/sklearn_nominal",
     # "twitter_url": "https://twitter.com/pandas_dev",
     "use_edit_page_button": True,
     "show_toc_level": 1,
@@ -67,7 +67,7 @@ html_theme_options = {
 
 html_context = {
     "github_user": "facundoq",
-    "github_repo": "sklearnmodels",
+    "github_repo": "sklearn_nominal",
     "github_version": "master",
     "doc_path": "doc",
 }
@@ -106,9 +106,9 @@ intersphinx_mapping = {
 plot_gallery = True
 
 sphinx_gallery_conf = {
-    "doc_module": "sklearnmodels",
+    "doc_module": "sklearn_nominal",
     "backreferences_dir": os.path.join("generated"),
     "examples_dirs": "../examples",
     "gallery_dirs": "auto_examples",
-    "reference_url": {"sklearnmodels": None},
+    "reference_url": {"sklearn_nominal": None},
 }

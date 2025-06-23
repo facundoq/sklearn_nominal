@@ -1,4 +1,4 @@
-# sklearnmodels
+# sklearn_nominal
 Extra models for scikit-learn, including Decision/Regression Trees with support for nominal values
 
 
@@ -6,7 +6,7 @@ Extra models for scikit-learn, including Decision/Regression Trees with support 
 To export tree graphs to those formats, you need `pygraphviz` (and in the future, possibly other dependencies). To install those dependencies, use:
 
 ````
-pip install sklearnmodels[export]
+pip install sklearn_nominal[export]
 ````
 
 Before that, make sure to install `graphviz` (with headers) and `cairo`. In Ubuntu 24.04:
@@ -16,7 +16,7 @@ sudo apt install graphviz libgraphviz-dev cairosvg
 ````
 
 
-## Developing sklearnmodels
+## Developing sklearn_nominal
 
 We use [uv](https://docs.astral.sh/uv/) for project management.
 
@@ -43,7 +43,7 @@ pre-commit run --all-files
 ````
 uv run pytest
 uvx ruff check
-uvx black sklearnmodels
+uvx black sklearn_nominal
 ````
 
 ### Running benchmarks

@@ -7,9 +7,9 @@ source = "uv-dynamic-versioning"
 
 
 [project]
-name = "sklearnmodels"
+name = "sklearn_nominal"
 dynamic = ["version"]
-description = "Extra models for scikit-learn"
+description = "Extra models for scikit-learn w/ built-in support for nominal attributes"
 readme = "README.md"
 authors = [{name="Facundo Manuel Quiroga", email="{first_name}{last_name_initial}@gmail.com"}]
 requires-python = ">=3.12"
@@ -39,7 +39,7 @@ dev = [
     "scipy-stubs>=1.15.2.1",
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
-    "sklearnmodels",
+    "sklearn_nominal",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
     "snakeviz>=2.2.2",
@@ -56,9 +56,9 @@ dev = [
 
 
 [project.urls]
-"Homepage" = "https://github.com/facundoq/sklearnmodels"
-"Bug Reports" = "https://github.com/facundoq/sklearnmodels/issues"
-"Source" = "https://github.com/facundoq/sklearnmodels"
+"Homepage" = "https://github.com/facundoq/sklearn_nominal"
+"Bug Reports" = "https://github.com/facundoq/sklearn_nominal/issues"
+"Source" = "https://github.com/facundoq/sklearn_nominal"
 
 [project.optional-dependencies]
 export = [
@@ -67,7 +67,7 @@ export = [
 
 
 [tool.setuptools_scm]
-version_file = "sklearnmodels/_version.py"
+version_file = "sklearn_nominal/_version.py"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
@@ -81,7 +81,7 @@ publish-url = "https://pypi.org/legacy/"
 
 [tool.uv.sources]
 microsoft-python-type-stubs = { git = "https://github.com/microsoft/python-type-stubs.git" }
-sklearnmodels = { workspace = true }
+sklearn_nominal = { workspace = true }
 
 
 [tool.pixi.feature.lint.dependencies]
@@ -91,23 +91,23 @@ pre-commit = "4.3.0"
 ruff = "0.4.2"
 
 [tool.pixi.feature.lint.tasks]
-black = { cmd = "black --check --diff sklearnmodels && black --check --diff examples" }
-ruff = { cmd = "ruff check --output-format=full sklearnmodels && ruff check --output-format=full examples" }
+black = { cmd = "black --check --diff sklearn_nominal && black --check --diff examples" }
+ruff = { cmd = "ruff check --output-format=full sklearn_nominal && ruff check --output-format=full examples" }
 lint = { depends_on = ["black", "ruff"]}
 
 
 [tool.setuptools]
-py-modules = ['sklearnmodels']
+py-modules = ['sklearn_nominal']
 
 [tool.hatch.build.targets.wheel]
-packages = ["sklearnmodels"]
+packages = ["sklearn_nominal"]
 
 [tool.pixi.feature.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
 
 [tool.pixi.feature.test.tasks]
-test = { cmd = "pytest -vsl --cov=sklearnmodels --cov-report=xml sklearnmodels" }
+test = { cmd = "pytest -vsl --cov=sklearn_nominal --cov-report=xml sklearn_nominal" }
 
 [tool.pixi.feature.doc.dependencies]
 matplotlib = "*"
@@ -140,7 +140,7 @@ exclude = '''
   | \.vscode
 )/
 '''
-force-exclude = "sklearnmodels/_version.py"
+force-exclude = "sklearn_nominal/_version.py"
 
 [tool.ruff]
 # max line length for black
@@ -153,7 +153,7 @@ exclude=[
     "doc/_build",
     "doc/auto_examples",
     "build",
-    "sklearnmodels/_version.py",
+    "sklearn_nominal/_version.py",
 ]
 
 [tool.ruff.lint]

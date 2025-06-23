@@ -76,7 +76,7 @@ target/
 .LSOverride
 
 # auto-generated files
-sklearnmodels/_version.py
+sklearn_nominal/_version.py
 
 .ruff_cache/
 
