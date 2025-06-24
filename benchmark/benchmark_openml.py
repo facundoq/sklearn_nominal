@@ -27,7 +27,6 @@ basepath = Path("benchmark/openml_cc18/")
 
 
 class BenchmarkResult:
-
     def __init__(self, filepath: Path, save_on_change=True):
         self.filepath = filepath
         self.save_on_change = save_on_change
@@ -270,7 +269,6 @@ def compute_results(models: dict[str, tuple[typing.Callable, bool]]):
 
 
 def export_md(df: pd.DataFrame, pdf=False):
-
     filepath = basepath / f"results.md"
     with open(filepath, "w") as f:
         f.write("\n## Graphs\n")
@@ -282,8 +280,9 @@ def export_md(df: pd.DataFrame, pdf=False):
     if pdf:
         pdf_filepath = basepath / "results.pdf"
         command_cd = f"cd '{basepath.absolute()}'"
-        command_pandoc = f"pandoc -f gfm '{filepath.absolute()}' -o \
-                        '{pdf_filepath.absolute()}'"
+        command_pandoc = (
+            f"pandoc -f gfm '{filepath.absolute()}' -o '{pdf_filepath.absolute()}'"
+        )
         command = f"{command_cd} && {command_pandoc}"
         print(command)
         subprocess.run(command, shell=True)
