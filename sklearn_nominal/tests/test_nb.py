@@ -8,7 +8,7 @@ from sklearn_nominal.bayes.model import (
     NaiveBayes,
     NaiveBayesSingleClass,
 )
-from sklearn_nominal.scikit.naive_bayes import NaiveBayesClassifier
+from sklearn_nominal.sklearn.naive_bayes import NaiveBayesClassifier
 from sklearn_nominal.tests.test_classification import read_classification_dataset
 
 

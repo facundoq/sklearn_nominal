@@ -20,7 +20,6 @@ type Partition = list[Dataset]
 
 
 class Dataset(abc.ABC):
-
     @abc.abstractmethod
     def split(self, conditions: list[Condition]) -> Partition:
         pass
@@ -119,13 +118,12 @@ class Dataset(abc.ABC):
 
 
 class Model(abc.ABC):
-
     @abc.abstractmethod
     def predict_sample(self, x: InputSample):
         pass
 
     @abc.abstractmethod
-    def output_size(self):
+    def output_size(self) -> int:
         pass
 
     def predict(self, x: Input):

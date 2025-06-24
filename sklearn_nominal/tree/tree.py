@@ -80,16 +80,14 @@ class Tree(Model):
         return self.n_leafs()
 
     def pretty_print(self, class_names=None, height=0, max_height=np.inf):
-
         result = ""
         if height == 0:
-            result = "root"
+            result = "🫚 Root"
         if self.leaf:
-            result = f"{self.prediction}"
+            result = f"☘︎ {self.prediction}"
             if class_names is not None:
-
                 klass = self.prediction.argmax()
-                result = f"{class_names[klass]}"
+                result = f"☘︎ {class_names[klass]}"
 
         if height >= max_height:
             return ""
@@ -100,7 +98,7 @@ class Tree(Model):
         else:
 
             def format(c, t):
-                node = f"{indent}{base_sep}🪵{c}"
+                node = f"{indent}{base_sep}🪵 {c}"
                 children = t.pretty_print(
                     height=height + 1, max_height=max_height, class_names=class_names
                 )

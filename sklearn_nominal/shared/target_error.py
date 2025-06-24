@@ -73,7 +73,6 @@ class EntropyError(ClassificationError):
         self.base = base
 
     def __call__(self, d: Dataset):
-
         p = self.prediction(d)
 
         return -np.sum(p * log(p, self.classes))

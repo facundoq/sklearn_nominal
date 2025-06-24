@@ -20,7 +20,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
 
-from sklearn_nominal.scikit.tree_classification import TreeClassifier
+from sklearn_nominal.sklearn.tree_classification import TreeClassifier
 from sklearn_nominal.tests import get_model_complexity
 
 basepath = Path("benchmark/openml_cc18/")

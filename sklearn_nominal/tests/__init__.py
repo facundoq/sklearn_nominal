@@ -4,7 +4,7 @@
 from sklearn.pipeline import Pipeline
 from sklearn.tree import BaseDecisionTree
 
-from sklearn_nominal.scikit.nominal_model import NominalSupervisedModel
+from sklearn_nominal.sklearn.nominal_model import NominalSupervisedModel
 from sklearn.tree import _tree
 
 

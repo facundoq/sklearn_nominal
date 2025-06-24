@@ -20,7 +20,11 @@ dependencies = [
     "pandas>=2.2.3",
     "scikit-learn>=1.6.1",
     "data-science-types>=0.2.23",
-    "pytest>=8.3.5",
+    "pandas[pyarrow]>=2.2.3",
+    "pyarrow>=19.0.1",
+    "pygraphviz>=1.14",
+    "cairosvg>=2.7.1",
+
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -39,6 +43,7 @@ dev = [
     "scipy-stubs>=1.15.2.1",
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
+    "pytest>=8.4.1",
     "sklearn_nominal",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
@@ -46,14 +51,20 @@ dev = [
     "openml>=0.15.1",
     "lets-plot>=4.6.2",
     "py-cpuinfo>=9.0.0",
-    "cairosvg>=2.7.1",
     "tabulate>=0.9.0",
-    "pandas[pyarrow]>=2.2.3",
-    "pyarrow>=19.0.1",
     "black>=25.1.0",
     "pre-commit>=4.2.0",
+    "poethepoet>=0.35.0",
 ]
-
+docs = [
+    "sphinx>=8.2.3",
+    "sphinx-design>=0.6.1",
+    "sphinx-prompt>=1.10.0",
+    "numpydoc>=1.9.0",
+    "sphinx-gallery>=0.19.0",
+    "pydata-sphinx-theme>=0.16.1",
+    "sphinx-autobuild>=2024.10.3",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/facundoq/sklearn_nominal"
@@ -62,17 +73,16 @@ dev = [
 
 [project.optional-dependencies]
 export = [
-    "pygraphviz>=1.14",
+
 ]
 
 
 [tool.setuptools_scm]
 version_file = "sklearn_nominal/_version.py"
 
-[tool.pixi.project]
-channels = ["conda-forge"]
-platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
+[tool.uv]
+default-groups = ["dev", "docs"]
 
 [[tool.uv.index]]
 name = "pypi"
@@ -82,6 +92,89 @@ publish-url = "https://pypi.org/legacy/"
 [tool.uv.sources]
 microsoft-python-type-stubs = { git = "https://github.com/microsoft/python-type-stubs.git" }
 sklearn_nominal = { workspace = true }
+
+
+
+# [tool.black]
+# line-length = 88
+# target_version = ['py312']
+# preview = true
+# exclude = '''
+# /(
+#     \.eggs         # exclude a few common directories in the
+#   | \.git          # root of the project
+#   | \.vscode
+# )/
+# '''
+#force-exclude = "sklearn_nominal/_version.py"
+
+[tool.ruff]
+# max line length for black
+line-length = 88
+target-version = "py312"
+exclude=[
+    ".git",
+    "__pycache__",
+    "dist",
+    "doc/_build",
+    "doc/auto_examples",
+    "build",
+    "sklearn_nominal/_version.py",
+]
+
+[tool.ruff.lint]
+# all rules can be found here: https://beta.ruff.rs/docs/rules/
+select = ["E", "F", "W", "I"]
+ignore=[
+    # space before : (needed for how black formats slicing)
+    "E203",
+    # explicit reexport
+    "F401",
+    # fstrings with no variables
+    "F541",
+    # do not assign a lambda expression, use a def
+    "E731",
+    # do not use variables named 'l', 'O', or 'I'
+    "E741",
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+# It's fine not to put the import at the top of the file in the examples
+# folder.
+"*/__init__.py"=["I001","E402"]
+"examples/*"=["E402"]
+"doc/conf.py"=["E402"]
+"doc/_templates/numpydoc_docstring.py"=["F821", "W292"]
+"*.ipynb" = ["ALL"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --color=yes"
+doctest_optionflags = "NORMALIZE_WHITESPACE"
+
+# [tool.mypy]
+# implicit_optional = true
+# disallow_untyped_defs = false
+# check_untyped_defs = true
+# warn_return_any = true
+
+
+[tool.poe]
+executor.type = "uv"
+
+[tool.poe.tasks]
+test = "uv run pytest sklearn_nominal/tests/"
+lint = "uvx ruff check --fix sklearn_nominal "
+format = "uvx ruff format sklearn_nominal"
+build = "uv build"
+docs = "uv run sphinx-build doc docs"
+serve-docs = " uv run sphinx-autobuild doc docs"
+
+# OLD PIXI STUFF FROM TEMPLATE
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
 
 [tool.pixi.feature.lint.dependencies]
@@ -128,66 +221,3 @@ doc = ["doc"]
 lint = ["lint"]
 test = ["test"]
 dev = ["doc", "lint", "test"]
-
-[tool.black]
-line-length = 88
-target_version = ['py312']
-preview = true
-exclude = '''
-/(
-    \.eggs         # exclude a few common directories in the
-  | \.git          # root of the project
-  | \.vscode
-)/
-'''
-force-exclude = "sklearn_nominal/_version.py"
-
-[tool.ruff]
-# max line length for black
-line-length = 88
-target-version = "py312"
-exclude=[
-    ".git",
-    "__pycache__",
-    "dist",
-    "doc/_build",
-    "doc/auto_examples",
-    "build",
-    "sklearn_nominal/_version.py",
-]
-
-[tool.ruff.lint]
-# all rules can be found here: https://beta.ruff.rs/docs/rules/
-select = ["E", "F", "W", "I"]
-ignore=[
-    # space before : (needed for how black formats slicing)
-    "E203",
-    # explicit reexport
-    "F401",
-    # fstrings with no variables
-    "F541",
-    # do not assign a lambda expression, use a def
-    "E731",
-    # do not use variables named 'l', 'O', or 'I'
-    "E741",
-]
-
-
-[tool.ruff.lint.per-file-ignores]
-# It's fine not to put the import at the top of the file in the examples
-# folder.
-"*/__init__.py"=["I001","E402"]
-"examples/*"=["E402"]
-"doc/conf.py"=["E402"]
-"doc/_templates/numpydoc_docstring.py"=["F821", "W292"]
-"*.ipynb" = ["ALL"]
-
-[tool.pytest.ini_options]
-addopts = "--doctest-modules --color=yes"
-doctest_optionflags = "NORMALIZE_WHITESPACE"
-
-[tool.mypy]
-implicit_optional = true
-disallow_untyped_defs = false
-check_untyped_defs = true
-warn_return_any = true

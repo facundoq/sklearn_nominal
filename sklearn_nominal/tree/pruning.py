@@ -11,7 +11,7 @@ class PruneCriteria:
         self,
         min_error_decrease: float = 0.00001,
         min_samples_leaf: int = 1,
-        min_samples_split=1,
+        min_samples_split: int = 2,
         max_height: int = None,
         error_tolerance: float = 1e-16,
     ):

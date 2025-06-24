@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 
 from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition
-from sklearn_nominal.scikit.tree_classification import TreeClassifier
+from sklearn_nominal.sklearn.tree_classification import TreeClassifier
 from sklearn_nominal.tests.test_classification import read_classification_dataset
 from sklearn_nominal.tree.tree import Tree
 

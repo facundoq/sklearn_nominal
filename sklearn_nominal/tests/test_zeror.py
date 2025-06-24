@@ -4,7 +4,7 @@ import numpy as np
 
 from sklearn_nominal.backend.conditions import AndCondition, Condition, ValueCondition
 from sklearn_nominal.rules.model import RuleModel
-from sklearn_nominal.scikit.rule_zeror import ZeroRClassifier
+from sklearn_nominal.sklearn.rule_zeror import ZeroRClassifier
 from sklearn_nominal.tests.test_classification import read_classification_dataset
 
 

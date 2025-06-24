@@ -31,7 +31,6 @@ ConditionGenerator = Generator[None, None, tuple[Condition, bool]]
 
 
 class PRISM:
-
     def __init__(
         self,
         class_weight: np.ndarray,
@@ -86,7 +85,6 @@ class PRISM:
     def generate_rule(
         self, d: Dataset, target_error: TargetError
     ) -> None | PredictionRule:
-
         conditions: list[Condition] = []
         error = np.inf
         while len(conditions) < self.max_length_per_rule:

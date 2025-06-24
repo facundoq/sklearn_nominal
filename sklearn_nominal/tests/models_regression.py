@@ -7,14 +7,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeRegressor
 
-from sklearn_nominal.scikit.rule_cn2 import CN2Regressor
-from sklearn_nominal.scikit.rule_oner import OneRRegressor
-from sklearn_nominal.scikit.rule_zeror import ZeroRRegressor
-from sklearn_nominal.scikit.tree_regression import TreeRegressor
+from sklearn_nominal.sklearn.rule_cn2 import CN2Regressor
+from sklearn_nominal.sklearn.rule_oner import OneRRegressor
+from sklearn_nominal.sklearn.rule_zeror import ZeroRRegressor
+from sklearn_nominal.sklearn.tree_regression import TreeRegressor
 
 
 def get_zeror(criterion: str):
-
     def build(x: pd.DataFrame, y: np.ndarray):
         model = ZeroRRegressor(criterion)
         return model
@@ -23,7 +22,6 @@ def get_zeror(criterion: str):
 
 
 def get_oner(criterion: str):
-
     def build(x: pd.DataFrame, y: np.ndarray):
         model = OneRRegressor(criterion)
         return model

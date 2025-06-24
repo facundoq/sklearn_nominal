@@ -37,13 +37,25 @@ uv run pre-commit install
 ````
 pre-commit run --all-files
 ````
+### Install PoeThePoet task runner
+
+````
+uv tool install poethepoet
+````
 
 ### Running tests, linter, formatter
 
 ````
-uv run pytest
-uvx ruff check
-uvx black sklearn_nominal
+poe lint
+poe format
+poe test
+
+````
+
+### Updating docs
+
+````
+poe docs
 ````
 
 ### Running benchmarks

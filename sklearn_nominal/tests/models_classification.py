@@ -7,17 +7,16 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
-from sklearn_nominal.scikit.naive_bayes import NaiveBayesClassifier
-from sklearn_nominal.scikit.nominal_model import NominalSupervisedModel
-from sklearn_nominal.scikit.rule_cn2 import CN2Classifier
-from sklearn_nominal.scikit.rule_oner import OneRClassifier
-from sklearn_nominal.scikit.rule_prism import PRISMClassifier
-from sklearn_nominal.scikit.rule_zeror import ZeroRClassifier
-from sklearn_nominal.scikit.tree_classification import TreeClassifier
+from sklearn_nominal.sklearn.naive_bayes import NaiveBayesClassifier
+from sklearn_nominal.sklearn.nominal_model import NominalSupervisedModel
+from sklearn_nominal.sklearn.rule_cn2 import CN2Classifier
+from sklearn_nominal.sklearn.rule_oner import OneRClassifier
+from sklearn_nominal.sklearn.rule_prism import PRISMClassifier
+from sklearn_nominal.sklearn.rule_zeror import ZeroRClassifier
+from sklearn_nominal.sklearn.tree_classification import TreeClassifier
 
 
 def get_oner_classifier(criterion: str):
-
     def build(x: pd.DataFrame, classes: int):
         model = OneRClassifier(criterion)
         return model
@@ -26,7 +25,6 @@ def get_oner_classifier(criterion: str):
 
 
 def get_naive_bayes(smoothing: float):
-
     def build(x: pd.DataFrame, classes: int):
         model = NaiveBayesClassifier(smoothing=smoothing)
         return model

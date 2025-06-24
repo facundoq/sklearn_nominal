@@ -5,7 +5,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-from sklearn_nominal.scikit.tree_regression import TreeRegressor
+from sklearn_nominal.sklearn.tree_regression import TreeRegressor
 from sklearn_nominal.tests import get_model_complexity
 from sklearn_nominal.tests.models_regression import (
     get_cn2,
@@ -61,13 +61,12 @@ def check_results(
     reference = results.pop(reference_model)
 
     for model_name, model_results in results.items():
-
         for set in ["Train", "Test"]:
             reference_score = reference[set]
             model_score = model_results[set]
             percent = model_score / reference_score
             amp = at_most_percent[model_name]
-            message = f"{set} score of {model_name} ({model_score:.2f}) should be at most {amp*100:.2f}% of sklearn.tree ({reference_score:.2f}) on dataset {reference["Dataset"]}, was {percent*100:.2f}% instead."  # noqa: E501
+            message = f"{set} score of {model_name} ({model_score:.2f}) should be at most {amp * 100:.2f}% of sklearn.tree ({reference_score:.2f}) on dataset {reference['Dataset']}, was {percent * 100:.2f}% instead."  # noqa: E501
             assert percent <= amp, message
             # f"{set} score of {model_name} ({model_score:.2g}) should be at least {alp*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
 

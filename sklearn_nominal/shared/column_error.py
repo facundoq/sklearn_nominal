@@ -35,7 +35,6 @@ class ColumnErrorResult:
 
 
 class ColumnError(abc.ABC):
-
     def __init__(
         self,
         metric: TargetError,
@@ -71,7 +70,6 @@ class ColumnError(abc.ABC):
 
 
 class NumericColumnError(ColumnError):
-
     def __init__(
         self,
         metric: TargetError,
@@ -115,7 +113,6 @@ class NumericColumnError(ColumnError):
 
 
 class NominalColumnError(ColumnError):
-
     def error(self, d: Dataset, column: str) -> ColumnErrorResult | None:
         conditions: list[Condition] = [
             ValueCondition(column, v) for v in d.unique_values(column, False)

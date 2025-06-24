@@ -14,7 +14,6 @@ from .tree import Condition, Tree
 
 
 class TreeTrainer(abc.ABC):
-
     @abc.abstractmethod
     def fit(self, d: Dataset) -> Tree:
         pass
@@ -46,7 +45,6 @@ class TreeCreationCallbackResult:
 
 
 class BaseTreeTrainer(TreeTrainer):
-
     def __init__(
         self,
         error: Splitter,

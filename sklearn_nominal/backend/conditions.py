@@ -12,7 +12,6 @@ from sklearn_nominal.backend import ColumnID, InputSample
 # A condition can filter rows of a Dataset
 # Returns a new boolean series
 class Condition(abc.ABC):
-
     def __init__(self, column: ColumnID):
         super().__init__()
         self.column = column
@@ -75,7 +74,6 @@ class RangeCondition(Condition):
         return [RangeCondition(column, value, t) for t in [True, False]]
 
     def __call__(self, x: InputSample):
-
         if self.less:
             return self.na_to_false(x[self.column] <= self.value)
         else:

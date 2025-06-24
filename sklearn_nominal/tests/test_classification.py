@@ -77,15 +77,18 @@ def check_results(
     reference = results.pop(reference_model)
 
     for model_name, model_results in results.items():
-
         for set in ["Train", "Test"]:
             reference_score = reference[set]
             model_score = model_results[set]
             percent = model_score / reference_score
             alp = at_least_percent[model_name]
-            assert (
-                alp <= percent
-            ), f"{set} accuracy of {model_name} ({model_score:.2g}) should be at least {alp*100:.2g}% of {reference_model} ({reference_score:.2g}) on dataset {reference["Dataset"]}, was only {percent*100:.2g}%."  # noqa: E501
+            message = f"{set} accuracy of {model_name} ({model_score:.2g})"
+            message += f"should be at least {alp * 100:.2g}% of \
+                {reference_model} ({reference_score:.2g})"
+            message += (
+                f"on dataset {reference['Dataset']}, was only {percent * 100:.2g}%."
+            )
+            assert alp <= percent, message
 
 
 def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset_names):

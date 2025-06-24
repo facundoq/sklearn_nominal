@@ -1,0 +1,6 @@
+﻿sklearn\_nominal.utils.discovery.all\_estimators
+================================================
+
+.. currentmodule:: sklearn_nominal.utils.discovery
+
+.. autofunction:: all_estimators

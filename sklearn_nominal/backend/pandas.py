@@ -20,7 +20,6 @@ from .core import ColumnType, Dataset
 
 
 class PandasDataset(Dataset):
-
     def __init__(self, x: pd.DataFrame, y: np.ndarray, idx=None):
         super().__init__()
         self._x: pd.DataFrame = x

@@ -11,7 +11,6 @@ from sklearn_nominal.backend.core import Model
 
 
 class Variable(ABC):
-
     @abc.abstractmethod
     def predict(self, x: pd.Series) -> np.ndarray:
         pass
@@ -25,7 +24,6 @@ atol = 1e-02
 
 
 class GaussianVariable(Variable):
-
     def __init__(self, mu: float, std: float, smoothing: float = 0) -> None:
         self.mu = mu
         self.std = std
@@ -65,7 +63,6 @@ def dict_allclose(x: dict[Any, float], y: dict[Any, float]):
 
 
 class CategoricalVariable(Variable):
-
     def __init__(self, probabilities: dict[str, float]) -> None:
         self.probabilities = probabilities
 
@@ -92,7 +89,6 @@ class CategoricalVariable(Variable):
 
 
 class NaiveBayesSingleClass:
-
     def __init__(self, variables: dict[str, Variable]):
         self.variables = variables
 
@@ -122,7 +118,6 @@ class NaiveBayesSingleClass:
 
 
 class NaiveBayes(Model):
-
     def __init__(
         self,
         class_models: list[NaiveBayesSingleClass],

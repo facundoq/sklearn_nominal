@@ -29,7 +29,6 @@ class GlobalErrorResult:
 
 
 class Splitter(abc.ABC):
-
     @abc.abstractmethod
     def global_error(self, d: Dataset) -> GlobalErrorResult:
         pass
@@ -40,7 +39,6 @@ class Splitter(abc.ABC):
 
 
 class DefaultSplitter(Splitter):
-
     def __init__(
         self,
         error_function: TargetError,

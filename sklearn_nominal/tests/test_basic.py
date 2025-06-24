@@ -3,8 +3,8 @@
 import pytest
 from sklearn.datasets import load_diabetes, load_iris
 
-from sklearn_nominal.scikit.tree_classification import TreeClassifier
-from sklearn_nominal.scikit.tree_regression import TreeRegressor
+from sklearn_nominal.sklearn.tree_classification import TreeClassifier
+from sklearn_nominal.sklearn.tree_regression import TreeRegressor
 
 # Authors: scikit-learn-contrib developers
 # License: BSD 3 clause

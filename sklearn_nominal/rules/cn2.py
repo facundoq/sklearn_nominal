@@ -35,7 +35,6 @@ ConditionGenerator = Generator[None, None, tuple[Condition, bool]]
 
 
 class CN2:
-
     def __init__(
         self,
         error: TargetError,
@@ -81,7 +80,6 @@ class CN2:
     def generate_rule(
         self, d: Dataset, target_error: TargetError
     ) -> None | PredictionRule:
-
         conditions = []
         error = np.inf
         while len(conditions) < self.max_length_per_rule:

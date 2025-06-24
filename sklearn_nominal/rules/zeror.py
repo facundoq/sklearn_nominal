@@ -4,7 +4,6 @@ from sklearn_nominal.shared.target_error import TargetError
 
 
 class ZeroR:
-
     def __init__(self, error_function: TargetError):
         self.error_function = error_function
 

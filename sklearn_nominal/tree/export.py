@@ -58,7 +58,7 @@ def make_label(info: TreeInfo, class_names: list[str] | None, max_classes: int):
     column = ""
     if not info.tree.leaf:
         column_str = ", ".join(info.tree.columns)
-        column = f"<br/>{'-'*len(column_str)}<br/><b>{column_str}</b>"
+        column = f"<br/>{'-' * len(column_str)}<br/><b>{column_str}</b>"
     error = f"error: {info.tree.error:.3f}, n={info.tree.samples}"
     label = f"<{class_info} {error} <br/> {prediction} {column}>"
     return label
