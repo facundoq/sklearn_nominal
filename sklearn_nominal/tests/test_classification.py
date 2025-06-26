@@ -7,7 +7,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
-from .utils import get_model_complexity
 from sklearn_nominal.tests.models_classification import (
     get_cn2_classifier,
     get_naive_bayes,
@@ -17,6 +16,8 @@ from sklearn_nominal.tests.models_classification import (
     get_sklearn_tree,
     get_zeror_classifier,
 )
+
+from .utils import get_model_complexity
 
 
 def read_classification_dataset(path: Path, reencode_y=True):

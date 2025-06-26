@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from sklearn_nominal.sklearn.tree_regression import TreeRegressor
-from .utils import get_model_complexity
 from sklearn_nominal.tests.models_regression import (
     get_cn2,
     get_oner,
@@ -14,6 +13,8 @@ from sklearn_nominal.tests.models_regression import (
     get_tree,
     get_zeror,
 )
+
+from .utils import get_model_complexity
 
 
 def read_regression_dataset(path: Path):

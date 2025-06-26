@@ -1,9 +1,7 @@
-
 from sklearn.pipeline import Pipeline
-from sklearn.tree import BaseDecisionTree
+from sklearn.tree import BaseDecisionTree, _tree
 
 from sklearn_nominal.sklearn.nominal_model import NominalSupervisedModel
-from sklearn.tree import _tree
 
 
 def get_model_complexity(model: NominalSupervisedModel | BaseDecisionTree) -> int:

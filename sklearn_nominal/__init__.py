@@ -1,7 +1,11 @@
 # Authors: scikit-learn-contrib developers
 # License: BSD 3 clause
+__version__ = "0.0.0"
+try:
+    from ._version import __version__
+except ImportError:
+    pass
 
-from ._version import __version__
 
 from . import tree
 from . import rules
