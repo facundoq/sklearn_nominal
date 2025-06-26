@@ -24,7 +24,7 @@ jobs:
           python-version-file: "pyproject.toml"
 
       - name: Install the project
-        run: uv sync --dev
+        run: uv sync
 
       - name: Install poe the poet
         run: uv tool install poethepoet
