@@ -47,7 +47,7 @@ html_static_path = ["_static"]
 html_style = "css/project-template.css"
 html_logo = "_static/img/logo.png"
 # html_favicon = "_static/img/favicon.ico"
-html_favicon = "static/logo.png"
+html_favicon = "static/img/logo.png"
 html_css_files = [
     "css/project-template.css",
 ]

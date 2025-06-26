@@ -1,5 +1,3 @@
-# Authors: scikit-learn-contrib developers
-# License: BSD 3 clause
 
 from sklearn.pipeline import Pipeline
 from sklearn.tree import BaseDecisionTree

@@ -51,9 +51,7 @@ This is the documentation for  `scikit_nominal`, a library that includes drop-in
         :class-card: intro-card
         :shadow: md
 
-        An example of API documentation. This is an example how to use `sphinx` to
-        automatically generate reference API page.
-
+        Detailed reference of our model's API.
         +++
 
         .. button-ref:: api
