@@ -149,7 +149,7 @@ ignore=[
 "*.ipynb" = ["ALL"]
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules --color=yes"
+addopts = "--color=yes"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
 # [tool.mypy]
@@ -163,7 +163,7 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
 executor.type = "uv"
 
 [tool.poe.tasks]
-test = "uv run pytest sklearn_nominal/tests/"
+test = "uv run pytest sklearn_nominal"
 lint = "uvx ruff check --fix sklearn_nominal "
 format = "uvx ruff format sklearn_nominal"
 build = "uv build"

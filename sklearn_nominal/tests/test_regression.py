@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from sklearn_nominal.sklearn.tree_regression import TreeRegressor
-from sklearn_nominal.tests import get_model_complexity
+from .utils import get_model_complexity
 from sklearn_nominal.tests.models_regression import (
     get_cn2,
     get_oner,
