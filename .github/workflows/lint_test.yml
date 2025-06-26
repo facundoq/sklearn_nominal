@@ -9,29 +9,12 @@ on:
       - main
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: sudo apt install graphviz-dev
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-            enable-cache: true
-      - name: "Set up Python"
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: "pyproject.toml"
-      - name: Install the project
-        run: uv sync
-
-      - name: Install poe the poet
-        run: uv tool install poethepoet
-
+      - name: Setup
+        uses: .github/actions/setup
       - name: Run linter
         run: poe lint
-
       - name: Run tests
         run: poe test
