@@ -8,7 +8,6 @@ from sklearn_nominal.sklearn.nominal_model import NominalClassifier
 
 
 class NaiveBayesClassifier(NominalClassifier, BaseEstimator):
-    
     """A NaiveBayesClassifier that mimics `scikit-learn`'s
     :class:`sklearn.tree.GaussianNB` but adds support for nominal
     attributes with categorical distributions.
@@ -75,7 +74,7 @@ class NaiveBayesClassifier(NominalClassifier, BaseEstimator):
     >>> print(accuracy_score(y,y_pred))
     ... 0.787
     """
-    
+
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
         tags.classifier_tags.poor_score = True

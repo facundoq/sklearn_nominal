@@ -17,7 +17,7 @@ class BaseTree:
         The function to measure the quality of a split. Supported criteria are
         "gini" for the Gini impurity and "gain_ratio" and "entropy" both for the
         Shannon information gain with and without attribute penalization.
-    
+
      min_impurity_decrease : float, default=0.0
         A node will be split if this split induces a decrease of the error
         greater than or equal to this value. For compatibility with
@@ -69,7 +69,7 @@ class BaseTree:
     unpruned trees which can potentially be very large on some data sets. To
     reduce memory consumption, the complexity and size of the trees should be
     controlled by setting those parameter values.
-    
+
      References
     ----------
 
@@ -83,8 +83,8 @@ class BaseTree:
 
     .. [4] L. Breiman, and A. Cutler, "Random Forests",
            https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
-           
-    
+
+
     """
 
     def __init__(

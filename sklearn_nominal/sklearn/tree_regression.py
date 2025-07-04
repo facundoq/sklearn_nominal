@@ -13,7 +13,6 @@ from .tree_base import BaseTree
 
 
 class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
-    
     """A decision tree regressor that mimics `scikit-learn`'s
     :class:`sklearn.tree.DecisionTreeRegressor` but adds support for nominal
     attributes.
@@ -27,7 +26,7 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
         The function to measure the error of a split. Supported criteria are
         currently only "std", for standard deviation (equivalent to root MSE), but in the future other error functions may be added.
 
-   
+
     Attributes
     ----------
     classes_ : ndarray of shape (n_classes,) or list of ndarray
@@ -54,7 +53,7 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
     --------
     BaseTree : base class for DecisionTreeRegressor.
     TreeClassifier : A decision tree classifier.
-    
+
     Examples
     --------
     >>> import pandas as pd
@@ -75,8 +74,9 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
     >>> y_pred = model.predict(x)
     >>> print(f"{mean_absolute_error(y, y_pred):.2f}")
     0.07
-   
-"""           
+
+    """
+
     def __init__(
         self,
         criterion="std",
