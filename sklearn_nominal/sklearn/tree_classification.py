@@ -28,21 +28,6 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
         "gini" for the Gini impurity and "log_loss" and "entropy" both for the
         Shannon information gain.
 
-    min_impurity_decrease : float, default=0.0
-        A node will be split if this split induces a decrease of the error
-        greater than or equal to this value. For compatibility with
-        `scikit-learn` this is called `min_impurity_decrease`, but a more proper
-        name would be `min_error_decrease`.
-
-        The weighted error decrease equation is the following::
-
-            Δerror = error - Σ_i (N_i/N) * error_i
-
-
-        where ``N`` is the total number of samples, ``N_i`` is the number of
-        samples in the i-th branch, and `error_i` is the error at the i-th
-        branch.
-
     class_weight : dict, list of dict or "balanced", default=None
         Weights associated with classes in the form ``{class_label: weight}``.
         If None, all classes are supposed to have weight one.
@@ -75,34 +60,17 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
 
     See Also
     --------
-    TreeRegressor : A decision tree regressor.
+    BaseTree : base class for :class: TreeClassifier and :class: TreeRegressor.
+    TreeRegressor : A decision tree regressor with nominal support.
+    NaiveBayesClassifier: a NaiveBayesClassifier with nominal support.
 
     Notes
     -----
-    The default values for the parameters controlling the size of the trees
-    (e.g. ``max_depth``, ``min_samples_leaf``, etc.) lead to fully grown and
-    unpruned trees which can potentially be very large on some data sets. To
-    reduce memory consumption, the complexity and size of the trees should be
-    controlled by setting those parameter values.
 
     The :meth:`predict` method operates using the :func:`numpy.argmax`
     function on the outputs of :meth:`predict_proba`. This means that in
     case the highest predicted probabilities are tied, the classifier will
     predict the tied class with the lowest index in :term:`classes_`.
-
-    References
-    ----------
-
-    .. [1] https://en.wikipedia.org/wiki/Decision_tree_learning
-
-    .. [2] L. Breiman, J. Friedman, R. Olshen, and C. Stone, "Classification
-           and Regression Trees", Wadsworth, Belmont, CA, 1984.
-
-    .. [3] T. Hastie, R. Tibshirani and J. Friedman. "Elements of Statistical
-           Learning", Springer, 2009.
-
-    .. [4] L. Breiman, and A. Cutler, "Random Forests",
-           https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
 
     Examples
     --------
@@ -118,12 +86,6 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
     >>> y_pred = model.predict(x)
     >>> print(accuracy_score(y,y_pred))
     ... 0.787
-    >>> print(model.pretty_print(class_names=y.unique()))
-    ... 🫚 Root
-    ... |   🪵checking_status=>=200 =>
-    ... |   |   🪵property_magnitude=real estate =>
-    ... |   |   |   🪵installment_commitment <= 3 => ☘︎ bad
-    ... ...........
     """
 
     def __init__(
