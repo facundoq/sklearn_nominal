@@ -61,6 +61,4 @@ class RuleModel(Model):
             return True
         conditions, predictions = zip(*self.rules)
         x_conditions, x_predictions = zip(*x.rules)
-        return conditions == x_conditions and all(
-            [np.allclose(a, b) for a, b in zip(predictions, x_predictions)]
-        )
+        return conditions == x_conditions and all([np.allclose(a, b) for a, b in zip(predictions, x_predictions)])

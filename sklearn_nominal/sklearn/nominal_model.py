@@ -87,9 +87,7 @@ class NominalModel(metaclass=abc.ABCMeta):
             assert len(x.shape) == 2, f"Expected 2d input, actual shape {x.shape}"
             self.dtypes_ = [x.dtype] * x.shape[1]
         else:
-            raise ValueError(
-                f"Only pd.Dataframe or np.ndarray supported, received: {x}"
-            )
+            raise ValueError(f"Only pd.Dataframe or np.ndarray supported, received: {x}")
 
     def set_model(self, model):
         self.model_: Model = model
@@ -164,9 +162,7 @@ class NominalClassifier(NominalSupervisedModel):
             raise ValueError("Can't train classifier with one class.")
         # dtype = x_original.dtype
         class_weight = self.get_class_weights(y)
-        dataset = make_dataset(
-            self.backend, x, self.get_y(y), self.get_feature_names(), dtypes
-        )
+        dataset = make_dataset(self.backend, x, self.get_y(y), self.get_feature_names(), dtypes)
         return dataset, class_weight
 
     def get_y(self, y):
@@ -189,9 +185,7 @@ class NominalClassifier(NominalSupervisedModel):
         return self
 
     def get_class_weights(self, y):
-        return compute_class_weight(
-            class_weight=self.class_weight, classes=self.classes_, y=y
-        )
+        return compute_class_weight(class_weight=self.class_weight, classes=self.classes_, y=y)
 
     def build_error(self, criterion: str, class_weight: np.array) -> TargetError:
         classes = len(class_weight)

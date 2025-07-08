@@ -104,28 +104,34 @@ class BaseTree:
         self.min_error_decrease = min_error_decrease
 
     def build_attribute_penalizer(self):
+        """
+        Determines the `shared.ColumnPenalization` corresponding to the error function.
+        """
         if self.criterion == "gain_ratio":
             return shared.GainRatioPenalization()
         else:
             return shared.NoPenalization()
 
     def build_splitter(self, e: shared.TargetError, p: shared.ColumnPenalization):
+        """
+        Builds a dict of `ColumnError` for each type of column in the dataset based on the error and column penalization.
+        """
         if self.splitter == "best":
             max_evals = np.iinfo(np.int64).max
         elif isinstance(self.splitter, int):
             max_evals = self.splitter
         else:
-            raise ValueError(
-                f"Invalid value '{self.splitter}' for splitter; expected integer or"
-                " 'best'"
-            )
+            raise ValueError(f"Invalid value '{self.splitter}' for splitter; expected integer or 'best'")
         scorers = {
             ColumnType.Numeric: shared.NumericColumnError(e, p, max_evals=max_evals),
             ColumnType.Nominal: shared.NominalColumnError(e, p),
         }
         return scorers
 
-    def make_prune_criteria(self, d: Dataset):
+    def build_prune_criteria(self, d: Dataset) -> PruneCriteria:
+        """
+        Builds the `PruneCriteria` for the tree
+        """
         min_samples_leaf = self.min_samples_leaf
         if isinstance(min_samples_leaf, float):
             min_samples_leaf = int(floor(d.n * min_samples_leaf))
@@ -148,9 +154,7 @@ class BaseTree:
         return tree.export_dot(self.model_, title=title, class_names=class_names)
 
     def export_dot_file(self, filepath, class_names=None, title=""):
-        tree.export_dot_file(
-            self.model_, filepath, title=title, class_names=class_names
-        )
+        tree.export_dot_file(self.model_, filepath, title=title, class_names=class_names)
 
     def export_image(self, filepath, class_names=None, title=""):
         tree.export_image(self.model_, filepath, title=title, class_names=class_names)

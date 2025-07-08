@@ -54,14 +54,8 @@ class NaiveBayesTrainer(Trainer):
         return NaiveBayesSingleClass(p)
 
     def fit(self, d: Dataset):
-        nominal_values = {
-            c: d.unique_values(c)
-            for c in d.columns
-            if d.types_dict[c] == ColumnType.Nominal
-        }
-        class_models = [
-            self.fit_class(d.filter_by_class(c), nominal_values) for c in d.classes()
-        ]
+        nominal_values = {c: d.unique_values(c) for c in d.columns if d.types_dict[c] == ColumnType.Nominal}
+        class_models = [self.fit_class(d.filter_by_class(c), nominal_values) for c in d.classes()]
         pi = d.class_distribution(self.class_weight)
         model = NaiveBayes(class_models, pi)
         return model

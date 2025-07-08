@@ -112,9 +112,7 @@ class BaseTreeTrainer(TreeTrainer):
         # RECURSIVE CASE: use best column to split
         subtrees = []
 
-        for i, (d_branch, condition) in enumerate(
-            zip(best_column.partition, best_column.conditions)
-        ):
+        for i, (d_branch, condition) in enumerate(zip(best_column.partition, best_column.conditions)):
             # avoid branches with low samples
             if d_branch.n < self.prune.min_samples_leaf:
                 continue

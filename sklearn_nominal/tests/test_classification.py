@@ -37,9 +37,7 @@ def read_classification_dataset(path: Path, reencode_y=True):
 def train_test_classification_model(model_name: str, model_generator, dataset: Path):
     dataset_name = dataset.name.split(".")[0]
     x, y, class_names = read_classification_dataset(dataset)
-    x_train, x_test, y_train, y_test = train_test_split(
-        x, y, train_size=0.8, stratify=y, shuffle=True, random_state=0
-    )
+    x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, stratify=y, shuffle=True, random_state=0)
 
     model = model_generator(x_train, len(class_names))
     model.fit(x_train, y_train)
@@ -71,9 +69,7 @@ dataset_names = [
 ]
 
 
-def check_results(
-    at_least_percent: float, results: dict[str, dict[str, float]], reference_model: str
-):
+def check_results(at_least_percent: float, results: dict[str, dict[str, float]], reference_model: str):
     results = results.copy()
     reference = results.pop(reference_model)
 
@@ -86,9 +82,7 @@ def check_results(
             message = f"{set} accuracy of {model_name} ({model_score:.2g})"
             message += f"should be at least {alp * 100:.2g}% of \
                 {reference_model} ({reference_score:.2g})"
-            message += (
-                f"on dataset {reference['Dataset']}, was only {percent * 100:.2g}%."
-            )
+            message += f"on dataset {reference['Dataset']}, was only {percent * 100:.2g}%."
             assert alp <= percent, message
 
 
@@ -121,14 +115,10 @@ def test_performance_similar_sklearn(at_least_percent=0.8, dataset_names=dataset
     datasets = [path / name for name in dataset_names]
     results_all = []
     for dataset in tqdm(datasets, desc="Datasets"):
-        results = {
-            k: train_test_classification_model(k, m, dataset) for k, m in models.items()
-        }
+        results = {k: train_test_classification_model(k, m, dataset) for k, m in models.items()}
         check_results(at_least_percent, results, "sklearn.tree")
         results_all += list(results.values())
-    with pd.option_context(
-        "display.max_rows", None, "display.max_columns", None, "display.width", 120
-    ):
+    with pd.option_context("display.max_rows", None, "display.max_columns", None, "display.width", 120):
         print(pd.DataFrame.from_records(results_all))
 
 

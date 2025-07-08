@@ -102,6 +102,6 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
         column_penalization = self.build_attribute_penalizer()
         scorers = self.build_splitter(error, column_penalization)
         scorer = shared.DefaultSplitter(error, scorers)
-        prune_criteria = self.make_prune_criteria(d)
+        prune_criteria = self.build_prune_criteria(d)
         trainer = tree.BaseTreeTrainer(scorer, prune_criteria)
         return trainer

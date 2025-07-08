@@ -20,6 +20,9 @@
         ~TreeRegressor.build_error
       
       
+        ~TreeRegressor.build_prune_criteria
+      
+      
         ~TreeRegressor.build_splitter
       
       
@@ -57,9 +60,6 @@
       
       
         ~TreeRegressor.make_model
-      
-      
-        ~TreeRegressor.make_prune_criteria
       
       
         ~TreeRegressor.predict

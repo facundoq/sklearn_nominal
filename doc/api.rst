@@ -4,7 +4,6 @@
 API Reference
 #############
 
-This is an example on how to document the API of your own project.
 
 .. currentmodule:: sklearn_nominal
 
@@ -34,11 +33,14 @@ This is an example on how to document the API of your own project.
    OneRRegressor
    CN2Regressor
 
-Base classes for some models
+Base classes 
 ============================
 
-`BaseTree` for example, defines the pruning parameters for both `TreeRegressor`
-and `TreeClassifier`. Same thing with
+
+`BaseTree` defines the pruning parameters for both `TreeRegressor`
+and `TreeClassifier`. `Nominal*` classes define base methods to support inference with nominal attributes
+
+Same thing with 
 
 .. autosummary::
    :toctree: generated/
@@ -48,3 +50,18 @@ and `TreeClassifier`. Same thing with
    sklearn.nominal_model.NominalModel
    sklearn.nominal_model.NominalClassifier
    sklearn.nominal_model.NominalRegressor
+
+
+`Dataset` classes
+============================
+
+In order to support nominal attributes, and facilitate the implementation of various estimators, `sklearn_nominal` abstracts away the details of a dataset with the corresponding `Dataset` class and implementations, including many common method such as filtering datasets on attribute-value conditions. Currently, only a `pandas` backend is available, but future versions may include `polars` or pure `numpy` backends.
+
+
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+   backend.Dataset
+   backend.PandasDataset
+   backend.Condition

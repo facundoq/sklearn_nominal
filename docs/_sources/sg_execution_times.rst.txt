@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.000** total execution time for 0 files **from all galleries**:
+**00:00.000** total execution time for 2 files **from all galleries**:
 
 .. container::
 
@@ -32,6 +32,9 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - N/A
-     - N/A
-     - N/A
+   * - :ref:`sphx_glr_auto_examples_compare_classifiers.py` (``../examples/compare_classifiers.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_train_tree_classifier.py` (``../examples/train_tree_classifier.py``)
+     - 00:00.000
+     - 0.0

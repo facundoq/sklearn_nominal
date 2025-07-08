@@ -20,6 +20,9 @@
         ~TreeClassifier.build_error
       
       
+        ~TreeClassifier.build_prune_criteria
+      
+      
         ~TreeClassifier.build_splitter
       
       
@@ -63,9 +66,6 @@
       
       
         ~TreeClassifier.make_model
-      
-      
-        ~TreeClassifier.make_prune_criteria
       
       
         ~TreeClassifier.predict

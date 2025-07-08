@@ -23,9 +23,7 @@ edge [fontname="helvetica-bold"] ;
 
 
 class TreeInfo:
-    def __init__(
-        self, id: int, parent_id: int, tree: Tree, condition: Condition, height: int
-    ):
+    def __init__(self, id: int, parent_id: int, tree: Tree, condition: Condition, height: int):
         self.id = id
         self.parent_id = parent_id
         self.tree = tree
@@ -64,16 +62,12 @@ def make_label(info: TreeInfo, class_names: list[str] | None, max_classes: int):
     return label
 
 
-def make_node(
-    info: TreeInfo, max_height: int, class_names: list[str] | None, max_classes: int
-):
+def make_node(info: TreeInfo, max_height: int, class_names: list[str] | None, max_classes: int):
     color = make_color(info.height, max_height)
     shape = "rect" if info.tree.leaf else "rect"
     style = ', style="filled,rounded"' if info.tree.leaf else ""
     label = make_label(info, class_names, max_classes)
-    node = (
-        f'{info.id} [ label={label}, fillcolor="{color}", shape="{shape}" {style}];\n'
-    )
+    node = f'{info.id} [ label={label}, fillcolor="{color}", shape="{shape}" {style}];\n'
     return node
 
 
@@ -111,9 +105,7 @@ def export_dot(tree: Tree, class_names: list[str] = None, title=None, max_classe
     return dot_template(body, title)
 
 
-def export_dot_file(
-    tree: Tree, filepath: Path, title="", class_names: list[str] = None
-):
+def export_dot_file(tree: Tree, filepath: Path, title="", class_names: list[str] = None):
     dot = export_dot(tree, class_names, title=title)
     with open(filepath, "w") as f:
         f.write(dot)
@@ -123,9 +115,7 @@ def html_escape(s: str) -> str:
     return s.replace("<", "&lt;").replace(">", "&gt;")
 
 
-def export_image(
-    tree: Tree, filepath: Path, title="", class_names: list[str] = None, prog="dot"
-):
+def export_image(tree: Tree, filepath: Path, title="", class_names: list[str] = None, prog="dot"):
     if class_names is None:
         class_names = [f"Class '{i}'" for i in range(len(tree.prediction))]
 
@@ -137,7 +127,5 @@ def export_image(
 def display(model: Tree, title=None, class_names: list[str] = None, max_classes=10):
     import graphviz
 
-    dot_graph = export_dot(
-        model, title=title, class_names=class_names, max_classes=max_classes
-    )
+    dot_graph = export_dot(model, title=title, class_names=class_names, max_classes=max_classes)
     return graphviz.Source(dot_graph)

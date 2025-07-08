@@ -68,27 +68,19 @@ def all_estimators(type_filter=None):
     # Ignore deprecation warnings triggered at import time and from walking
     # packages
     with ignore_warnings(category=FutureWarning):
-        for _, module_name, _ in pkgutil.walk_packages(
-            path=[root], prefix="sklearn_nominal."
-        ):
+        for _, module_name, _ in pkgutil.walk_packages(path=[root], prefix="sklearn_nominal."):
             module_parts = module_name.split(".")
             if any(part in _MODULE_TO_IGNORE for part in module_parts):
                 continue
             module = import_module(module_name)
             classes = inspect.getmembers(module, inspect.isclass)
-            classes = [
-                (name, est_cls) for name, est_cls in classes if not name.startswith("_")
-            ]
+            classes = [(name, est_cls) for name, est_cls in classes if not name.startswith("_")]
 
             all_classes.extend(classes)
 
     all_classes = set(all_classes)
 
-    estimators = [
-        c
-        for c in all_classes
-        if (issubclass(c[1], BaseEstimator) and c[0] != "BaseEstimator")
-    ]
+    estimators = [c for c in all_classes if (issubclass(c[1], BaseEstimator) and c[0] != "BaseEstimator")]
     # get rid of abstract base classes
     estimators = [c for c in estimators if not is_abstract(c[1])]
 
@@ -107,9 +99,7 @@ def all_estimators(type_filter=None):
         for name, mixin in filters.items():
             if name in type_filter:
                 type_filter.remove(name)
-                filtered_estimators.extend(
-                    [est for est in estimators if issubclass(est[1], mixin)]
-                )
+                filtered_estimators.extend([est for est in estimators if issubclass(est[1], mixin)])
         estimators = filtered_estimators
         if type_filter:
             raise ValueError(
@@ -144,9 +134,7 @@ def all_displays():
     # Ignore deprecation warnings triggered at import time and from walking
     # packages
     with ignore_warnings(category=FutureWarning):
-        for _, module_name, _ in pkgutil.walk_packages(
-            path=[root], prefix="sklearn_nominal."
-        ):
+        for _, module_name, _ in pkgutil.walk_packages(path=[root], prefix="sklearn_nominal."):
             module_parts = module_name.split(".")
             if any(part in _MODULE_TO_IGNORE for part in module_parts):
                 continue
@@ -195,20 +183,14 @@ def all_functions():
     # Ignore deprecation warnings triggered at import time and from walking
     # packages
     with ignore_warnings(category=FutureWarning):
-        for _, module_name, _ in pkgutil.walk_packages(
-            path=[root], prefix="sklearn_nominal."
-        ):
+        for _, module_name, _ in pkgutil.walk_packages(path=[root], prefix="sklearn_nominal."):
             module_parts = module_name.split(".")
             if any(part in _MODULE_TO_IGNORE for part in module_parts):
                 continue
 
             module = import_module(module_name)
             functions = inspect.getmembers(module, _is_checked_function)
-            functions = [
-                (func.__name__, func)
-                for name, func in functions
-                if not name.startswith("_")
-            ]
+            functions = [(func.__name__, func) for name, func in functions if not name.startswith("_")]
             all_functions.extend(functions)
 
     # drop duplicates, sort for reproducibility

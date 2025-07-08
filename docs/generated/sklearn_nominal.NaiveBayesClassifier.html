@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>NaiveBayesClassifier &#8212; sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation</title>
+    <title>NaiveBayesClassifier &#8212; sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation</title>
   
   
   
@@ -45,11 +45,12 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=b75c4496"></script>
+    <script src="../_static/documentation_options.js?v=72b0a905"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/sklearn_nominal.NaiveBayesClassifier';</script>
+    <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="ZeroRClassifier" href="sklearn_nominal.ZeroRClassifier.html" />
@@ -122,8 +123,8 @@
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
-    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
   
   
 </a></div>
@@ -316,6 +317,11 @@
 <li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.sklearn.nominal_model.NominalClassifier.html">NominalClassifier</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.sklearn.nominal_model.NominalRegressor.html">NominalRegressor</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.Dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.PandasDataset.html">PandasDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.Condition.html">Condition</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -379,8 +385,70 @@
 <h1>NaiveBayesClassifier<a class="headerlink" href="#naivebayesclassifier" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sklearn_nominal.NaiveBayesClassifier">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sklearn_nominal.</span></span><span class="sig-name descname"><span class="pre">NaiveBayesClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pandas'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.NaiveBayesClassifier" title="Link to this definition">#</a></dt>
-<dd><p class="rubric">Methods</p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sklearn_nominal.</span></span><span class="sig-name descname"><span class="pre">NaiveBayesClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smoothing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pandas'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.NaiveBayesClassifier" title="Link to this definition">#</a></dt>
+<dd><p>A NaiveBayesClassifier that mimics <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s
+<code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.GaussianNB</span></code> but adds support for nominal
+attributes with categorical distributions.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>smoothing</strong><span class="classifier">float, default=0.0</span></dt><dd><p>The laplace smoothing factor categorical distributions. This value will be added to the count of each value to generate a smoothed categorical distribution. The default value, 0.0, indicates no smoothing.</p>
+</dd>
+<dt><strong>class_weight</strong><span class="classifier">dict, list of dict or “balanced”, default=None</span></dt><dd><p>Weights associated with classes in the form <code class="docutils literal notranslate"><span class="pre">{class_label:</span> <span class="pre">weight}</span></code>.
+If None, all classes are supposed to have weight one.</p>
+<p>The “balanced” mode uses the values of y to automatically adjust
+weights inversely proportional to class frequencies in the input data
+as <code class="docutils literal notranslate"><span class="pre">n_samples</span> <span class="pre">/</span> <span class="pre">(n_classes</span> <span class="pre">*</span> <span class="pre">np.bincount(y))</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>classes_</strong><span class="classifier">ndarray of shape (n_classes,) or list of ndarray</span></dt><dd><p>The classes labels (single output problem),
+or a list of arrays of class labels (multi-output problem).</p>
+</dd>
+<dt><strong>n_classes_</strong><span class="classifier">int or list of int</span></dt><dd><p>The number of classes (for single output problems),</p>
+</dd>
+<dt><strong>n_features_in_</strong><span class="classifier">int</span></dt><dd><p>Number of features seen during <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v1.7)"><span class="xref std std-term">fit</span></a>.</p>
+</dd>
+<dt><strong>feature_names_in_</strong><span class="classifier">ndarray of shape (<code class="docutils literal notranslate"><span class="pre">n_features_in_</span></code>,)</span></dt><dd><p>Names of features seen during <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v1.7)"><span class="xref std std-term">fit</span></a>. Defined only when <code class="docutils literal notranslate"><span class="pre">X</span></code>
+has feature names that are all strings.</p>
+</dd>
+<dt><strong>n_outputs_</strong><span class="classifier">int</span></dt><dd><p>The number of outputs when <code class="docutils literal notranslate"><span class="pre">fit</span></code> is performed.</p>
+</dd>
+<dt><strong>model_</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn_nominal.bayes.NaiveBayes</span></code> instance</span></dt><dd><p>The underlying NaiveBayes that actually holds the distribution parameters and can perform inference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="sklearn_nominal.TreeClassifier.html#sklearn_nominal.TreeClassifier" title="sklearn_nominal.TreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeClassifier</span></code></a></dt><dd><p>A decision tree classifier.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict()</span></code> method operates using the <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.argmax.html#numpy.argmax" title="(in NumPy v2.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.argmax()</span></code></a>
+function on the outputs of <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict_proba()</span></code>. This means that in
+case the highest predicted probabilities are tied, the classifier will
+predict the tied class with the lowest index in <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-classes_" title="(in scikit-learn v1.7)"><span class="xref std std-term">classes_</span></a>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_openml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s2">&quot;credit-g&quot;</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">frame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn_nominal</span><span class="w"> </span><span class="kn">import</span> <span class="n">NaiveBayesClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">NaiveBayesClassifier</span><span class="p">(</span><span class="n">smoothing</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
+<span class="gp">... </span><span class="mf">0.787</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_error</span></code>(criterion, class_weight)</p></td>

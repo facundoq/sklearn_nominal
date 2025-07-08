@@ -30,6 +30,7 @@ extensions = [
     "sphinx_prompt",
     "sphinx_gallery.gen_gallery",
     "numpydoc",
+    "sphinx_autodoc_typehints",
 ]
 
 templates_path = ["_templates"]
@@ -47,7 +48,7 @@ html_static_path = ["_static"]
 html_style = "css/project-template.css"
 html_logo = "_static/img/logo.png"
 # html_favicon = "_static/img/favicon.ico"
-html_favicon = "static/img/logo.png"
+html_favicon = "_static/img/logo.png"
 html_css_files = [
     "css/project-template.css",
 ]
@@ -104,7 +105,7 @@ intersphinx_mapping = {
 # -- Options for sphinx-gallery -----------------------------------------------
 
 # Generate the plot for the gallery
-plot_gallery = True
+plot_gallery = "True"
 
 sphinx_gallery_conf = {
     "doc_module": "sklearn_nominal",

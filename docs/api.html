@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API Reference &#8212; sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation</title>
+    <title>API Reference &#8212; sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation</title>
   
   
   
@@ -45,11 +45,12 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=b75c4496"></script>
+    <script src="_static/documentation_options.js?v=72b0a905"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
+    <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="TreeClassifier" href="generated/sklearn_nominal.TreeClassifier.html" />
@@ -122,8 +123,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
   
   
 </a></div>
@@ -316,6 +317,11 @@
 <li class="toctree-l1"><a class="reference internal" href="generated/sklearn_nominal.sklearn.nominal_model.NominalClassifier.html">NominalClassifier</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/sklearn_nominal.sklearn.nominal_model.NominalRegressor.html">NominalRegressor</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/sklearn_nominal.backend.Dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/sklearn_nominal.backend.PandasDataset.html">PandasDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/sklearn_nominal.backend.Condition.html">Condition</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -374,7 +380,6 @@
                   
   <section id="api-reference">
 <span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
-<p>This is an example on how to document the API of your own project.</p>
 <section id="scikit-learn-compatible-classifiers">
 <h2><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> compatible classifiers<a class="headerlink" href="#scikit-learn-compatible-classifiers" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -383,7 +388,7 @@
 <td><p>A decision tree classifier that mimics <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>'s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeClassifier</span></code></a> but adds support for nominal attributes.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sklearn_nominal.NaiveBayesClassifier.html#sklearn_nominal.NaiveBayesClassifier" title="sklearn_nominal.NaiveBayesClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NaiveBayesClassifier</span></code></a>([smoothing, backend, ...])</p></td>
-<td><p></p></td>
+<td><p>A NaiveBayesClassifier that mimics <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>'s <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.GaussianNB</span></code> but adds support for nominal attributes with categorical distributions.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sklearn_nominal.ZeroRClassifier.html#sklearn_nominal.ZeroRClassifier" title="sklearn_nominal.ZeroRClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZeroRClassifier</span></code></a>([criterion, backend, ...])</p></td>
 <td><p></p></td>
@@ -406,7 +411,7 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sklearn_nominal.TreeRegressor.html#sklearn_nominal.TreeRegressor" title="sklearn_nominal.TreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeRegressor</span></code></a>([criterion, splitter, ...])</p></td>
-<td><p></p></td>
+<td><p>A decision tree regressor that mimics <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>'s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html#sklearn.tree.DecisionTreeRegressor" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeRegressor</span></code></a> but adds support for nominal attributes.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sklearn_nominal.ZeroRRegressor.html#sklearn_nominal.ZeroRRegressor" title="sklearn_nominal.ZeroRRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZeroRRegressor</span></code></a>([criterion, backend])</p></td>
 <td><p></p></td>
@@ -421,10 +426,11 @@
 </table>
 </div>
 </section>
-<section id="base-classes-for-some-models">
-<h2>Base classes for some models<a class="headerlink" href="#base-classes-for-some-models" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">BaseTree</span></code> for example, defines the pruning parameters for both <code class="docutils literal notranslate"><span class="pre">TreeRegressor</span></code>
-and <code class="docutils literal notranslate"><span class="pre">TreeClassifier</span></code>. Same thing with</p>
+<section id="base-classes">
+<h2>Base classes<a class="headerlink" href="#base-classes" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">BaseTree</span></code> defines the pruning parameters for both <code class="docutils literal notranslate"><span class="pre">TreeRegressor</span></code>
+and <code class="docutils literal notranslate"><span class="pre">TreeClassifier</span></code>. <code class="docutils literal notranslate"><span class="pre">Nominal*</span></code> classes define base methods to support inference with nominal attributes</p>
+<p>Same thing with</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sklearn_nominal.sklearn.tree_base.BaseTree.html#sklearn_nominal.sklearn.tree_base.BaseTree" title="sklearn_nominal.sklearn.tree_base.BaseTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.tree_base.BaseTree</span></code></a>([criterion, ...])</p></td>
@@ -437,6 +443,24 @@ and <code class="docutils literal notranslate"><span class="pre">TreeClassifier<
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/sklearn_nominal.sklearn.nominal_model.NominalRegressor.html#sklearn_nominal.sklearn.nominal_model.NominalRegressor" title="sklearn_nominal.sklearn.nominal_model.NominalRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.nominal_model.NominalRegressor</span></code></a>([backend])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dataset-classes">
+<h2><code class="docutils literal notranslate"><span class="pre">Dataset</span></code> classes<a class="headerlink" href="#dataset-classes" title="Link to this heading">#</a></h2>
+<p>In order to support nominal attributes, and facilitate the implementation of various estimators, <code class="docutils literal notranslate"><span class="pre">sklearn_nominal</span></code> abstracts away the details of a dataset with the corresponding <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class and implementations, including many common method such as filtering datasets on attribute-value conditions. Currently, only a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> backend is available, but future versions may include <code class="docutils literal notranslate"><span class="pre">polars</span></code> or pure <code class="docutils literal notranslate"><span class="pre">numpy</span></code> backends.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sklearn_nominal.backend.Dataset.html#sklearn_nominal.backend.Dataset" title="sklearn_nominal.backend.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backend.Dataset</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sklearn_nominal.backend.PandasDataset.html#sklearn_nominal.backend.PandasDataset" title="sklearn_nominal.backend.PandasDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backend.PandasDataset</span></code></a>(x, y[, idx])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sklearn_nominal.backend.Condition.html#sklearn_nominal.backend.Condition" title="sklearn_nominal.backend.Condition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backend.Condition</span></code></a>(column)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -494,7 +518,8 @@ and <code class="docutils literal notranslate"><span class="pre">TreeClassifier<
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scikit-learn-compatible-classifiers"><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> compatible classifiers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scikit-learn-compatible-regressors"><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> compatible regressors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-classes-for-some-models">Base classes for some models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-classes">Base classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-classes"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code> classes</a></li>
 </ul>
   </nav></div>
 

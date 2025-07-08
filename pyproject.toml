@@ -64,6 +64,7 @@ docs = [
     "sphinx-gallery>=0.19.0",
     "pydata-sphinx-theme>=0.16.1",
     "sphinx-autobuild>=2024.10.3",
+    "sphinx-autodoc-typehints>=3.2.0",
 ]
 
 [project.urls]
@@ -108,16 +109,19 @@ sklearn_nominal = { workspace = true }
 # '''
 #force-exclude = "sklearn_nominal/_version.py"
 
+
 [tool.ruff]
-# max line length for black
-line-length = 88
+line-length = 120
+
 target-version = "py312"
 exclude=[
     ".git",
+    ".github",
     "__pycache__",
     "dist",
     "doc/_build",
     "doc/auto_examples",
+    "docs",
     "build",
     "sklearn_nominal/_version.py",
 ]
@@ -136,8 +140,9 @@ ignore=[
     "E731",
     # do not use variables named 'l', 'O', or 'I'
     "E741",
+    # line length
+    "E501"
 ]
-
 
 [tool.ruff.lint.per-file-ignores]
 # It's fine not to put the import at the top of the file in the examples

@@ -32,12 +32,8 @@ def test_jobs():
         error=0,
         samples=0,
         branches={
-            ValueCondition(column="Experience", value="HIGH"): Tree(
-                prediction=c2, error=0, samples=0
-            ),
-            ValueCondition(column="Experience", value="MID"): Tree(
-                prediction=c1, error=0, samples=0
-            ),
+            ValueCondition(column="Experience", value="HIGH"): Tree(prediction=c2, error=0, samples=0),
+            ValueCondition(column="Experience", value="MID"): Tree(prediction=c1, error=0, samples=0),
         },
     )
 
@@ -47,9 +43,7 @@ def test_jobs():
         samples=0,
         branches={
             RangeCondition(column="Past_Jobs", value=8, less=True): past_jobs_8,
-            RangeCondition(column="Past_Jobs", value=8, less=False): Tree(
-                prediction=c2, error=0, samples=0
-            ),
+            RangeCondition(column="Past_Jobs", value=8, less=False): Tree(prediction=c2, error=0, samples=0),
         },
     )
 
@@ -58,9 +52,7 @@ def test_jobs():
         error=0,
         samples=0,
         branches={
-            RangeCondition(column="Past_Jobs", value=6, less=True): Tree(
-                prediction=c1, error=0, samples=0
-            ),
+            RangeCondition(column="Past_Jobs", value=6, less=True): Tree(prediction=c1, error=0, samples=0),
             RangeCondition(column="Past_Jobs", value=6, less=False): past_jobs_6,
         },
     )
@@ -70,9 +62,7 @@ def test_jobs():
         error=0,
         samples=0,
         branches={
-            ValueCondition(column="Degree", value="YES"): Tree(
-                prediction=c2, error=0, samples=0
-            ),
+            ValueCondition(column="Degree", value="YES"): Tree(prediction=c2, error=0, samples=0),
             ValueCondition(column="Degree", value="NO"): degree_no,
         },
     )
@@ -103,12 +93,8 @@ def test_basic():
         error=0,
         samples=0,
         branches={
-            ValueCondition(column="Age", value="Adult"): Tree(
-                prediction=c1, error=0, samples=0
-            ),
-            ValueCondition(column="Age", value="Children"): Tree(
-                prediction=c2, error=0, samples=0
-            ),
+            ValueCondition(column="Age", value="Adult"): Tree(prediction=c1, error=0, samples=0),
+            ValueCondition(column="Age", value="Children"): Tree(prediction=c2, error=0, samples=0),
         },
     )
 
@@ -117,9 +103,7 @@ def test_basic():
         error=0,
         samples=0,
         branches={
-            ValueCondition(column="Color", value="Yellow"): Tree(
-                prediction=c1, error=0, samples=0
-            ),
+            ValueCondition(column="Color", value="Yellow"): Tree(prediction=c1, error=0, samples=0),
             ValueCondition(column="Color", value="Red"): color_red,
         },
     )
@@ -129,9 +113,7 @@ def test_basic():
         error=0,
         samples=0,
         branches={
-            ValueCondition(column="Stretchs", value="No"): Tree(
-                prediction=c2, error=0, samples=0
-            ),
+            ValueCondition(column="Stretchs", value="No"): Tree(prediction=c2, error=0, samples=0),
             ValueCondition(column="Stretchs", value="Yes"): stretch_yes,
         },
     )

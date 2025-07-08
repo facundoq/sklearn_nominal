@@ -82,9 +82,7 @@ class PRISM:
         for s in filter(issimilar, conditions):
             conditions.remove(s)
 
-    def generate_rule(
-        self, d: Dataset, target_error: TargetError
-    ) -> None | PredictionRule:
+    def generate_rule(self, d: Dataset, target_error: TargetError) -> None | PredictionRule:
         conditions: list[Condition] = []
         error = np.inf
         while len(conditions) < self.max_length_per_rule:
@@ -129,9 +127,7 @@ class PRISM:
         else:
             raise ValueError(f"Invalid column type")
 
-    def propose_condition(
-        self, d: Dataset, base_error: float, target_error: TargetError
-    ):
+    def propose_condition(self, d: Dataset, base_error: float, target_error: TargetError):
         best = None
         for column in d.columns:
             for condition, drop in self.generate_conditions(d, column):
@@ -144,10 +140,7 @@ class PRISM:
                 if (
                     best is None
                     or error < best.error
-                    or (
-                        abs(error - best.error) < 1e-16
-                        and d_condition.n > best.dataset.n
-                    )
+                    or (abs(error - best.error) < 1e-16 and d_condition.n > best.dataset.n)
                 ):
                     best = ConditionProposal(error, condition, d_condition, drop)
         return best

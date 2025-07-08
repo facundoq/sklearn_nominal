@@ -9,9 +9,7 @@ type Branches = dict[Condition, Tree]
 
 
 class TreeInfo:
-    def __init__(
-        self, column_names: list[str], categorical_values: dict[str, dict[int, str]]
-    ):
+    def __init__(self, column_names: list[str], categorical_values: dict[str, dict[int, str]]):
         self.column_names = column_names
         self.categorical_values = categorical_values
 
@@ -99,14 +97,10 @@ class Tree(Model):
 
             def format(c, t):
                 node = f"{indent}{base_sep}🪵 {c}"
-                children = t.pretty_print(
-                    height=height + 1, max_height=max_height, class_names=class_names
-                )
+                children = t.pretty_print(height=height + 1, max_height=max_height, class_names=class_names)
                 return f"{node} => {children}"
 
-            children = "\n" + "\n".join(
-                [format(c, t) for c, t in self.branches.items()]
-            )
+            children = "\n" + "\n".join([format(c, t) for c, t in self.branches.items()])
         return f"{result}{children}"
 
     def __eq__(self, x):

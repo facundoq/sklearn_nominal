@@ -43,9 +43,7 @@ class GaussianVariable(Variable):
     def __eq__(self, x):
         if not isinstance(x, GaussianVariable):
             return False
-        return np.allclose(self.mu, x.mu, atol=atol) and np.allclose(
-            self.std, x.std, atol=atol
-        )
+        return np.allclose(self.mu, x.mu, atol=atol) and np.allclose(self.std, x.std, atol=atol)
 
 
 def dict_allclose(x: dict[Any, float], y: dict[Any, float]):
@@ -55,11 +53,7 @@ def dict_allclose(x: dict[Any, float], y: dict[Any, float]):
     def values(x: dict):
         return np.array([x[k] for k in keys(x)])
 
-    return (
-        len(x) == len(y)
-        and keys(x) == keys(y)
-        and np.allclose(values(x), values(y), atol=atol)
-    )
+    return len(x) == len(y) and keys(x) == keys(y) and np.allclose(values(x), values(y), atol=atol)
 
 
 class CategoricalVariable(Variable):
@@ -102,9 +96,7 @@ class NaiveBayesSingleClass:
 
     def pretty_print(self) -> str:
         max_name_length = max(map(len, self.variables.keys())) + 2
-        variables = "\n".join(
-            [f"    {k:{max_name_length}} ~ {v}" for k, v in self.variables.items()]
-        )
+        variables = "\n".join([f"    {k:{max_name_length}} ~ {v}" for k, v in self.variables.items()])
         return f"{variables}"
 
     def complexity(self) -> int:

@@ -15,9 +15,7 @@ def pyarrow_backed_pandas(x: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def make_dataset(
-    backend: str, x: np.ndarray, y: np.ndarray, columns: list[str], dtype
-) -> Dataset:
+def make_dataset(backend: str, x: np.ndarray, y: np.ndarray, columns: list[str], dtype) -> Dataset:
     if backend == "pandas":
         x = pd.DataFrame(x, columns=columns)
         if dtype is not None:

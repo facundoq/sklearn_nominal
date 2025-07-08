@@ -114,9 +114,7 @@ class NumericColumnError(ColumnError):
 
 class NominalColumnError(ColumnError):
     def error(self, d: Dataset, column: str) -> ColumnErrorResult | None:
-        conditions: list[Condition] = [
-            ValueCondition(column, v) for v in d.unique_values(column, False)
-        ]
+        conditions: list[Condition] = [ValueCondition(column, v) for v in d.unique_values(column, False)]
         result = self.evaluate_conditions(d, conditions, column, remove=True)
         self.do_callback(result)
         return result

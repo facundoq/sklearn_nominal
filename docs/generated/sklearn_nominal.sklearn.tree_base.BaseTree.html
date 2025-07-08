@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>BaseTree &#8212; sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation</title>
+    <title>BaseTree &#8212; sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation</title>
   
   
   
@@ -45,11 +45,12 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=b75c4496"></script>
+    <script src="../_static/documentation_options.js?v=72b0a905"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/sklearn_nominal.sklearn.tree_base.BaseTree';</script>
+    <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NominalModel" href="sklearn_nominal.sklearn.nominal_model.NominalModel.html" />
@@ -122,8 +123,8 @@
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
-    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post40.dev0+5a6d33c documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="sklearn_nominal 0.1.1.post52.dev0+5cb8901 documentation - Home"/>
   
   
 </a></div>
@@ -316,6 +317,11 @@
 <li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.sklearn.nominal_model.NominalClassifier.html">NominalClassifier</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.sklearn.nominal_model.NominalRegressor.html">NominalRegressor</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.Dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.PandasDataset.html">PandasDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sklearn_nominal.backend.Condition.html">Condition</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -379,26 +385,38 @@
 <h1>BaseTree<a class="headerlink" href="#basetree" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sklearn_nominal.sklearn.tree_base.BaseTree">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sklearn_nominal.sklearn.tree_base.</span></span><span class="sig-name descname"><span class="pre">BaseTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_error_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.sklearn.tree_base.BaseTree" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sklearn_nominal.sklearn.tree_base.</span></span><span class="sig-name descname"><span class="pre">BaseTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splitter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_error_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.sklearn.tree_base.BaseTree" title="Link to this definition">#</a></dt>
 <dd><p>A base class for decision trees</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>criterion</strong><span class="classifier">{“gini”, “entropy”, “gain_ratio”}, default=”gini”</span></dt><dd><p>The function to measure the quality of a split. Supported criteria are
+<dt><strong>criterion</strong><span class="classifier">{“gini”, “entropy”, “gain_ratio”}, default=”gini”</span></dt><dd><blockquote>
+<div><p>The function to measure the quality of a split. Supported criteria are
 “gini” for the Gini impurity and “gain_ratio” and “entropy” both for the
 Shannon information gain with and without attribute penalization.</p>
-</dd>
-<dt><strong>splitter</strong><span class="classifier">{“best”, int}, default=”best”</span></dt><dd><blockquote>
-<div><p>The strategy used to choose the split at each numeric node. Supported
-strategies are “best” to choose the best split, or a number to limit
-the maximum number of splits to consider.</p>
 </div></blockquote>
-<dl class="simple">
-<dt>max_depth<span class="classifier">int, default=None</span></dt><dd><p>The maximum depth of the tree. If None, then nodes are expanded until
-all leaves are pure or until all leaves contain less than
-min_samples_split samples.</p>
+<dl>
+<dt>min_impurity_decrease<span class="classifier">float, default=0.0</span></dt><dd><p>A node will be split if this split induces a decrease of the error
+greater than or equal to this value. For compatibility with
+<code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> this is called <code class="docutils literal notranslate"><span class="pre">min_impurity_decrease</span></code>, but a more proper
+name would be <code class="docutils literal notranslate"><span class="pre">min_error_decrease</span></code>.</p>
+<p>The weighted error decrease equation is the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Δerror</span> <span class="o">=</span> <span class="n">error</span> <span class="o">-</span> <span class="n">Σ_i</span> <span class="p">(</span><span class="n">N_i</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="n">error_i</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the total number of samples, <code class="docutils literal notranslate"><span class="pre">N_i</span></code> is the number of
+samples in the i-th branch, and <code class="docutils literal notranslate"><span class="pre">error_i</span></code> is the error at the i-th
+branch.</p>
 </dd>
 </dl>
+</dd>
+<dt><strong>splitter</strong><span class="classifier">{“best”, int}, default=”best”</span></dt><dd><p>The strategy used to choose the split at each numeric node. Supported
+strategies are “best” to choose the best split, or a number to limit
+the maximum number of splits to consider.</p>
+</dd>
+<dt><strong>max_depth</strong><span class="classifier">int, default=None</span></dt><dd><p>The maximum depth of the tree. If None, then nodes are expanded until
+all leaves are pure or until all leaves contain less than
+min_samples_split samples.</p>
 </dd>
 <dt><strong>min_samples_split</strong><span class="classifier">int or float, default=2</span></dt><dd><p>The minimum number of samples required to split an internal node:</p>
 <ul class="simple">
@@ -420,31 +438,60 @@ especially in regression.</p>
 number of samples for each node.</p></li>
 </ul>
 </dd>
+<dt><strong>Notes</strong></dt><dd></dd>
+<dt><strong>—–</strong></dt><dd></dd>
+<dt><strong>The default values for the parameters controlling the size of the trees</strong></dt><dd></dd>
+<dt><strong>(e.g. ``max_depth``, ``min_samples_leaf``, etc.) lead to fully grown and</strong></dt><dd></dd>
+<dt><strong>unpruned trees which can potentially be very large on some data sets. To</strong></dt><dd></dd>
+<dt><strong>reduce memory consumption, the complexity and size of the trees should be</strong></dt><dd></dd>
+<dt><strong>controlled by setting those parameter values.</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r150ea0afb7de-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Decision_tree_learning">https://en.wikipedia.org/wiki/Decision_tree_learning</a></p>
+</div>
+<div class="citation" id="r150ea0afb7de-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>L. Breiman, J. Friedman, R. Olshen, and C. Stone, “Classification
+and Regression Trees”, Wadsworth, Belmont, CA, 1984.</p>
+</div>
+<div class="citation" id="r150ea0afb7de-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>T. Hastie, R. Tibshirani and J. Friedman. “Elements of Statistical
+Learning”, Springer, 2009.</p>
+</div>
+<div class="citation" id="r150ea0afb7de-4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>L. Breiman, and A. Cutler, “Random Forests”,
+<a class="reference external" href="https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm">https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm</a></p>
+</div>
+</div>
 <p class="rubric">Methods</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_attribute_penalizer</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_attribute_penalizer" title="sklearn_nominal.sklearn.tree_base.BaseTree.build_attribute_penalizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_attribute_penalizer</span></code></a>()</p></td>
+<td><p>Determines the <code class="docutils literal notranslate"><span class="pre">shared.ColumnPenalization</span></code> corresponding to the error function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_prune_criteria" title="sklearn_nominal.sklearn.tree_base.BaseTree.build_prune_criteria"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_prune_criteria</span></code></a>(d)</p></td>
+<td><p>Builds the <code class="docutils literal notranslate"><span class="pre">PruneCriteria</span></code> for the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_splitter" title="sklearn_nominal.sklearn.tree_base.BaseTree.build_splitter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_splitter</span></code></a>(e, p)</p></td>
+<td><p>Builds a dict of <code class="docutils literal notranslate"><span class="pre">ColumnError</span></code> for each type of column in the dataset based on the error and column penalization.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">display</span></code>([class_names, title])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_splitter</span></code>(e, p)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_dot</span></code>([class_names, title])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">display</span></code>([class_names, title])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_dot_file</span></code>(filepath[, class_names, title])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_dot</span></code>([class_names, title])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_dot_file</span></code>(filepath[, class_names, title])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_image</span></code>(filepath[, class_names, title])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_prune_criteria</span></code>(d)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_image</span></code>(filepath[, class_names, title])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pretty_print</span></code>([class_names])</p></td>
@@ -453,6 +500,29 @@ number of samples for each node.</p></li>
 </tbody>
 </table>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sklearn_nominal.sklearn.tree_base.BaseTree.build_attribute_penalizer">
+<span class="sig-name descname"><span class="pre">build_attribute_penalizer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_attribute_penalizer" title="Link to this definition">#</a></dt>
+<dd><p>Determines the <code class="docutils literal notranslate"><span class="pre">shared.ColumnPenalization</span></code> corresponding to the error function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sklearn_nominal.sklearn.tree_base.BaseTree.build_prune_criteria">
+<span class="sig-name descname"><span class="pre">build_prune_criteria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_prune_criteria" title="Link to this definition">#</a></dt>
+<dd><p>Builds the <code class="docutils literal notranslate"><span class="pre">PruneCriteria</span></code> for the tree</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PruneCriteria</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sklearn_nominal.sklearn.tree_base.BaseTree.build_splitter">
+<span class="sig-name descname"><span class="pre">build_splitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_splitter" title="Link to this definition">#</a></dt>
+<dd><p>Builds a dict of <code class="docutils literal notranslate"><span class="pre">ColumnError</span></code> for each type of column in the dataset based on the error and column penalization.</p>
+</dd></dl>
+
 </dd></dl>
 
 <div style='clear:both'></div></section>
@@ -504,7 +574,12 @@ number of samples for each node.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sklearn_nominal.sklearn.tree_base.BaseTree"><code class="docutils literal notranslate"><span class="pre">BaseTree</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sklearn_nominal.sklearn.tree_base.BaseTree"><code class="docutils literal notranslate"><span class="pre">BaseTree</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_attribute_penalizer"><code class="docutils literal notranslate"><span class="pre">BaseTree.build_attribute_penalizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_prune_criteria"><code class="docutils literal notranslate"><span class="pre">BaseTree.build_prune_criteria()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sklearn_nominal.sklearn.tree_base.BaseTree.build_splitter"><code class="docutils literal notranslate"><span class="pre">BaseTree.build_splitter()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

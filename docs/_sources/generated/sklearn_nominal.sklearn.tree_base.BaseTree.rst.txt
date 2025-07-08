@@ -17,6 +17,9 @@
         ~BaseTree.build_attribute_penalizer
       
       
+        ~BaseTree.build_prune_criteria
+      
+      
         ~BaseTree.build_splitter
       
       
@@ -30,9 +33,6 @@
       
       
         ~BaseTree.export_image
-      
-      
-        ~BaseTree.make_prune_criteria
       
       
         ~BaseTree.pretty_print
