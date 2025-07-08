@@ -22,7 +22,7 @@ version = "0.0.1"
 description = "Extra models for scikit-learn w/ built-in support for nominal attributes"
 readme = "README.md"
 authors = [{name="Facundo Manuel Quiroga", email="{first_name}{last_name_initial}@gmail.com"}]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "numpy>=2.2.0",
     "matplotlib>=3.10.0",
@@ -182,8 +182,8 @@ test = "uv run pytest sklearn_nominal"
 lint = "uvx ruff check --fix sklearn_nominal "
 format = "uvx ruff format sklearn_nominal"
 build = "uv build"
-docs = "uv run sphinx-build doc docs"
-serve-docs = " uv run sphinx-autobuild doc docs"
+docs = "uv run sphinx-build docs docs/_build"
+serve-docs = " uv run sphinx-autobuild --open-browser docs docs/_build"
 precommit = "uv run pre-commit run --all-files"
 
 # OLD PIXI STUFF FROM TEMPLATE

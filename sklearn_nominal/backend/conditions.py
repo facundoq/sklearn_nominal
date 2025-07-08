@@ -9,9 +9,12 @@ import pandas as pd
 from sklearn_nominal.backend import ColumnID, InputSample
 
 
-# A condition can filter rows of a Dataset
-# Returns a new boolean series
+
 class Condition(abc.ABC):
+    """
+    A condition to filter rows of a :class: Dataset
+    
+    """
     def __init__(self, column: ColumnID):
         super().__init__()
         self.column = column
@@ -22,6 +25,9 @@ class Condition(abc.ABC):
 
     @abc.abstractmethod
     def short_description(self) -> str:
+        """
+        Returns a short description of this Condition for displaying purposes
+        """
         pass
 
     def na_to_false(self, s: bool | any):
@@ -31,6 +37,9 @@ class Condition(abc.ABC):
             return s
 
     def is_similar(self, c: Condition):
+        """
+        returns True if the condition uses the same attributes and values as this condition.
+        """
         pass
 
 
