@@ -18,7 +18,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sklearn_nominal"
-version = "0.0.2"
+version = "0.0.3"
 description = "Extra models for scikit-learn w/ built-in support for nominal attributes"
 readme = "README.md"
 authors = [{name="Facundo Manuel Quiroga", email="{first_name}{last_name_initial}@gmail.com"}]
