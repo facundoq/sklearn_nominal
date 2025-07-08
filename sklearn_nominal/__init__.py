@@ -1,10 +1,5 @@
 # Authors: scikit-learn-contrib developers
 # License: BSD 3 clause
-__version__ = "0.0.0"
-try:
-    from ._version import __version__
-except ImportError:
-    pass
 
 
 from . import tree
@@ -23,5 +18,4 @@ __all__ = [
     "rules",
     "bayes",
     "sklearn",
-    "__version__",
 ]

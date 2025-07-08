@@ -12,7 +12,7 @@ pip install sklearn_nominal[export]
 Before that, make sure to install `graphviz` (with headers) and `cairo`. In Ubuntu 24.04:
 
 ````
-sudo apt install graphviz libgraphviz-dev cairosvg
+sudo apt install libgraphviz-dev graphviz cairosvg 
 ````
 
 
@@ -32,6 +32,10 @@ Install pre-commit hooks
 uv run pre-commit install
 ````
 
+````
+uv tool install poethepoet
+````
+
 ### Running pre commit hooks
 
 ````
@@ -39,9 +43,7 @@ pre-commit run --all-files
 ````
 ### Install PoeThePoet task runner
 
-````
-uv tool install poethepoet
-````
+
 
 ### Running tests, linter, formatter
 
@@ -49,7 +51,6 @@ uv tool install poethepoet
 poe lint
 poe format
 poe test
-
 ````
 
 ### Updating docs
