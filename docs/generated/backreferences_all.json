@@ -1,0 +1,63 @@
+{
+ "sklearn_nominal.CN2Classifier": [
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ],
+ "sklearn_nominal.NaiveBayesClassifier": [
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ],
+ "sklearn_nominal.OneRClassifier": [
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ],
+ "sklearn_nominal.PRISMClassifier": [
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ],
+ "sklearn_nominal.TreeClassifier": [
+  [
+   "train_tree_classifier.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Train and evaluate a TreeClassifier on golf weather data",
+   "Train a TreeClassifier"
+  ],
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ],
+ "sklearn_nominal.ZeroRClassifier": [
+  [
+   "compare_classifiers.py",
+   "/home/fquiroga/dev/sklearnmodels/docs/../examples",
+   "/home/fquiroga/dev/sklearnmodels/docs/auto_examples",
+   "Compare scikit compatible classifiers available in sklearn_nominal",
+   "Nominal classifiers comparison"
+  ]
+ ]
+}
