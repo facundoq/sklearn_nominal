@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
+
 from sklearn_nominal.backend.core import Model
 
 from ..backend.conditions import Condition

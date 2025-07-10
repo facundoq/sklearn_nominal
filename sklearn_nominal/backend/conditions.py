@@ -9,12 +9,12 @@ import pandas as pd
 from sklearn_nominal.backend import ColumnID, InputSample
 
 
-
 class Condition(abc.ABC):
     """
     A condition to filter rows of a :class: Dataset
-    
+
     """
+
     def __init__(self, column: ColumnID):
         super().__init__()
         self.column = column
