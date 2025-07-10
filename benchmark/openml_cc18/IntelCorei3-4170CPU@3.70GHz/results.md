@@ -1,6 +1,6 @@
 
 ## Graphs
- All times are specified in seconds
+ All times are specified in seconds 
 ![alt](train_accuracy.png)
 
 ![alt](train_time.png)
@@ -11,21 +11,9 @@
 
 ![alt](classes.png)
 
-![alt](samples_train_time.png)
+![alt](dataset_speedup_train_time.png)
 
-![alt](samples_test_time.png)
-
-![alt](samples_speedup_train_time.png)
-
-![alt](samples_speedup_test_time.png)
-
-![alt](features_train_time.png)
-
-![alt](features_test_time.png)
-
-![alt](features_speedup_train_time.png)
-
-![alt](features_speedup_test_time.png)
+![alt](dataset_speedup_test_time.png)
 
 
 # Benchmark table

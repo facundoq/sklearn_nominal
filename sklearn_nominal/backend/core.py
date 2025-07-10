@@ -16,13 +16,13 @@ class ColumnType(enum.Enum):
     Nominal = 1
 
 
-type Partition = list[Dataset]
+Partition = list["Dataset"]
 
 
 class Dataset(abc.ABC):
     """
     A Dataset abstracts away the contents of a dataset and provides common operations, specially filtering and statistics operations, to implement models that support nominal attributes.
-    
+
     """
 
     @abc.abstractmethod

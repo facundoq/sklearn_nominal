@@ -33,15 +33,15 @@ class TreeTask:
         self.height = height
 
 
-type TreeCreationCallback = Callable[[TreeCreationCallbackResult], None]
-
-
 @dataclass
 class TreeCreationCallbackResult:
     tree: Tree
     task: TreeTask
     prune: bool = False
     best_column: ColumnErrorResult | None = None
+
+
+TreeCreationCallback = Callable[[TreeCreationCallbackResult], None]
 
 
 class BaseTreeTrainer(TreeTrainer):

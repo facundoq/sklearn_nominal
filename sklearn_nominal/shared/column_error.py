@@ -3,7 +3,6 @@ from typing import Callable
 
 import numpy as np
 import pandas as pd
-from h11 import Data
 
 from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition
 from sklearn_nominal.backend.core import Dataset, Partition
@@ -11,8 +10,6 @@ from sklearn_nominal.backend.split import RangeSplit, Split, ValueSplit
 
 from .attribute_penalization import ColumnPenalization, NoPenalization
 from .target_error import TargetError
-
-type ColumnCallback = Callable[[ColumnErrorResult], None]
 
 
 class ColumnErrorResult:
@@ -32,6 +29,9 @@ class ColumnErrorResult:
 
     def __repr__(self):
         return f"Score({self.column},{self.error},{len(self.conditions)} branches)"
+
+
+ColumnCallback = Callable[[ColumnErrorResult], None]
 
 
 class ColumnError(abc.ABC):

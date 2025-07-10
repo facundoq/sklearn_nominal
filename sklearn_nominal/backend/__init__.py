@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 
-type Output = np.ndarray
-type Input = pd.DataFrame | np.ndarray
-type InputSample = pd.Series
-type ColumnID = int
+Output = np.ndarray
+Input = pd.DataFrame | np.ndarray
+InputSample = pd.Series
+ColumnID = int
 
 from .conditions import Condition, RangeCondition, ValueCondition
 

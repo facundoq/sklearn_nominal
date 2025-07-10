@@ -18,7 +18,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sklearn_nominal"
-version = "0.0.3"
+version = "0.0.4"
 description = "Extra models for scikit-learn w/ built-in support for nominal attributes"
 readme = "README.md"
 authors = [{name="Facundo Manuel Quiroga", email="{first_name}{last_name_initial}@gmail.com"}]
@@ -32,8 +32,7 @@ dependencies = [
     "data-science-types>=0.2.23",
     "pandas[pyarrow]>=2.2.3",
     "pyarrow>=19.0.1",
-    "pygraphviz>=1.14",
-    "cairosvg>=2.7.1",
+
 
 ]
 classifiers = [
@@ -54,7 +53,7 @@ dev = [
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
     "pytest>=8.4.1",
-    "sklearn_nominal",
+    "sklearn_nominal[export]",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
     "snakeviz>=2.2.2",
@@ -77,15 +76,19 @@ docs = [
     "sphinx-autodoc-typehints>=3.2.0",
 ]
 
+[project.optional-dependencies]
+export = [
+    "pygraphviz>=1.14",
+    "cairosvg>=2.7.1",
+]
+
+
 [project.urls]
 "Homepage" = "https://github.com/facundoq/sklearn_nominal"
 "Bug Reports" = "https://github.com/facundoq/sklearn_nominal/issues"
 "Source" = "https://github.com/facundoq/sklearn_nominal"
+"Documentation" = "https://sklearn-nominal.readthedocs.io/"
 
-[project.optional-dependencies]
-export = [
-
-]
 
 
 [tool.setuptools_scm]
@@ -103,21 +106,6 @@ publish-url = "https://pypi.org/legacy/"
 [tool.uv.sources]
 microsoft-python-type-stubs = { git = "https://github.com/microsoft/python-type-stubs.git" }
 sklearn_nominal = { workspace = true }
-
-
-
-# [tool.black]
-# line-length = 88
-# target_version = ['py312']
-# preview = true
-# exclude = '''
-# /(
-#     \.eggs         # exclude a few common directories in the
-#   | \.git          # root of the project
-#   | \.vscode
-# )/
-# '''
-#force-exclude = "sklearn_nominal/_version.py"
 
 
 [tool.ruff]

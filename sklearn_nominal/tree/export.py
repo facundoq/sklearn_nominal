@@ -1,11 +1,13 @@
 from pathlib import Path
 
-import pygraphviz
 
 from . import Condition, Tree
 
 
 def dot_template(body: str, title: str):
+    """
+    The template of the dot file to export trees.
+    """
     title_dot = f"""0 [label="{title}", shape=plaintext];
 0:s -> 1:n [style=invis];
 """
@@ -23,6 +25,10 @@ edge [fontname="helvetica-bold"] ;
 
 
 class TreeInfo:
+    """
+    Auxiliary class to store tree information in order to export the tree in other formats
+    """
+
     def __init__(self, id: int, parent_id: int, tree: Tree, condition: Condition, height: int):
         self.id = id
         self.parent_id = parent_id
@@ -76,7 +82,10 @@ def make_edge(info: TreeInfo):
     return f'{info.parent_id}:s -> {info.id}:n [label="{html_escape(condition)}"] ;\n'
 
 
-def export_dot(tree: Tree, class_names: list[str] = None, title=None, max_classes=10):
+def export_dot(tree: Tree, class_names: list[str] = None, title=None, max_classes=10) -> str:
+    """
+    Export tree with `graphviz` dot format to string.
+    """
     if title is None:
         title = f"{tree}"
     if class_names is not None:
@@ -106,6 +115,9 @@ def export_dot(tree: Tree, class_names: list[str] = None, title=None, max_classe
 
 
 def export_dot_file(tree: Tree, filepath: Path, title="", class_names: list[str] = None):
+    """
+    Export tree with `graphviz` dot format to a file.
+    """
     dot = export_dot(tree, class_names, title=title)
     with open(filepath, "w") as f:
         f.write(dot)
@@ -116,6 +128,12 @@ def html_escape(s: str) -> str:
 
 
 def export_image(tree: Tree, filepath: Path, title="", class_names: list[str] = None, prog="dot"):
+    """
+    Exports a tree as an image
+    Warning: Requires the `graphviz` package (which requires the `graphviz` *library* installed in your system with headers)
+    """
+    import pygraphviz
+
     if class_names is None:
         class_names = [f"Class '{i}'" for i in range(len(tree.prediction))]
 
@@ -125,6 +143,10 @@ def export_image(tree: Tree, filepath: Path, title="", class_names: list[str] = 
 
 
 def display(model: Tree, title=None, class_names: list[str] = None, max_classes=10):
+    """
+    Returns  `graphviz.Source` object that can be displayed in a jupyter notebook like environment.
+    Warning: Requires the `graphviz` package (which requires the `graphviz` *library* installed in your system with headers)
+    """
     import graphviz
 
     dot_graph = export_dot(model, title=title, class_names=class_names, max_classes=max_classes)

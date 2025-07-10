@@ -21,7 +21,7 @@ from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
 
 from sklearn_nominal.sklearn.tree_classification import TreeClassifier
-from sklearn_nominal.tests import get_model_complexity
+from sklearn_nominal.tests.utils import get_model_complexity
 
 basepath = Path("benchmark/openml_cc18/")
 
@@ -65,9 +65,7 @@ def get_tree_parameters(x: pd.DataFrame, classes: int):
 def get_nominal_tree(backend: str):
     def do_get_nominal_tree(x: pd.DataFrame, classes: int):
         n, m = x.shape
-        max_height, min_samples_leaf, min_samples_split, min_error_improvement = (
-            get_tree_parameters(x, classes)
-        )
+        max_height, min_samples_leaf, min_samples_split, min_error_improvement = get_tree_parameters(x, classes)
 
         return TreeClassifier(
             criterion="entropy",
@@ -106,9 +104,7 @@ def get_sklearn_pipeline(x: pd.DataFrame, model):
 
 
 def get_sklearn_tree(x: pd.DataFrame, classes: int):
-    max_height, min_samples_leaf, min_samples_split, min_error_improvement = (
-        get_tree_parameters(x, classes)
-    )
+    max_height, min_samples_leaf, min_samples_split, min_error_improvement = get_tree_parameters(x, classes)
     model = DecisionTreeClassifier(
         max_depth=max_height,
         min_samples_leaf=min_samples_leaf,
@@ -129,21 +125,15 @@ def reduce_numeric_features(x: pd.DataFrame, max_numeric_features):
         x_numeric_reduced = pca.fit_transform(x_numeric)
         x_numeric_reduced = pd.DataFrame(
             data=x_numeric_reduced,
-            columns=[
-                f"v_{i}={v:.2f}" for i, v in enumerate(pca.explained_variance_ratio_)
-            ],
+            columns=[f"v_{i}={v:.2f}" for i, v in enumerate(pca.explained_variance_ratio_)],
         )
 
         x = pd.concat([x_numeric_reduced, x_non_numeric], axis=1)
     return x
 
 
-def benchmark(
-    model_generator: typing.Callable, model_name: str, benchmark_result: BenchmarkResult
-):
-    benchmark_suite = openml.study.get_suite(
-        "OpenML-CC18"
-    )  # obtain the benchmark suite
+def benchmark(model_generator: typing.Callable, model_name: str, benchmark_result: BenchmarkResult):
+    benchmark_suite = openml.study.get_suite("OpenML-CC18")  # obtain the benchmark suite
 
     # print("Running", benchmark_suite)
 
@@ -219,9 +209,7 @@ def plot_results(df: pd.DataFrame):
     condition = df["model"] == "sklearn.tree"
     df_reference = df.loc[condition]
     df_others = df.loc[~condition].copy()
-    mix = df_others.merge(
-        df_reference, on="dataset", how="left", suffixes=(None, "_ref")
-    )
+    mix = df_others.merge(df_reference, on="dataset", how="left", suffixes=(None, "_ref"))
 
     for y in ["train_accuracy", "train_time", "test_time", "complexity", "classes"]:
         plot = (
@@ -236,17 +224,11 @@ def plot_results(df: pd.DataFrame):
         # for y in ["train_time", "test_time"]:
         #     plot = lp.ggplot(df, lp.aes(x=x, y=y, color="model")) + common_options
         #     save_plot(plot, f"{x}_{y}.png")
-        aes_speedup = lp.ylim(0, 1.5) + lp.geom_hline(
-            yintercept=1, color="black", linetype="longdash"
-        )
+        aes_speedup = lp.ylim(0, 1.5) + lp.geom_hline(yintercept=1, color="black", linetype="longdash")
         for y in ["train_time", "test_time"]:
             speedup_y = f"speedup_{y}"
             df_others[speedup_y] = mix[f"{y}_ref"] / mix[y]
-            plot = (
-                lp.ggplot(df_others, lp.aes(x=x, y=speedup_y, color="model"))
-                + common_options
-                + aes_speedup
-            )
+            plot = lp.ggplot(df_others, lp.aes(x=x, y=speedup_y, color="model")) + common_options + aes_speedup
             save_plot(plot, f"{x}_{speedup_y}.png")
 
 
@@ -280,9 +262,7 @@ def export_md(df: pd.DataFrame, pdf=False):
     if pdf:
         pdf_filepath = basepath / "results.pdf"
         command_cd = f"cd '{basepath.absolute()}'"
-        command_pandoc = (
-            f"pandoc -f gfm '{filepath.absolute()}' -o '{pdf_filepath.absolute()}'"
-        )
+        command_pandoc = f"pandoc -f gfm '{filepath.absolute()}' -o '{pdf_filepath.absolute()}'"
         command = f"{command_cd} && {command_pandoc}"
         print(command)
         subprocess.run(command, shell=True)
@@ -297,11 +277,7 @@ if __name__ == "__main__":
 
     info = cpuinfo.get_cpu_info()
     platform = (
-        "".join(info["brand_raw"].split(" "))
-        .replace("/", "-")
-        .replace("_", "-")
-        .replace("(R)", "")
-        .replace("(TM)", "")
+        "".join(info["brand_raw"].split(" ")).replace("/", "-").replace("_", "-").replace("(R)", "").replace("(TM)", "")
     )
     basepath = basepath / platform
     basepath.mkdir(exist_ok=True, parents=True)
