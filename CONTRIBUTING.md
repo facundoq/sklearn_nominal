@@ -8,7 +8,7 @@ We use [uv](https://docs.astral.sh/uv/) for project management.
 Install `graphviz` (with headers) and `cairo`. In Ubuntu 24.04:
 
 ````
-sudo apt install libgraphviz-dev graphviz cairosvg 
+sudo apt install libgraphviz-dev
 ````
 
 Install deps:

@@ -88,6 +88,7 @@ export = [
 "Bug Reports" = "https://github.com/facundoq/sklearn_nominal/issues"
 "Source" = "https://github.com/facundoq/sklearn_nominal"
 "Documentation" = "https://sklearn-nominal.readthedocs.io/"
+"Package" = "https://pypi.org/project/sklearn-nominal/"
 
 
 
