@@ -11,6 +11,7 @@ docs/_build/
 docs/auto_examples/
 docs/modules/generated/
 docs/datasets/generated/
+docs/generated/
 
 # Distribution / packaging
 .Python
