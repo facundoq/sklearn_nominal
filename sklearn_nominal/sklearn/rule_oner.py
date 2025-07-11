@@ -13,6 +13,71 @@ from sklearn_nominal.sklearn.nominal_model import NominalClassifier, NominalRegr
 
 
 class OneRClassifier(NominalClassifier, BaseEstimator):
+    """A OneR classifier, equivalent to a TreeClassifier with a depth of 1 (root and children).
+
+    [1] Holte, Robert C. "Very simple classification rules perform well on most commonly used datasets." Machine learning 11.1 (1993): 63-90.
+
+    Parameters
+    ----------
+    criterion : {"gini", "entropy", "log_loss"}, default="entropy"
+        The function to measure the quality of a split. Supported criteria are
+        "gini" for the Gini impurity and "log_loss" and "entropy" both for the
+        Shannon information gain.
+
+    class_weight : dict, list of dict or "balanced", default=None
+        Weights associated with classes in the form ``{class_label: weight}``.
+        If None, all classes are supposed to have weight one.
+
+        The "balanced" mode uses the values of y to automatically adjust
+        weights inversely proportional to class frequencies in the input data
+        as ``n_samples / (n_classes * np.bincount(y))``
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,) or list of ndarray
+        The classes labels (single output problem),
+        or a list of arrays of class labels (multi-output problem).
+
+    n_classes_ : int or list of int
+        The number of classes (for single output problems),
+
+    n_features_in_ : int
+        Number of features seen during :term:`fit`.
+
+    feature_names_in_ : ndarray of shape (`n_features_in_`,)
+        Names of features seen during :term:`fit`. Defined only when `X`
+        has feature names that are all strings.
+
+    n_outputs_ : int
+        The number of outputs when ``fit`` is performed.
+
+    model_ : :class:`sklearn_nominal.rules.model.RuleModel` instance
+        The underlying model object.
+
+    See Also
+    --------
+    TreeRegressor : A decision tree regressor with nominal support.
+    NaiveBayesClassifier: a NaiveBayesClassifier with nominal support.
+    CN2Classifier: a CN2Classifier classifier with nominal support.
+    ZeroRClassifier: a ZeroR classifier with nominal support.
+    PRISMClassifier: a PRISM classifier with nominal support.
+
+    Examples
+    --------
+    >>> from sklearn.datasets import fetch_openml
+    >>> df = fetch_openml("credit-g",version=2).frame
+    >>> x,y = df.iloc[:,0:-1], df.iloc[:,-1]
+    >>>
+    >>> from sklearn_nominal import OneR
+    >>> model = OneR()
+    >>> model.fit(x,y)
+    >>>
+    >>> from sklearn.metrics import accuracy_score
+    >>> y_pred = model.predict(x)
+    >>> print(accuracy_score(y,y_pred))
+    ... 0.787
+    """
+
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
         tags.classifier_tags.poor_score = True

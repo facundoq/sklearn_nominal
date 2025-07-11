@@ -20,7 +20,7 @@
 `Issues & Ideas <https://github.com/facundoq/sklearn_nominal/issues>`__ |
 `PyPi <https://pypi.org/project/sklearn-nominal>`__ |
 
-This is the documentation for  `scikit_nominal`, a library that includes drop-in replacements for `scikit-learn` models and a few additional ones. Nonetheless, the models were designed with compliance with the `scikit-learn` API in mind. For example, the `sklearn_nominal.TreeClassifier` model can be used as drop-in replacement for `sklearn.tree.TreeClassifier` without any code changes, and other models follow the `fit`, `predict`, etc, API of `scikit-learn`.
+This is the documentation for  `scikit_nominal`, a library that includes drop-in replacements for `scikit-learn` models and a few additional ones. Nonetheless, the models were designed with compliance with the `scikit-learn` API in mind. For example, the `TreeClassifier` model can be used as drop-in replacement for `sklearn.tree.TreeClassifier` without any code changes, and other models follow the `fit`, `predict`, etc, API of `scikit-learn`.
 
 
 
