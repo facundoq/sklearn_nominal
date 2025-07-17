@@ -93,14 +93,58 @@ class OneRClassifier(NominalClassifier, BaseEstimator):
 
 
 class OneRRegressor(NominalRegressor, BaseEstimator):
-    def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
-        tags.regressor_tags.poor_score = True
-        return tags
+    """A OneR Regressor, equivalent to a TreeClassifier with a depth of 1.
+
+    [1] Holte, Robert C. "Very simple classification rules perform well on most commonly used datasets." Machine learning 11.1 (1993): 63-90.
+
+    Parameters
+    ----------
+    criterion : {"std"}, default="std"
+        The function to measure the error of a split. Supported criteria are
+        currently only "std", for standard deviation (equivalent to root MSE), but in the future other error functions may be added.
+
+    Attributes
+    ----------
+
+    n_features_in_ : int
+        Number of features seen during :term:`fit`.
+
+    feature_names_in_ : ndarray of shape (`n_features_in_`,)
+        Names of features seen during :term:`fit`. Defined only when `X`
+        has feature names that are all strings.
+
+    n_outputs_ : int
+        The number of outputs when ``fit`` is performed.
+
+    model_ : :class:`sklearn_nominal.rules.model.RuleModel` instance
+        The underlying model object.
+
+    See Also
+    --------
+    TreeRegressor : A decision tree regressor with nominal support.
+    CN2Regressor: a CN2Classifier regressor with nominal support.
+    ZeroRRegressor: a ZeroR regressor with nominal support.
+
+    Examples
+    --------
+    >>> from sklearn_nominal import OneRRegressor, read_golf_regression_dataset
+    >>> x, y = read_golf_regression_dataset(url)
+    >>> model = OneRRegressor()
+    >>> from sklearn.metrics import mean_absolute_error
+    >>> model.fit(x, y)
+    >>> y_pred = model.predict(x)
+    >>> print(f"{mean_absolute_error(y, y_pred):.2f}")
+    0.07
+    """
 
     def __init__(self, criterion="std", backend=DEFAULT_BACKEND):
         super().__init__(backend=backend)
         self.criterion = criterion
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.regressor_tags.poor_score = True
+        return tags
 
     def make_model(self, d: Dataset):
         error = self.build_error(self.criterion)

@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
     "sphinx_design",
     "sphinx_prompt",
     # "sphinx_gallery.gen_gallery",

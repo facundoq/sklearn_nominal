@@ -1,4 +1,4 @@
-# Authors: scikit-learn-contrib developers
+# Authors: facundoq
 # License: BSD 3 clause
 
 
@@ -12,6 +12,7 @@ from .sklearn.rule_cn2 import CN2Classifier, CN2Regressor
 from .sklearn.rule_oner import OneRClassifier, OneRRegressor
 from .sklearn.rule_zeror import ZeroRClassifier, ZeroRRegressor
 from .sklearn.rule_prism import PRISMClassifier
+from .utils import read_regression_dataset, read_golf_regression_dataset
 
 __all__ = [
     "tree",

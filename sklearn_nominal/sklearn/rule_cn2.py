@@ -122,6 +122,58 @@ class CN2Classifier(NominalClassifier, BaseEstimator):
 
 
 class CN2Regressor(NominalRegressor, BaseEstimator):
+    """A rule-based regressor that performs sequential covering in a CN2 [1] style.
+
+    [1]  Clark, P. and Niblett, T (1989) The CN2 induction algorithm. Machine Learning 3(4):261-283.
+
+    Parameters
+    ----------
+    criterion : {"std"}, default="std"
+        The function to measure the error of a split. Supported criteria are
+        currently only "std", for standard deviation (equivalent to root MSE), but in the future other error functions may be added.
+    max_rule_length: int, default= sys.maxsize
+        The maximum number of conditions in a rule. Analogous to the maximum height of a Tree model.
+    max_rules: int, default=sys.maxsize
+        Maximum number of rules for the model. Analogous to the maximum number of leaves in a Tree model.
+    min_rule_support:int, default=10
+        Minimum number of samples that satisfy the condition of a rule required to include that rule in the model. Analogous to the `min_samples_leaf` parameter for Tree models.
+    max_error_per_rule:float, default=0.99
+        Maximum (absolute) error that the rule can have. This value depends on the error (:param: criterion) used for the model.
+
+    Attributes
+    ----------
+
+    n_features_in_ : int
+        Number of features seen during :term:`fit`.
+
+    feature_names_in_ : ndarray of shape (`n_features_in_`,)
+        Names of features seen during :term:`fit`. Defined only when `X`
+        has feature names that are all strings.
+
+    n_outputs_ : int
+        The number of outputs when ``fit`` is performed.
+
+    model_ : :class:`sklearn_nominal.rules.model.RuleModel` instance
+        The underlying model object.
+
+    See Also
+    --------
+    TreeRegressor : A decision tree regressor with nominal support.
+    ZeroRRegressor: a ZeroRClassifier regressor with nominal support.
+    OneRRegressor: a OneR regressor with nominal support.
+
+    Examples
+    --------
+    >>> from sklearn_nominal import CN2Regressor, read_golf_regression_dataset
+    >>> x, y = read_golf_regression_dataset(url)
+    >>> model = CN2Regressor()
+    >>> from sklearn.metrics import mean_absolute_error
+    >>> model.fit(x, y)
+    >>> y_pred = model.predict(x)
+    >>> print(f"{mean_absolute_error(y, y_pred):.2f}")
+    0.07
+    """
+
     def __init__(
         self,
         criterion="std",
