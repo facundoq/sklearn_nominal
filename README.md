@@ -1,6 +1,8 @@
 # sklearn_nominal
 Extra models for scikit-learn, including Tree, PRISM, CN2, OneR and ZeroR Classifiers and Regressors with support for **nominal values**.
 
+[Documentation at ReadTheDocs](https://sklearn-nominal.readthedocs.io/)
+
 ## Colab Quickstart
 
 Check our  [classification models notebook](https://colab.research.google.com/github/facundoq/sklearn_nominal/blob/main/examples/Classification%20Models.ipynb) and [regression models notebook](https://colab.research.google.com/github/facundoq/sklearn_nominal/blob/main/examples/Regression%20Models.ipynb) to see samples of `sklearn_nominal` models in action with simple datasets.
