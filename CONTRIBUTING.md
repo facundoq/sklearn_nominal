@@ -72,6 +72,5 @@ When you have a new version to publish, make sure to upgrade the version number 
 
 ````
 
-git tag v[version]
-git push --tags
+git tag v[version] && git push --tags
 ````

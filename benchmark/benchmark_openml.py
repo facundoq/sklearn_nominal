@@ -81,7 +81,6 @@ def get_nominal_tree(backend: str):
 
 
 def get_sklearn_pipeline(x: pd.DataFrame, model):
-    numeric_features = pd.DataFrame.select_dtypes(x, include=["int64", "float64", "bool"])
     numeric_features = x.select_dtypes(include=["int64", "float64"]).columns
     numeric_transformer = Pipeline(
         steps=[
