@@ -56,6 +56,9 @@
         ~NaiveBayesClassifier.pretty_print
       
       
+        ~NaiveBayesClassifier.score
+      
+      
         ~NaiveBayesClassifier.set_dtypes
       
       
@@ -72,6 +75,12 @@
       
       
         ~NaiveBayesClassifier.set_predict_request
+      
+      
+        ~NaiveBayesClassifier.set_score_request
+      
+      
+        ~NaiveBayesClassifier.set_sklearn_tags
       
       
         ~NaiveBayesClassifier.validate_data_fit_classification

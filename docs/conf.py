@@ -35,12 +35,11 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "_templates", "Thumbs.db", ".DS_Store",
-                    "auto_examples","generated"]
+exclude_patterns = ["_build", "_templates", "Thumbs.db", ".DS_Store"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
-default_role = "literal"
+default_role = "obj"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

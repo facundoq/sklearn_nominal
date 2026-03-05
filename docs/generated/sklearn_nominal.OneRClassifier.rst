@@ -56,6 +56,9 @@
         ~OneRClassifier.pretty_print
       
       
+        ~OneRClassifier.score
+      
+      
         ~OneRClassifier.set_dtypes
       
       
@@ -72,6 +75,12 @@
       
       
         ~OneRClassifier.set_predict_request
+      
+      
+        ~OneRClassifier.set_score_request
+      
+      
+        ~OneRClassifier.set_sklearn_tags
       
       
         ~OneRClassifier.validate_data_fit_classification

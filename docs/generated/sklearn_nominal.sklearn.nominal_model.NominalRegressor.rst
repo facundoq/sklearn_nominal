@@ -50,6 +50,9 @@
         ~NominalRegressor.set_model
       
       
+        ~NominalRegressor.set_sklearn_tags
+      
+      
         ~NominalRegressor.validate_data_fit_regression
       
       

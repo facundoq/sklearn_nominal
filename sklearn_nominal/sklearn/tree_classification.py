@@ -60,9 +60,9 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
 
     See Also
     --------
-    BaseTree : base class for :class: TreeClassifier and :class: TreeRegressor.
+    BaseTree : Base class for :class:`TreeClassifier` and :class:`TreeRegressor`.
     TreeRegressor : A decision tree regressor with nominal support.
-    NaiveBayesClassifier: a NaiveBayesClassifier with nominal support.
+    NaiveBayesClassifier : A NaiveBayesClassifier with nominal support.
 
     Notes
     -----

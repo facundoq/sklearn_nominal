@@ -56,6 +56,9 @@
         ~ZeroRClassifier.pretty_print
       
       
+        ~ZeroRClassifier.score
+      
+      
         ~ZeroRClassifier.set_dtypes
       
       
@@ -72,6 +75,12 @@
       
       
         ~ZeroRClassifier.set_predict_request
+      
+      
+        ~ZeroRClassifier.set_score_request
+      
+      
+        ~ZeroRClassifier.set_sklearn_tags
       
       
         ~ZeroRClassifier.validate_data_fit_classification

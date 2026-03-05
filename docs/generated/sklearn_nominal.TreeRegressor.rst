@@ -89,6 +89,9 @@
         ~TreeRegressor.set_score_request
       
       
+        ~TreeRegressor.set_sklearn_tags
+      
+      
         ~TreeRegressor.validate_data_fit_regression
       
       

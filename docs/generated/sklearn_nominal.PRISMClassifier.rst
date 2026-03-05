@@ -56,6 +56,9 @@
         ~PRISMClassifier.pretty_print
       
       
+        ~PRISMClassifier.score
+      
+      
         ~PRISMClassifier.set_dtypes
       
       
@@ -72,6 +75,12 @@
       
       
         ~PRISMClassifier.set_predict_request
+      
+      
+        ~PRISMClassifier.set_score_request
+      
+      
+        ~PRISMClassifier.set_sklearn_tags
       
       
         ~PRISMClassifier.validate_data_fit_classification

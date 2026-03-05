@@ -34,6 +34,9 @@
       
         ~NominalModel.set_model
       
+      
+        ~NominalModel.set_sklearn_tags
+      
    
    
 

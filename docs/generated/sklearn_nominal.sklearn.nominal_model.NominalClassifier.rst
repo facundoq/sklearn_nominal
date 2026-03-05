@@ -50,10 +50,16 @@
         ~NominalClassifier.pretty_print
       
       
+        ~NominalClassifier.score
+      
+      
         ~NominalClassifier.set_dtypes
       
       
         ~NominalClassifier.set_model
+      
+      
+        ~NominalClassifier.set_sklearn_tags
       
       
         ~NominalClassifier.validate_data_fit_classification
