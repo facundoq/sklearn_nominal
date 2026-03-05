@@ -54,10 +54,10 @@ class ZeroRClassifier(NominalClassifier, BaseEstimator):
 
     See Also
     --------
-    NaiveBayesClassifier: a NaiveBayesClassifier with nominal support.
-    CN2Classifier: a CN2Classifier classifier with nominal support.
-    PRISMClassifier: a PRISM classifier with nominal support.
-    OneRClassifier: a OneR classifier with nominal support.
+    NaiveBayesClassifier : A NaiveBayesClassifier with nominal support.
+    CN2Classifier : A CN2Classifier classifier with nominal support.
+    PRISMClassifier : A PRISM classifier with nominal support.
+    OneRClassifier : A OneR classifier with nominal support.
 
     Examples
     --------
@@ -120,8 +120,8 @@ class ZeroRRegressor(NominalRegressor, BaseEstimator):
     See Also
     --------
     TreeRegressor : A decision tree regressor with nominal support.
-    CN2Regressor: a CN2Classifier regressor with nominal support.
-    OneRRegressor: a OneR regressor with nominal support.
+    CN2Regressor : A CN2Classifier regressor with nominal support.
+    OneRRegressor : A OneR regressor with nominal support.
 
     Examples
     --------
