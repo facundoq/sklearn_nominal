@@ -1,0 +1,83 @@
+{
+ "CN2Classifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "CN2Classifier"
+  }
+ ],
+ "NaiveBayesClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "NaiveBayesClassifier"
+  }
+ ],
+ "OneRClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "OneRClassifier"
+  }
+ ],
+ "PRISMClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "PRISMClassifier"
+  }
+ ],
+ "TreeClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "TreeClassifier"
+  }
+ ],
+ "ZeroRClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "ZeroRClassifier"
+  }
+ ],
+ "accuracy_score": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.metrics",
+   "module_short": "sklearn.metrics",
+   "name": "accuracy_score"
+  }
+ ],
+ "pd.DataFrame.from_records": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.DataFrame",
+   "module_short": "pandas.DataFrame",
+   "name": "from_records"
+  }
+ ],
+ "pd.read_csv": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "read_csv"
+  }
+ ]
+}

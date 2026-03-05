@@ -7,29 +7,29 @@ from pandas import DataFrame
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.calibration import LabelEncoder
 from sklearn.exceptions import NotFittedError
+from sklearn.metrics import accuracy_score
 from sklearn.utils import compute_class_weight, validation
 from sklearn.utils._tags import (
-    ClassifierTags,
-    RegressorTags,
-    Tags,
-    TargetTags,
-    TransformerTags,
-    get_tags,
+    ClassifierTags,  # ty:ignore[unresolved-import]
+    RegressorTags,  # ty:ignore[unresolved-import]
+    Tags,  # ty:ignore[unresolved-import]
+    TargetTags,  # ty:ignore[unresolved-import]
+    TransformerTags,  # ty:ignore[unresolved-import]
+    get_tags,  # ty:ignore[unresolved-import]
 )
 from sklearn.utils.multiclass import check_classification_targets
-from sklearn.utils.validation import _check_y, validate_data
-
-from sklearn_nominal.backend import Input, Output
-from sklearn_nominal.backend.factory import make_dataset
-from sklearn_nominal.shared.target_error import TargetError
+from sklearn.utils.validation import _check_y, validate_data  # ty:ignore[unresolved-import]
 
 from .. import shared, tree
+from ..backend import Input, Output
 from ..backend.core import Dataset, Model
+from ..backend.factory import make_dataset
 from ..backend.pandas import PandasDataset
+from ..shared.target_error import TargetError
 
 
 def atleast_2d(x):
-    x = np.asanyarray(x)
+    x = np.asanyarray(x)  # ty:ignore[unresolved-attribute]
     if x.ndim == 0:
         result = x.reshape(1, 1)
     elif x.ndim == 1:
@@ -39,6 +39,7 @@ def atleast_2d(x):
     return result
 
 
+# This is a mixin that must be used with sklearn estimators
 class NominalModel(metaclass=abc.ABCMeta):
     check_parameters = {"dtype": None}
 
@@ -50,21 +51,19 @@ class NominalModel(metaclass=abc.ABCMeta):
         self.check_is_fitted()
         return self.model_.complexity()
 
-    def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
+    def set_sklearn_tags(self, tags):
         tags.non_deterministic = False
         tags.input_tags.sparse = False
         tags.input_tags.allow_nan = True
         tags.input_tags.string = True
-        return tags
+        print("nominal tags")
 
-    def pretty_print(self, class_names: list[str] = None):
+    def pretty_print(self, class_names: list[str] | None = None):
         self.check_is_fitted()
         return self.model_.pretty_print(class_names=class_names)
 
-    def check_is_fitted(self) -> bool:
-        validation.check_is_fitted(self)
-        if not self.is_fitted_:
+    def check_is_fitted(self):
+        if not hasattr(self, "is_fitted_") or not self.is_fitted_:
             raise NotFittedError()
 
     def get_dtypes(self, x):
@@ -95,19 +94,18 @@ class NominalModel(metaclass=abc.ABCMeta):
 
 
 class NominalUnsupervisedModel(NominalModel):
-    def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
+    def set_sklearn_tags__(self, tags):
+        super().set_sklearn_tags(tags)
         tags.target_tags.single_output = False
         tags.target_tags.required = False
         return tags
 
 
 class NominalSupervisedModel(NominalModel):
-    def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
+    def set_sklearn_tags(self, tags):
+        super().set_sklearn_tags(tags)
         tags.target_tags.single_output = False
         tags.target_tags.required = True
-        return tags
 
     def validate_data_predict(self, x):
         dtypes = self.get_dtypes(x)
@@ -129,21 +127,24 @@ class NominalSupervisedModel(NominalModel):
         return df
 
 
-class NominalClassifier(NominalSupervisedModel):
+class NominalClassifier(NominalSupervisedModel, ClassifierMixin):
     def __init__(self, class_weight=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.class_weight = class_weight
 
     def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
+        # TODO unsure why ClassifierMixin.__sklearn_tags__ is not enough; redefining all tags here
+        tags = super().__sklearn_tags__()  # ty:ignore[unresolved-attribute]
         tags.estimator_type = "classifier"
         tags.classifier_tags = ClassifierTags()
-        tags.classifier_tags.multi_class = True
+        tags.target_tags.required = True
 
+        self.set_sklearn_tags(tags)
+        tags.classifier_tags.multi_class = True
         return tags
 
-    def validate_data_fit_classification(self, x, y) -> Dataset:
+    def validate_data_fit_classification(self, x, y) -> tuple[Dataset, np.ndarray]:
         check_classification_targets(y)
         dtypes = self.get_dtypes(x)
         x, y = validate_data(
@@ -187,7 +188,7 @@ class NominalClassifier(NominalSupervisedModel):
     def get_class_weights(self, y):
         return compute_class_weight(class_weight=self.class_weight, classes=self.classes_, y=y)
 
-    def build_error(self, criterion: str, class_weight: np.array) -> TargetError:
+    def build_error(self, criterion: str, class_weight: np.ndarray) -> TargetError:
         classes = len(class_weight)
         errors = {
             "entropy": shared.EntropyError(classes, class_weight),
@@ -200,12 +201,8 @@ class NominalClassifier(NominalSupervisedModel):
 
     def predict_proba(self, x: Input) -> Output:
         self.check_is_fitted()
-
-        # print("nominal predict proba",self.model_)
         x = self.validate_data_predict(x)
-        # print("nominal predict proba after validate",x)
         y = self.model_.predict(x)
-        # print("nominal predict proba after predict",y,self.model_)
         return y
 
     def predict(self, x: Input) -> Output:
@@ -217,10 +214,8 @@ class NominalClassifier(NominalSupervisedModel):
 
 class NominalRegressor(NominalSupervisedModel, RegressorMixin):
     def __sklearn_tags__(self):
-        tags = super().__sklearn_tags__()
-        tags.estimator_type = "regressor"
-        tags.regressor_tags = RegressorTags()
-        tags.target_tags.required = True
+        tags = super().__sklearn_tags__()  # ty:ignore[unresolved-attribute]
+        self.set_sklearn_tags(tags)
         return tags
 
     def validate_data_fit_regression(self, x, y) -> Dataset:

@@ -30,7 +30,7 @@ class GaussianVariable(Variable):
         self.normal = norm(mu, std + smoothing)
 
     def predict(self, x: pd.Series) -> np.ndarray:
-        result = self.normal.pdf(x.values)
+        result: np.ndarray = self.normal.pdf(x.values)
         result[np.isnan(x.values)] = 1
         return result
 

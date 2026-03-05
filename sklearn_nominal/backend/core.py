@@ -139,7 +139,7 @@ class Model(abc.ABC):
         return predictions
 
     @abc.abstractmethod
-    def pretty_print(self, class_names: list[str] = None) -> str:
+    def pretty_print(self, class_names: list[str] | None = None) -> str:
         pass
 
     @abc.abstractmethod

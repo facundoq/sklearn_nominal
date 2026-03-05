@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 from multiprocessing import Value
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -30,7 +31,7 @@ class Condition(abc.ABC):
         """
         pass
 
-    def na_to_false(self, s: bool | any):
+    def na_to_false(self, s: bool | Any):
         if not isinstance(s, (bool, np.bool_)):
             return False
         else:

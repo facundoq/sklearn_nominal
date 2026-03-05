@@ -1,3 +1,5 @@
+# type: ignore
+
 """
 The :mod:`sklearn_nominal.utils.discovery` module includes utilities to discover
 objects (i.e. estimators, displays, functions) from the `sklearn_nominal` package.

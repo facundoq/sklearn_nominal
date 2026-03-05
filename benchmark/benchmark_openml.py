@@ -81,6 +81,7 @@ def get_nominal_tree(backend: str):
 
 
 def get_sklearn_pipeline(x: pd.DataFrame, model):
+    numeric_features = pd.DataFrame.select_dtypes(x, include=["int64", "float64", "bool"])
     numeric_features = x.select_dtypes(include=["int64", "float64"]).columns
     numeric_transformer = Pipeline(
         steps=[
@@ -134,7 +135,8 @@ def reduce_numeric_features(x: pd.DataFrame, max_numeric_features):
 
 def benchmark(model_generator: typing.Callable, model_name: str, benchmark_result: BenchmarkResult):
     benchmark_suite = openml.study.get_suite("OpenML-CC18")  # obtain the benchmark suite
-
+    if benchmark_suite.tasks is None:
+        raise ValueError("No tasks found in the benchmark suite")
     # print("Running", benchmark_suite)
 
     pbar = tqdm(total=len(benchmark_suite.tasks))

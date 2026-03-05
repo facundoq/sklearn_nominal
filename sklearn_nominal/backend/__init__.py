@@ -4,7 +4,7 @@ import pandas as pd
 Output = np.ndarray
 Input = pd.DataFrame | np.ndarray
 InputSample = pd.Series
-ColumnID = int
+ColumnID = str
 
 from .conditions import Condition, RangeCondition, ValueCondition
 

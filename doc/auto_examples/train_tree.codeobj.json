@@ -1,0 +1,29 @@
+{
+ "TreeClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn_nominal",
+   "module_short": "sklearn_nominal",
+   "name": "TreeClassifier"
+  }
+ ],
+ "accuracy_score": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.metrics",
+   "module_short": "sklearn.metrics",
+   "name": "accuracy_score"
+  }
+ ],
+ "pd.read_csv": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "read_csv"
+  }
+ ]
+}
