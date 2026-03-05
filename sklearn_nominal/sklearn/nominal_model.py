@@ -56,7 +56,6 @@ class NominalModel(metaclass=abc.ABCMeta):
         tags.input_tags.sparse = False
         tags.input_tags.allow_nan = True
         tags.input_tags.string = True
-        print("nominal tags")
 
     def pretty_print(self, class_names: list[str] | None = None):
         self.check_is_fitted()
