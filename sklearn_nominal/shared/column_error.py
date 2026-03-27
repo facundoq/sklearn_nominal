@@ -4,7 +4,7 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition
+from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition, NotCondition
 from sklearn_nominal.backend.core import Dataset, Partition
 from sklearn_nominal.backend.split import RangeSplit, Split, ValueSplit
 
@@ -78,36 +78,51 @@ class NumericColumnError(ColumnError):
         max_evals: int = np.iinfo(np.int64).max,
     ):
         super().__init__(metric, penalization, callback=callback)
-        assert max_evals > 0
+        if max_evals <= 0:
+            raise ValueError("max_evals must be greater than 0")
         self.max_evals = max_evals
 
-    def get_values(self, d: Dataset, column: str):
-        values = d.unique_values(column, False)
+    def get_split_points(self, d: Dataset, column: str) -> np.ndarray:
+        """
+        Identifies potential split points for a numeric column.
+        """
+        # Get unique sorted values for potential split points
+        values = d.unique_values(column, sorted=True)
         n = len(values)
-        if self.max_evals is not None:
-            if n > self.max_evals:
-                # subsample
-                step = n // self.max_evals
-                values = values[::step]
-                n = len(values)
-        if n > 1:
-            values = values[:-1]
-            n -= 1
-        return values
+
+        if n <= 1:
+            return np.array([])
+
+        # Subsample if there are too many unique values to evaluate
+        if self.max_evals is not None and n > self.max_evals:
+            step = n // self.max_evals
+            values = values[::step]
+            n = len(values)
+
+        # Use unique values as split points (except the last one)
+        # This creates splits like: x <= v and x > v
+        return values[:-1]
 
     def error(
         self,
         d: Dataset,
         column: str,
     ) -> ColumnErrorResult | None:
-        values = self.get_values(d, column)
-        # find best split value based on unique values of column
+        """
+        Finds the best split point for a numeric column by minimizing the metric.
+        """
+        split_points = self.get_split_points(d, column)
+        if len(split_points) == 0:
+            return None
+
         best = None
-        for i, v in enumerate(values):
+        for v in split_points:
+            # RangeCondition.make(column, v) returns [x <= v, x > v]
             conditions = RangeCondition.make(column, v)
             result = self.evaluate_conditions(d, conditions, column)
             self.do_callback(result)
-            if best is None or result.error <= best.error:
+
+            if best is None or result.error < best.error:
                 best = result
         return best
 
@@ -118,3 +133,29 @@ class NominalColumnError(ColumnError):
         result = self.evaluate_conditions(d, conditions, column, remove=True)
         self.do_callback(result)
         return result
+
+
+class BinaryNominalColumnError(ColumnError):
+    """
+    Finds the best binary split (One-vs-Rest) for a nominal column.
+    This prevents extremely wide trees by creating binary branches.
+    """
+
+    def error(self, d: Dataset, column: str) -> ColumnErrorResult | None:
+        unique_values = d.unique_values(column, False)
+        if len(unique_values) <= 2:
+            # For 1 or 2 values, use the standard nominal error
+            return NominalColumnError(self.metric, self.penalization, self.callback).error(d, column)
+
+        best = None
+        for v in unique_values:
+            # Create a One-vs-Rest split
+            conditions = [
+                ValueCondition(column, v),
+                NotCondition(ValueCondition(column, v)),
+            ]
+            result = self.evaluate_conditions(d, conditions, column)
+            self.do_callback(result)
+            if best is None or result.error < best.error:
+                best = result
+        return best

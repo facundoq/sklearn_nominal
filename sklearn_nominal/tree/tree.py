@@ -41,11 +41,34 @@ class Tree(Model):
         return list(set([c.column for c in self.conditions()]))
 
     def predict_sample(self, x: pd.Series):
+        df = pd.DataFrame([x])
+        return self.predict(df)[0, :]
+
+    def predict(self, x: pd.DataFrame):
+        n = len(x)
+        predictions = np.zeros((n, self.output_size()))
+        mask = np.ones(n, dtype=bool)
+        self._predict_recursive(x, mask, predictions)
+        return predictions
+
+    def _predict_recursive(self, x, mask, predictions):
+        if self.leaf:
+            predictions[mask] = self.prediction
+            return
+
+        # Samples that haven't followed any branch yet
+        remaining = mask.copy()
+
         for condition, child in self.branches.items():
-            result = condition(x)
-            if result:
-                return child.predict_sample(x)
-        return self.prediction
+            # condition(x) returns a boolean series/array
+            branch_mask = condition(x) & remaining
+            if branch_mask.any():
+                child._predict_recursive(x, branch_mask, predictions)
+                remaining &= ~branch_mask
+
+        # Samples that didn't match any condition
+        if remaining.any():
+            predictions[remaining] = self.prediction
 
     def children(self):
         return list(self.branches.values())

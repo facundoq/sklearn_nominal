@@ -21,10 +21,19 @@ class RuleModel(Model):
         return len(self.default_prediction)
 
     def predict_sample(self, x: InputSample):
+        df = pd.DataFrame([x])
+        return self.predict(df)[0, :]
+
+    def predict(self, x: pd.DataFrame):
+        n = len(x)
+        predictions = np.zeros((n, self.output_size()))
+        remaining = np.ones(n, dtype=bool)
         for condition, p in self.rules:
-            if condition(x):
-                return p
-        return self.default_prediction
+            mask = condition(x) & remaining
+            predictions[mask] = p
+            remaining &= ~mask
+        predictions[remaining] = self.default_prediction
+        return predictions
 
     def __repr__(self):
         return f"RuleModel(rules={len(self.rules)},p={self.default_prediction})"

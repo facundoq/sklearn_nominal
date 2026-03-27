@@ -17,79 +17,135 @@ class OneRClassifier(NominalClassifier, BaseEstimator):
 
     [1] Holte, Robert C. "Very simple classification rules perform well on most commonly used datasets." Machine learning 11.1 (1993): 63-90.
 
-    Parameters
-    ----------
-    criterion : {"gini", "entropy", "log_loss"}, default="entropy"
-        The function to measure the quality of a split. Supported criteria are
-        "gini" for the Gini impurity and "log_loss" and "entropy" both for the
-        Shannon information gain.
+    Args:
+        criterion (str, optional): The function to measure the quality of a split.
+            Supported criteria are "gini" for the Gini impurity and "log_loss"
+            and "entropy" both for the Shannon information gain. Defaults to "entropy".
+        backend (str, optional): The backend to use for computations. Defaults to DEFAULT_BACKEND.
+        class_weight (dict or "balanced", optional): Weights associated with classes
+            in the form ``{class_label: weight}``. If None, all classes are assumed
+            to have weight one. Defaults to None.
 
-    class_weight : dict, list of dict or "balanced", default=None
-        Weights associated with classes in the form ``{class_label: weight}``.
-        If None, all classes are supposed to have weight one.
+    Attributes:
+        classes_ (ndarray of shape (n_classes,)): The classes labels.
+        n_classes_ (int): The number of classes.
+        n_features_in_ (int): Number of features seen during :term:`fit`.
+        feature_names_in_ (ndarray of shape (n_features_in_,)): Names of features
+            seen during :term:`fit`. Defined only when `X` has feature names that
+            are all strings.
+        n_outputs_ (int): The number of outputs when ``fit`` is performed.
+        model_ (RuleModel): The underlying model object.
 
-        The "balanced" mode uses the values of y to automatically adjust
-        weights inversely proportional to class frequencies in the input data
-        as ``n_samples / (n_classes * np.bincount(y))``
+    See Also:
+        TreeRegressor: A decision tree regressor with nominal support.
+        NaiveBayesClassifier: A NaiveBayesClassifier with nominal support.
+        CN2Classifier: A CN2Classifier classifier with nominal support.
+        ZeroRClassifier: A ZeroR classifier with nominal support.
+        PRISMClassifier: A PRISM classifier with nominal support.
 
-    Attributes
-    ----------
-    classes_ : ndarray of shape (n_classes,) or list of ndarray
-        The classes labels (single output problem),
-        or a list of arrays of class labels (multi-output problem).
-
-    n_classes_ : int or list of int
-        The number of classes (for single output problems),
-
-    n_features_in_ : int
-        Number of features seen during :term:`fit`.
-
-    feature_names_in_ : ndarray of shape (`n_features_in_`,)
-        Names of features seen during :term:`fit`. Defined only when `X`
-        has feature names that are all strings.
-
-    n_outputs_ : int
-        The number of outputs when ``fit`` is performed.
-
-    model_ : :class:`sklearn_nominal.rules.model.RuleModel` instance
-        The underlying model object.
-
-    See Also
-    --------
-    TreeRegressor : A decision tree regressor with nominal support.
-    NaiveBayesClassifier : A NaiveBayesClassifier with nominal support.
-    CN2Classifier : A CN2Classifier classifier with nominal support.
-    ZeroRClassifier : A ZeroR classifier with nominal support.
-    PRISMClassifier : A PRISM classifier with nominal support.
-
-    Examples
-    --------
-    >>> from sklearn.datasets import fetch_openml
-    >>> df = fetch_openml("credit-g",version=2).frame
-    >>> x,y = df.iloc[:,0:-1], df.iloc[:,-1]
-    >>>
-    >>> from sklearn_nominal import OneR
-    >>> model = OneR()
-    >>> model.fit(x,y)
-    >>>
-    >>> from sklearn.metrics import accuracy_score
-    >>> y_pred = model.predict(x)
-    >>> print(accuracy_score(y,y_pred))
-    ... 0.787
+    Examples:
+        >>> from sklearn.datasets import fetch_openml
+        >>> df = fetch_openml("credit-g",version=2).frame
+        >>> x,y = df.iloc[:,0:-1], df.iloc[:,-1]
+        >>>
+        >>> from sklearn_nominal import OneR
+        >>> model = OneR()
+        >>> model.fit(x,y)
+        >>>
+        >>> from sklearn.metrics import accuracy_score
+        >>> y_pred = model.predict(x)
+        >>> print(accuracy_score(y,y_pred))
+        ... 0.787
     """
 
     def __sklearn_tags__(self):
+        """Returns the scikit-learn tags for the estimator.
+
+        Returns:
+            Tags: The scikit-learn tags.
+        """
         tags = super().__sklearn_tags__()
         tags.classifier_tags.poor_score = True
         return tags
 
     def __init__(self, criterion="entropy", backend=DEFAULT_BACKEND, class_weight=None):
+        """Initializes the OneRClassifier.
+
+        Args:
+            criterion (str): The function to measure the quality of a split.
+                Supported criteria are "gini" for the Gini impurity and "log_loss"
+                and "entropy" both for the Shannon information gain.
+                Defaults to "entropy".
+            backend (str): The backend to use for computations.
+                Defaults to DEFAULT_BACKEND.
+            class_weight (dict or "balanced", optional): Weights associated with classes
+                in the form ``{class_label: weight}``. If None, all classes are assumed
+                to have weight one. Defaults to None.
+        """
         super().__init__(backend=backend, class_weight=class_weight)
         self.criterion = criterion
 
     def make_model(self, d: Dataset, class_weight: np.ndarray):
+        """Creates the OneR trainer for the model.
+
+        Args:
+            d (Dataset): The dataset to train on.
+            class_weight (np.ndarray): The weights for each class.
+
+        Returns:
+            OneR: The OneR trainer instance.
+        """
         error = self.build_error(self.criterion, class_weight)
         return OneR(error_function=error)
+
+    def fit(self, x, y):
+        """Fit the OneR model according to the given training data.
+
+        The OneR (One Rule) algorithm identifies the single best feature
+        (the "One Rule") that minimizes the classification error on the
+        training data. It creates a simple decision rule based on this
+        feature alone.
+
+        Args:
+            x (pd.DataFrame or np.ndarray): The training input samples.
+            y (np.ndarray): The target values (class labels) as integers or strings.
+
+        Returns:
+            self: Returns the instance itself.
+        """
+        return super().fit(x, y)
+
+    def predict(self, x):
+        """Perform classification on an array of test vectors X.
+
+        Predicts the target class based on the single best feature identified
+        during :meth:`fit`. If a value in the test set was not seen in the
+        training set for that feature, the default (majority) class is
+        predicted.
+
+        Args:
+            x (pd.DataFrame or np.ndarray): The input samples.
+
+        Returns:
+            np.ndarray: Predicted target values for X.
+        """
+        return super().predict(x)
+
+    def predict_proba(self, x):
+        """Return probability estimates for the test data X.
+
+        The probability estimates are derived from the class distribution of
+        the training samples that matched the same value of the "One Rule"
+        feature.
+
+        Args:
+            x (pd.DataFrame or np.ndarray): The input samples.
+
+        Returns:
+            np.ndarray: Returns the probability of the sample for each class
+                in the model.
+        """
+        return super().predict_proba(x)
 
 
 class OneRRegressor(NominalRegressor, BaseEstimator):
@@ -97,55 +153,97 @@ class OneRRegressor(NominalRegressor, BaseEstimator):
 
     [1] Holte, Robert C. "Very simple classification rules perform well on most commonly used datasets." Machine learning 11.1 (1993): 63-90.
 
-    Parameters
-    ----------
-    criterion : {"std"}, default="std"
-        The function to measure the error of a split. Supported criteria are
-        currently only "std", for standard deviation (equivalent to root MSE), but in the future other error functions may be added.
+    Args:
+        criterion (str, optional): The function to measure the error of a split.
+            Supported criteria are currently only "std", for standard deviation
+            (equivalent to root MSE). Defaults to "std".
+        backend (str, optional): The backend to use for computations. Defaults to DEFAULT_BACKEND.
 
-    Attributes
-    ----------
+    Attributes:
+        n_features_in_ (int): Number of features seen during :term:`fit`.
+        feature_names_in_ (ndarray of shape (n_features_in_,)): Names of features
+            seen during :term:`fit`. Defined only when `X` has feature names that
+            are all strings.
+        n_outputs_ (int): The number of outputs when ``fit`` is performed.
+        model_ (RuleModel): The underlying model object.
 
-    n_features_in_ : int
-        Number of features seen during :term:`fit`.
+    See Also:
+        TreeRegressor: A decision tree regressor with nominal support.
+        CN2Regressor: A CN2Classifier regressor with nominal support.
+        ZeroRRegressor: A ZeroR regressor with nominal support.
 
-    feature_names_in_ : ndarray of shape (`n_features_in_`,)
-        Names of features seen during :term:`fit`. Defined only when `X`
-        has feature names that are all strings.
-
-    n_outputs_ : int
-        The number of outputs when ``fit`` is performed.
-
-    model_ : :class:`sklearn_nominal.rules.model.RuleModel` instance
-        The underlying model object.
-
-    See Also
-    --------
-    TreeRegressor : A decision tree regressor with nominal support.
-    CN2Regressor : A CN2Classifier regressor with nominal support.
-    ZeroRRegressor : A ZeroR regressor with nominal support.
-
-    Examples
-    --------
-    >>> from sklearn_nominal import OneRRegressor, read_golf_regression_dataset
-    >>> x, y = read_golf_regression_dataset(url)
-    >>> model = OneRRegressor()
-    >>> from sklearn.metrics import mean_absolute_error
-    >>> model.fit(x, y)
-    >>> y_pred = model.predict(x)
-    >>> print(f"{mean_absolute_error(y, y_pred):.2f}")
-    0.07
+    Examples:
+        >>> from sklearn_nominal import OneRRegressor, read_golf_regression_dataset
+        >>> x, y = read_golf_regression_dataset(url)
+        >>> model = OneRRegressor()
+        >>> from sklearn.metrics import mean_absolute_error
+        >>> model.fit(x, y)
+        >>> y_pred = model.predict(x)
+        >>> print(f"{mean_absolute_error(y, y_pred):.2f}")
+        0.07
     """
 
     def __init__(self, criterion="std", backend=DEFAULT_BACKEND):
+        """Initializes the OneRRegressor.
+
+        Args:
+            criterion (str): The function to measure the error of a split.
+                Supported criteria are currently only "std", for standard deviation
+                (equivalent to root MSE). Defaults to "std".
+            backend (str): The backend to use for computations.
+                Defaults to DEFAULT_BACKEND.
+        """
         super().__init__(backend=backend)
         self.criterion = criterion
 
     def __sklearn_tags__(self):
+        """Returns the scikit-learn tags for the estimator.
+
+        Returns:
+            Tags: The scikit-learn tags.
+        """
         tags = super().__sklearn_tags__()
         tags.regressor_tags.poor_score = True
         return tags
 
     def make_model(self, d: Dataset):
+        """Creates the OneR trainer for the model.
+
+        Args:
+            d (Dataset): The dataset to train on.
+
+        Returns:
+            OneR: The OneR trainer instance.
+        """
         error = self.build_error(self.criterion)
         return OneR(error_function=error)
+
+    def fit(self, x, y):
+        """Fit the OneR model according to the given training data.
+
+        The OneR algorithm identifies the single best feature that minimizes
+        the regression error (e.g., standard deviation) on the training data.
+
+        Args:
+            x (pd.DataFrame or np.ndarray): The training input samples.
+            y (np.ndarray): The target values (real numbers).
+
+        Returns:
+            self: Returns the instance itself.
+        """
+        return super().fit(x, y)
+
+    def predict(self, x):
+        """Predict regression value for X.
+
+        Predicts the target value based on the single best feature identified
+        during :meth:`fit`. Typically, this is the mean target value of
+        training samples matching the same feature value.
+
+        Args:
+            x (pd.DataFrame or np.ndarray): The input samples.
+
+        Returns:
+            np.ndarray: Predicted target values for X.
+        """
+        return super().predict(x)

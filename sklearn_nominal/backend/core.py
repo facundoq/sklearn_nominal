@@ -131,12 +131,9 @@ class Model(abc.ABC):
     def output_size(self) -> int:
         pass
 
+    @abc.abstractmethod
     def predict(self, x: Input):
-        n = x.shape[0]
-        predictions = np.zeros((n, self.output_size()))
-        for i, (idx, row) in enumerate(x.iterrows()):
-            predictions[i, :] = self.predict_sample(row)
-        return predictions
+        pass
 
     @abc.abstractmethod
     def pretty_print(self, class_names: list[str] | None = None) -> str:

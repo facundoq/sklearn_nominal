@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from typing import Generator, Iterable
+import threading
 
 import numpy as np
 import pandas as pd
-from numpy import dtype, ndarray
-from scipy.special import y1
 
 from . import ColumnID
+from .core import Dataset, ColumnType
 from .conditions import (
     AndCondition,
     Condition,
@@ -16,7 +16,8 @@ from .conditions import (
     TrueCondition,
     ValueCondition,
 )
-from .core import ColumnType, Dataset
+
+...
 
 
 class PandasDataset(Dataset):
@@ -28,23 +29,28 @@ class PandasDataset(Dataset):
         # already filtered if idx is None
         self._x_subset = idx is None
         self._y_subset = self._x_subset
+        self._lock = threading.Lock()
 
     @property
     def x(self) -> pd.DataFrame:
         if not self._x_subset:
-            self._x = self._x.loc[self.idx]
-            self._x_subset = True
-            if self._y_subset:  # if filtered both, free idx
-                self.idx = None
+            with self._lock:
+                if not self._x_subset:
+                    self._x = self._x.loc[self.idx]
+                    self._x_subset = True
+                    if self._y_subset:  # if filtered both, free idx
+                        self.idx = None
         return self._x
 
     @property
     def y(self) -> pd.ndarray:
         if not self._y_subset:
-            self._y = self._y[self.idx]
-            self._y_subset = True
-        if self._x_subset:  # if filtered both, free idx
-            self.idx = None
+            with self._lock:
+                if not self._y_subset:
+                    self._y = self._y[self.idx]
+                    self._y_subset = True
+                if self._x_subset:  # if filtered both, free idx
+                    self.idx = None
         return self._y
 
     def split(self, conditions: list[Condition]):

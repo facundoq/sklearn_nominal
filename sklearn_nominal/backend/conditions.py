@@ -31,7 +31,12 @@ class Condition(abc.ABC):
         """
         pass
 
-    def na_to_false(self, s: bool | Any):
+    def na_to_false(self, s: bool | Any | pd.Series | np.ndarray):
+        if isinstance(s, (pd.Series, np.ndarray)):
+            if isinstance(s, pd.Series):
+                return s.fillna(False).astype(bool)
+            else:
+                return np.nan_to_num(s, nan=False).astype(bool)
         if not isinstance(s, (bool, np.bool_)):
             return False
         else:
@@ -123,11 +128,15 @@ class AndCondition(Condition):
         descriptions = ",".join(descriptions)
         return f"And({descriptions})"
 
-    def __call__(self, x: InputSample):
+    def __call__(self, x: InputSample | pd.DataFrame):
+        result = None
         for c in self.conditions:
-            if not c(x):
-                return False
-        return True
+            c_result = c(x)
+            if result is None:
+                result = c_result
+            else:
+                result = result & c_result
+        return result
 
     def __repr__(self):
         conditions = [f"({c})" for c in self.conditions]
@@ -166,7 +175,9 @@ class TrueCondition(Condition):
     def __init__(self):
         super().__init__("")
 
-    def __call__(self, x: InputSample):
+    def __call__(self, x: InputSample | pd.DataFrame):
+        if isinstance(x, pd.DataFrame):
+            return pd.Series([True] * len(x), index=x.index)
         return True
 
     def short_description(self):
@@ -190,8 +201,8 @@ class NotCondition(Condition):
         super().__init__(condition.column)
         self.condition = condition
 
-    def __call__(self, x: InputSample):
-        return not self.condition(x)
+    def __call__(self, x: InputSample | pd.DataFrame):
+        return ~self.condition(x)
 
     def short_description(self):
         return f"NOT {self.condition.short_description}"
