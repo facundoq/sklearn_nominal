@@ -1,3 +1,5 @@
+import operator
+from functools import reduce
 import abc
 from abc import ABC
 from typing import Any
@@ -8,6 +10,9 @@ from scipy.stats import norm
 
 from sklearn_nominal.backend import Input, InputSample
 from sklearn_nominal.backend.core import Model
+
+import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 
 class Variable(ABC):
@@ -136,6 +141,34 @@ class NaiveBayes(Model):
 
         return results
 
+    def explain(self, x: Input, class_names: list[str] | None = None) -> pd.DataFrame:
+        n = len(x)
+        if class_names is None:
+            class_names = [f"class_{i}" for i in range(len(self.models))]
+
+        n_classes = len(self.models)
+        explanation = [{"sample": i} for i in range(n)]
+        results = np.zeros((n, n_classes))
+        for c in range(n_classes):
+            p_x = 1
+            for name, var in self.models[c].variables.items():
+                p_var = var.predict(x[name])
+                for i in range(n):
+                    explanation[i][f"P({name}|{class_names[c]})"] = p_var[i]
+                p_x *= p_var
+            p_class = self.pi[c]
+            for i in range(n):
+                explanation[i][f"P({class_names[c]})"] = p_class
+            results[:, c] = p_x * p_class
+
+        results /= results.sum(axis=1, keepdims=True)
+        for i in range(n):
+            for c in range(n_classes):
+                explanation[i][f"p({class_names[c]}|x)"] = results[i, c]
+        # explanation = reduce(operator.ior, explanation, {})
+        explanation = pd.DataFrame(explanation)
+        return explanation
+
     def pretty_print(self, class_names: list[str] = None) -> str:
         n_classes = len(self.models)
 
@@ -147,6 +180,50 @@ class NaiveBayes(Model):
         class_descriptions = [class_description(i) for i in range(n_classes)]
         class_descriptions = "\n".join(class_descriptions)
         return f"{NaiveBayes.__name__}(classes={n_classes})\n{class_descriptions}"
+
+    def plot_distributions(
+        self, class_names: list[str] | None = None, feature_names: list[str] | None = None, n_cols=4
+    ):
+        models = self.models
+        if class_names is None:
+            class_names = [f"{i}" for i in range(len(models))]
+        if feature_names is None:
+            feature_names = [v for v, d in models[0].variables.items()]
+        n_rows = int(np.ceil(len(feature_names) / n_cols))
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(4 * n_cols, 3 * n_rows))
+        axes = np.array(axes).reshape(-1)
+        for ax, feat in zip(axes, feature_names):
+            var = models[0].variables[feat]
+            if isinstance(var, GaussianVariable):
+                for cls, m in zip(class_names, models):
+                    dist = m.variables[feat]
+                    mu, std = dist.mu, dist.std
+                    x = np.linspace(mu - 4 * std, mu + 4 * std, 200)
+                    y = dist.predict(pd.Series(x, name=feat))
+                    ax.plot(x, y, label=cls)
+            elif isinstance(var, CategoricalVariable):
+                # plot heatmap of probabilities for each class vs value for variable feat
+                probabilities = np.zeros((len(class_names), len(var.probabilities)))
+                values = list(var.probabilities.keys())
+                for i, cls in enumerate(class_names):
+                    dist = models[i].variables[feat]
+                    probabilities[i, :] = [dist.probabilities[v] for v in values]
+                ax.imshow(probabilities, cmap="viridis", aspect="auto")
+                ax.set_xticks(np.arange(len(values)))
+                ax.set_yticks(np.arange(len(class_names)))
+                ax.set_xticklabels(values)
+                ax.set_yticklabels(class_names)
+                ax.set_xlabel("Value")
+                ax.set_ylabel("Class")
+                ax.set_title(feat)
+                ## add colorbar
+                cbar = fig.colorbar(ax.imshow(probabilities, cmap="viridis", aspect="auto"), ax=ax)
+                cbar.set_label("Probability")
+
+        for ax in axes[len(feature_names) :]:
+            ax.axis("off")
+        plt.tight_layout()
+        plt.show()
 
     def complexity(self) -> int:
         return max([m.complexity() for m in self.models])

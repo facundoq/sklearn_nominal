@@ -1,3 +1,4 @@
+from sklearn_nominal.bayes.model import NaiveBayes
 import numpy as np
 from sklearn.base import BaseEstimator
 
@@ -151,3 +152,14 @@ class NaiveBayesClassifier(NominalClassifier, BaseEstimator):
                 in the model.
         """
         return super().predict_proba(x)
+
+    def plot_distributions(
+        self, class_names: list[str] | None = None, feature_names: list[str] | None = None, n_cols=4
+    ):
+        self.check_is_fitted()
+        model: NaiveBayes = self.model_
+        model.plot_distributions(class_names, feature_names, n_cols)
+
+    def explain(self, x, class_names: list[str] | None = None):
+        self.check_is_fitted()
+        return self.model_.explain(x, class_names)
