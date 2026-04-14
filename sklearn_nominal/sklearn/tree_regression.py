@@ -68,6 +68,7 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
         min_samples_split=2,
         min_samples_leaf=1,
         min_error_decrease=1e-16,
+        attribute_penalization_importance=1,
         nominal_split="multi",
         backend="pandas",
     ):
@@ -102,6 +103,7 @@ class TreeRegressor(NominalRegressor, BaseTree, BaseEstimator):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_error_decrease=min_error_decrease,
+            attribute_penalization_importance=attribute_penalization_importance,
             nominal_split=nominal_split,
             backend=backend,
         )

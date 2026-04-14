@@ -39,6 +39,10 @@ def get_nominal_tree_classifier(criterion: str):
         min_samples_leaf = max(2, int(n * (0.05 / classes)))
         min_samples_split = min_samples_leaf
         min_error_decrease = 0.01 / classes
+        if criterion == "gain_ratio":
+            attribute_penalization_importance = 0.3
+        else:
+            attribute_penalization_importance = 0
 
         return TreeClassifier(
             criterion=criterion,
@@ -46,6 +50,7 @@ def get_nominal_tree_classifier(criterion: str):
             min_samples_leaf=min_samples_leaf,
             min_samples_split=min_samples_split,
             min_error_decrease=min_error_decrease,
+            attribute_penalization_importance=attribute_penalization_importance,
             splitter=4,
         )
 

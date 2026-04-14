@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import Generator, Iterable
 import threading
+from typing import Generator, Iterable
 
 import numpy as np
 import pandas as pd
 
 from . import ColumnID
-from .core import Dataset, ColumnType
 from .conditions import (
     AndCondition,
     Condition,
@@ -16,6 +15,7 @@ from .conditions import (
     TrueCondition,
     ValueCondition,
 )
+from .core import ColumnType, Dataset
 
 ...
 

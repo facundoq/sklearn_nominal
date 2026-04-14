@@ -87,6 +87,7 @@ class BaseTree:
         min_samples_split: int | float = 2,
         min_samples_leaf=1,
         min_error_decrease=0.0,
+        attribute_penalization_importance=1.0,
         nominal_split="multi",
     ):
         """Initializes the BaseTree with growth and splitting parameters.
@@ -117,6 +118,7 @@ class BaseTree:
         self.min_samples_split = min_samples_split
         self.min_error_decrease = min_error_decrease
         self.nominal_split = nominal_split
+        self.attribute_penalization_importance = attribute_penalization_importance
 
     def build_attribute_penalizer(self):
         """Determines the penalization strategy for multi-valued attributes.
@@ -131,7 +133,7 @@ class BaseTree:
             `NoPenalization`).
         """
         if self.criterion == "gain_ratio":
-            return shared.GainRatioPenalization()
+            return shared.DivisionInfoPenalization(self.attribute_penalization_importance)
         else:
             return shared.NoPenalization()
 

@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn_nominal.bayes.model import (
@@ -10,7 +11,6 @@ from sklearn_nominal.bayes.model import (
 )
 from sklearn_nominal.sklearn.naive_bayes import NaiveBayesClassifier
 from sklearn_nominal.tests.test_classification import read_classification_dataset
-import matplotlib.pyplot as plt
 
 
 def test_basic():

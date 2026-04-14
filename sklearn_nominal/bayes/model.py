@@ -1,18 +1,16 @@
-import operator
-from functools import reduce
 import abc
+import operator
 from abc import ABC
+from functools import reduce
 from typing import Any
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
 
 from sklearn_nominal.backend import Input, InputSample
 from sklearn_nominal.backend.core import Model
-
-import matplotlib.pyplot as plt
-from scipy.stats import norm
 
 
 class Variable(ABC):

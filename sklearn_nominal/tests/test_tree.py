@@ -8,6 +8,32 @@ from sklearn_nominal.tests.test_classification import read_classification_datase
 from sklearn_nominal.tree.tree import Tree
 
 
+def test_alsol():
+    path = Path("datasets/classification/alsol.csv")
+    x, y, class_names = read_classification_dataset(path, reencode_y=False)
+    x = x.drop(columns=["id", "Nombre"])
+    expected_root = {
+        "gain_ratio": "Protector",
+        "entropy": "Pelo",
+    }
+    for criterion in [
+        "gain_ratio",
+        "entropy",
+    ]:
+        sk_model = TreeClassifier(
+            criterion=criterion, attribute_penalization_importance=0.3, min_samples_split=1, splitter="best"
+        )
+        sk_model.fit(x, y)
+
+        print(criterion)
+        print(sk_model.pretty_print())
+
+        model: Tree = sk_model.model_
+        conditions = list(model.branches.keys())
+        assert len(conditions) > 0, "Model has no branches"
+        assert conditions[0].column == expected_root[criterion], "Root condition is not the expected one"
+
+
 def test_jobs():
     path = Path("datasets/classification/jobs.csv")
     x, y, class_names = read_classification_dataset(path, reencode_y=False)

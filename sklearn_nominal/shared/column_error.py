@@ -4,7 +4,7 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from sklearn_nominal.backend.conditions import Condition, RangeCondition, ValueCondition, NotCondition
+from sklearn_nominal.backend.conditions import Condition, NotCondition, RangeCondition, ValueCondition
 from sklearn_nominal.backend.core import Dataset, Partition
 from sklearn_nominal.backend.split import RangeSplit, Split, ValueSplit
 
@@ -41,7 +41,7 @@ class ColumnError(abc.ABC):
         penalization: ColumnPenalization = NoPenalization(),
         callback=None,
     ):
-        self.penalization = penalization
+        self.attribute_penalization = penalization
         self.metric = metric
         self.callback = callback
 
@@ -65,7 +65,8 @@ class ColumnError(abc.ABC):
     ) -> ColumnErrorResult:
         partition = d.split(conditions)
         error = self.metric.average_split(partition)
-        error /= self.penalization.penalize(partition)
+        penalization_score = self.attribute_penalization.penalize(partition)
+        error = error + penalization_score
         return ColumnErrorResult(column, error, conditions, partition, remove)
 
 
@@ -145,7 +146,7 @@ class BinaryNominalColumnError(ColumnError):
         unique_values = d.unique_values(column, False)
         if len(unique_values) <= 2:
             # For 1 or 2 values, use the standard nominal error
-            return NominalColumnError(self.metric, self.penalization, self.callback).error(d, column)
+            return NominalColumnError(self.metric, self.attribute_penalization, self.callback).error(d, column)
 
         best = None
         for v in unique_values:

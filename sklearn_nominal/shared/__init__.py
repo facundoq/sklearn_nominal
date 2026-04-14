@@ -1,6 +1,6 @@
 from .attribute_penalization import (
     ColumnPenalization,
-    GainRatioPenalization,
+    DivisionInfoPenalization,
     NoPenalization,
 )
 from .column_error import (

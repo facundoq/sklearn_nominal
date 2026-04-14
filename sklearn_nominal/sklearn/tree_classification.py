@@ -20,9 +20,11 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
     attributes.
 
     Args:
-        criterion (str, optional): The function to measure the quality of a split.
-            Supported criteria are "gini" for the Gini impurity and "log_loss"
-            and "entropy" both for the Shannon information gain. Defaults to "entropy".
+        criterion (str): The function to measure the quality of a split.
+                Supported criteria are "gini" for the Gini impurity and "log_loss"
+                and "entropy" both for the Shannon information gain, and "gain_ratio"
+                 for "entropy" regularized by the intrinsic information of the split.
+                 Defaults to "entropy".
         class_weight (dict or "balanced", optional): Weights associated with classes
             in the form ``{class_label: weight}``. If None, all classes are assumed
             to have weight one. Defaults to None.
@@ -85,6 +87,7 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
         min_samples_leaf=1,
         min_error_decrease=1e-16,
         class_weight=None,
+        attribute_penalization_importance=1,
         nominal_split="multi",
         backend="pandas",
     ):
@@ -93,7 +96,9 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
         Args:
             criterion (str): The function to measure the quality of a split.
                 Supported criteria are "gini" for the Gini impurity and "log_loss"
-                and "entropy" both for the Shannon information gain. Defaults to "entropy".
+                and "entropy" both for the Shannon information gain, and "gain_ratio"
+                 for "entropy" regularized by the intrinsic information of the split.
+                 Defaults to "entropy".
             splitter (str or int): The strategy used to choose the split at
                 each numeric node. See :class:`BaseTree`. Defaults to "best".
             max_depth (int, optional): The maximum depth of the tree. See :class:`BaseTree`.
@@ -120,6 +125,7 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
             min_samples_leaf=min_samples_leaf,
             min_error_decrease=min_error_decrease,
             nominal_split=nominal_split,
+            attribute_penalization_importance=attribute_penalization_importance,
             backend=backend,
         )
 
@@ -145,7 +151,6 @@ class TreeClassifier(NominalClassifier, BaseTree, BaseEstimator):
         """
         error = self.build_error(self.criterion, class_weight)
         column_penalization = self.build_attribute_penalizer()
-
         scorers = self.build_splitter(error, column_penalization)
 
         scorer = shared.DefaultSplitter(error, scorers)
