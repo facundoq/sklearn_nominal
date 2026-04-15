@@ -23,6 +23,9 @@
         ~NaiveBayesClassifier.complexity
       
       
+        ~NaiveBayesClassifier.explain
+      
+      
         ~NaiveBayesClassifier.fit
       
       
@@ -45,6 +48,9 @@
       
       
         ~NaiveBayesClassifier.make_model
+      
+      
+        ~NaiveBayesClassifier.plot_distributions
       
       
         ~NaiveBayesClassifier.predict

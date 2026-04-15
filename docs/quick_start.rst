@@ -65,3 +65,19 @@ The results can be compared in this table:
    :file: classifier_comparison.csv
    :widths: 5,65,15,15
    :header-rows: 1
+
+
+Controlling Attribute Penalization
+----------------------------------------
+
+When working with nominal attributes, some features might have many unique values (high cardinality), such as "ID" or "Name". These features can lead to overfitting because they can perfectly partition the training data without providing real predictive power.
+
+The `gain_ratio` criterion addresses this by penalizing attributes based on their intrinsic information (the entropy of the split itself). You can control the strength of this penalization using the `attribute_penalization_importance` parameter.
+
+*   `attribute_penalization_importance = 0`: Equivalent to standard Information Gain (Entropy).
+*   `attribute_penalization_importance > 0`: Increases the penalty for multi-valued attributes.
+
+The following example demonstrates how different importance values affect the tree structure on the `alsol.csv` dataset, which contains high-cardinality features:
+
+.. literalinclude :: ../examples/gain_ratio_example.py
+   :language: python
