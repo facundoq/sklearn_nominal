@@ -66,15 +66,12 @@ class CN2:
         # remove range conditions that are similar
         if not isinstance(condition, RangeCondition):
             return
-        condition: RangeCondition = condition
-        conditions = filter(
-            lambda c: isinstance(c, RangeCondition),
-        )
+        conditions_range: list[RangeCondition] = list(filter(lambda c: isinstance(c, RangeCondition), conditions))
 
         def issimilar(c: RangeCondition):
             return c.column == condition.column and c.less == condition.less
 
-        for s in filter(issimilar, conditions):
+        for s in filter(issimilar, conditions_range):
             conditions.remove(s)
 
     def generate_rule(self, d: Dataset, target_error: TargetError) -> None | PredictionRule:

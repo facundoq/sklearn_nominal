@@ -68,6 +68,9 @@
         ~CN2Regressor.set_score_request
       
       
+        ~CN2Regressor.set_sklearn_tags
+      
+      
         ~CN2Regressor.validate_data_fit_regression
       
       

@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn_nominal.bayes.model import (
@@ -17,8 +18,12 @@ def test_basic():
     x, y, class_names = read_classification_dataset(path, reencode_y=False)
     sk_model = NaiveBayesClassifier()
     sk_model.fit(x, y)
-
+    print(x)
     print(sk_model.pretty_print(class_names=class_names))
+    print(sk_model.explain(x, class_names=class_names))
+    print(sk_model.predict_proba(x))
+    # sk_model.plot_distributions(class_names)
+    # plt.close()
 
     model: NaiveBayes = sk_model.model_
 

@@ -68,6 +68,9 @@
         ~OneRRegressor.set_score_request
       
       
+        ~OneRRegressor.set_sklearn_tags
+      
+      
         ~OneRRegressor.validate_data_fit_regression
       
       

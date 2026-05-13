@@ -56,6 +56,9 @@
         ~CN2Classifier.pretty_print
       
       
+        ~CN2Classifier.score
+      
+      
         ~CN2Classifier.set_dtypes
       
       
@@ -72,6 +75,12 @@
       
       
         ~CN2Classifier.set_predict_request
+      
+      
+        ~CN2Classifier.set_score_request
+      
+      
+        ~CN2Classifier.set_sklearn_tags
       
       
         ~CN2Classifier.validate_data_fit_classification

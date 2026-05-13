@@ -77,6 +77,9 @@
         ~TreeClassifier.pretty_print
       
       
+        ~TreeClassifier.score
+      
+      
         ~TreeClassifier.set_dtypes
       
       
@@ -93,6 +96,12 @@
       
       
         ~TreeClassifier.set_predict_request
+      
+      
+        ~TreeClassifier.set_score_request
+      
+      
+        ~TreeClassifier.set_sklearn_tags
       
       
         ~TreeClassifier.validate_data_fit_classification

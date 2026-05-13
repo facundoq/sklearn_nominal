@@ -66,61 +66,57 @@ class BaseTreeTrainer(TreeTrainer):
             self.tree_creation_callback(r)
 
     def build(self, d: Dataset, height: int) -> Tree:
-        # ROOT
+        """
+        Builds a decision tree from the given dataset.
+
+        Parameters
+        ----------
+        d : Dataset
+            The dataset to build the tree from.
+        height : int
+            The initial height of the tree (usually 1).
+
+        Returns
+        -------
+        Tree
+            The root of the constructed decision tree.
+        """
         global_score = self.splitter.global_error(d)
         root = Tree(global_score.prediction, global_score.error, d.n)
-        root_task = TreeTask(None, None, d, height)
-        subtrees = self.make_tree(root, root_task)
 
-        # OTHER NODES
-        while len(subtrees) > 0:
-            task = subtrees.pop()
-            global_score = self.splitter.global_error(task.d)
-            new_tree = Tree(global_score.prediction, global_score.error, task.d.n)
-            task.parent.branches[task.condition] = new_tree
-            subtree_tasks = self.make_tree(new_tree, task)
-            # bfs
-            subtree_tasks.reverse()
-            subtrees = subtrees + subtree_tasks
-        return root
+        # Stack stores (current_tree, current_dataset, current_height)
+        stack = [(root, d, height)]
 
-    def make_tree(self, tree: Tree, task: TreeTask) -> list[TreeTask]:
-        # BASE CASE: pre_split_prune
-        if self.prune.pre_split_prune(task.d.x, task.d.y, task.height, tree):
-            r = TreeCreationCallbackResult(tree, task, True)
-            self.do_creation_callback(r)
-            return []
+        while stack:
+            tree_node, dataset, node_height = stack.pop()
 
-        # COMPUTE SPLITS
-        best_column = self.splitter.split_columns(task.d)
-
-        # BASE CASE: no viable columns to split found
-        if best_column is None:
-            r = TreeCreationCallbackResult(tree, task)
-            self.do_creation_callback(r)
-            return []
-
-        # BASE CASE: best gain is not enough to split tree
-        if self.prune.post_split_prune(tree, best_column):
-            r = TreeCreationCallbackResult(tree, task, True, best_column)
-            self.do_creation_callback(r)
-            return []
-
-        r = TreeCreationCallbackResult(tree, task, False, best_column)
-        self.do_creation_callback(r)
-
-        # RECURSIVE CASE: use best column to split
-        subtrees = []
-
-        for i, (d_branch, condition) in enumerate(zip(best_column.partition, best_column.conditions)):
-            # avoid branches with low samples
-            if d_branch.n < self.prune.min_samples_leaf:
+            # 1. Pre-split pruning
+            if self.prune.pre_split_prune(dataset.x, dataset.y, node_height, tree_node):
+                self.do_creation_callback(TreeCreationCallbackResult(tree_node, None, True))
                 continue
-            # remove column from consideration
-            if best_column.remove:
-                d_branch = d_branch.drop(columns=[best_column.column])
-            # create tree task
-            subtask = TreeTask(tree, condition, d_branch, task.height + 1)
-            subtrees.append(subtask)
 
-        return subtrees
+            # 2. Find best split
+            best_split = self.splitter.split_columns(dataset)
+
+            # 3. Post-split pruning / Base cases
+            if best_split is None or self.prune.post_split_prune(tree_node, best_split):
+                self.do_creation_callback(TreeCreationCallbackResult(tree_node, None, best_column=best_split))
+                continue
+
+            self.do_creation_callback(TreeCreationCallbackResult(tree_node, None, best_column=best_split))
+
+            # 4. Create child nodes
+            for d_branch, condition in zip(best_split.partition, best_split.conditions):
+                if d_branch.n < self.prune.min_samples_leaf:
+                    continue
+
+                if best_split.remove:
+                    d_branch = d_branch.drop(columns=[best_split.column])
+
+                branch_score = self.splitter.global_error(d_branch)
+                child_tree = Tree(branch_score.prediction, branch_score.error, d_branch.n)
+                tree_node.branches[condition] = child_tree
+
+                stack.append((child_tree, d_branch, node_height + 1))
+
+        return root

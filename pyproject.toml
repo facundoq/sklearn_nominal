@@ -18,7 +18,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sklearn_nominal"
-version = "0.0.4"
+version = "0.0.9"
 description = "Extra models for scikit-learn w/ built-in support for nominal attributes"
 readme = "README.md"
 authors = [{name="Facundo Manuel Quiroga", email="{first_name}{last_name_initial}@gmail.com"}]
@@ -32,8 +32,7 @@ dependencies = [
     "data-science-types>=0.2.23",
     "pandas[pyarrow]>=2.2.3",
     "pyarrow>=19.0.1",
-
-
+    "pytest-xdist>=3.8.0",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -167,6 +166,7 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
 executor.type = "uv"
 
 [tool.poe.tasks]
+testp = "uv run pytest sklearn_nominal -n auto"
 test = "uv run pytest sklearn_nominal"
 lint = "uvx ruff check --fix sklearn_nominal "
 format = "uvx ruff format sklearn_nominal"

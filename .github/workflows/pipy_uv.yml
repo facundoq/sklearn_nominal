@@ -10,8 +10,8 @@ jobs:
     permissions:
       id-token: write  # Required for trusted publishing
     steps:
-      - uses: actions/checkout@v4
-      - name: setup
+      - uses: actions/checkout@v6
+      - name: Setup
         uses: ./.github/actions/setup 
       - run: uv build
       - name: Publish package

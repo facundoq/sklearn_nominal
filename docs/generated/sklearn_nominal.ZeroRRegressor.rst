@@ -68,6 +68,9 @@
         ~ZeroRRegressor.set_score_request
       
       
+        ~ZeroRRegressor.set_sklearn_tags
+      
+      
         ~ZeroRRegressor.validate_data_fit_regression
       
       

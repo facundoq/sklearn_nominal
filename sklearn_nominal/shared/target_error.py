@@ -50,6 +50,10 @@ def log(x, base):
         return np.log(x) * lb
 
 
+def entropy(p: np.ndarray, base: int = 2):
+    return -np.sum(p * log(p, base))
+
+
 class ClassificationError(TargetError):
     def __init__(self, classes: int, class_weight: np.ndarray):
         self.classes = classes
@@ -75,7 +79,7 @@ class EntropyError(ClassificationError):
     def __call__(self, d: Dataset):
         p = self.prediction(d)
 
-        return -np.sum(p * log(p, self.classes))
+        return entropy(p)
 
 
 class AccuracyError(ClassificationError):
