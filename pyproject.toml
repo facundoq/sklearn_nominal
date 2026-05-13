@@ -52,7 +52,6 @@ dev = [
     "scipy-stubs>=1.15.2.1",
     "microsoft-python-type-stubs",
     "jupyter>=1.1.1",
-    "pytest>=8.4.1",
     "sklearn_nominal[export]",
     "tqdm>=4.67.1",
     "types-tqdm>=4.67.0.20250401",
@@ -64,6 +63,7 @@ dev = [
     "black>=25.1.0",
     "pre-commit>=4.2.0",
     "poethepoet>=0.35.0",
+    "pytest>=9.0.3",
 ]
 docs = [
     "sphinx>=8.2.3",

@@ -20,4 +20,5 @@ from .target_error import (
     GiniError,
     RegressionError,
     TargetError,
+    AccuracyError,
 )

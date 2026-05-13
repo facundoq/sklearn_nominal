@@ -19,10 +19,9 @@ class OneRClassifier(NominalClassifier, BaseEstimator):
 
     Parameters
     ----------
-    criterion : {"gini", "entropy", "log_loss"}, default="entropy"
+    criterion : {"gini", "entropy", "accuracy"}, default="accuracy"
         The function to measure the quality of a split. Supported criteria are
-        "gini" for the Gini impurity and "log_loss" and "entropy" both for the
-        Shannon information gain.
+        "gini" for the Gini impurity, "entropy" for the Shannon information gain and "accuracy" for the standard classification error.
 
     class_weight : dict, list of dict or "balanced", default=None
         Weights associated with classes in the form ``{class_label: weight}``.
@@ -83,7 +82,7 @@ class OneRClassifier(NominalClassifier, BaseEstimator):
         tags.classifier_tags.poor_score = True
         return tags
 
-    def __init__(self, criterion="entropy", backend=DEFAULT_BACKEND, class_weight=None):
+    def __init__(self, criterion="accuracy", backend=DEFAULT_BACKEND, class_weight=None):
         super().__init__(backend=backend, class_weight=class_weight)
         self.criterion = criterion
 

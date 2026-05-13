@@ -193,6 +193,7 @@ class NominalClassifier(NominalSupervisedModel):
             "entropy": shared.EntropyError(classes, class_weight),
             "gini": shared.GiniError(classes, class_weight),
             "gain_ratio": shared.EntropyError(classes, class_weight),
+            "accuracy": shared.AccuracyError(classes, class_weight),
         }
         if criterion not in errors.keys():
             raise ValueError(f"Unknown error function {criterion}")
